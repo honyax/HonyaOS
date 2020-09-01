@@ -21,6 +21,11 @@ ipl:
 
         mov     [BOOT.DRIVE], dl            ; ブートドライブを保存
 
+        mov     al, 'X'                     ; AL = 出力文字
+        mov     ah, 0x0E                    ; テレタイプ式1文字出力
+        mov     bx, 0x0000                  ; ページ番号と文字色を0に設定
+        int     0x10                        ; ビデオBIOSコール
+
         jmp     $                           ; while (1) ;   // 無限ループ
 
 ALIGN 2, db 0
