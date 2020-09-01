@@ -50,3 +50,6 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+tools/nasm-2.14.02/
+*.img
+*.lst
