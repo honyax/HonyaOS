@@ -35,12 +35,17 @@
 		; 0010_9000 |////////////| 
 		;           |            | 
 
-        BOOT_SIZE       equ     (1024 * 8)      ; ブートサイズ
+        BOOT_SIZE           equ     (1024 * 8)      ; ブートサイズ
+        KERNEL_SIZE         equ     (1024 * 8)      ; カーネルサイズ
 
-        BOOT_LOAD       equ     0x7C00          ; ブートプログラムのロード位置
+        BOOT_LOAD           equ     0x7C00          ; ブートプログラムのロード位置
+		BOOT_END			equ		(BOOT_LOAD + BOOT_SIZE)
 
-        SECT_SIZE       equ     (512)           ; セクタサイズ
+        KERNEL_LOAD         equ     0x0010_1000
 
-        BOOT_SECT       equ     (BOOT_SIZE   / SECT_SIZE)   ; ブートプログラムのセクタ数
+        SECT_SIZE           equ     (512)           ; セクタサイズ
+
+        BOOT_SECT           equ     (BOOT_SIZE   / SECT_SIZE)   ; ブートプログラムのセクタ数
+		KERNEL_SECT			equ		(KERNEL_SIZE / SECT_SIZE)	; カーネルのセクタ数
 
 		E820_RECORD_SIZE	equ		20

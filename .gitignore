@@ -53,3 +53,4 @@ dkms.conf
 tools/nasm-2.14.02/
 *.img
 *.lst
+*.bin
