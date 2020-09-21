@@ -1,7 +1,7 @@
 void fuga();
 
 int kernel_main() {
-    int aaa = 0x12345678;
+    int aaa = 0x11335577;
     fuga(aaa);
     return aaa;
 }

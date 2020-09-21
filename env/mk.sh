@@ -3,6 +3,7 @@ if [ -e kernel.c ]; then
   nasm.exe boot.s -o boot.bin -l boot.lst
   gcc.exe -c kernel.c
   objconv.exe -fnasm kernel.o kernel_base.tmp.s
+  convert.sh kernel_base.tmp.s > kernel.tmp.s
   nasm.exe kernel.tmp.s -o kernel.bin -l kernel.lst
   cat boot.bin kernel.bin > boot.img
 
