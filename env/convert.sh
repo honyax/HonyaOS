@@ -13,7 +13,9 @@ cat $INPUT_FILE | while read line
 do
   if [[ ${line} =~ ^global.* ]]; then echo -n ";"; fi
   if [[ ${line} =~ ^SECTION.*rdata.* ]]; then exit 0; fi
-  echo $line
+  line=${line//noexecute/}
+  line=${line//execute/}
+  echo ${line}
 done
 
 cat $FOOTER_FILE
