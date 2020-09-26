@@ -40,6 +40,7 @@ RTC_TIME:	dd	0
 ;************************************************************************
 %include	"modules/protect/vga.s"
 %include	"modules/protect/draw_char.s"
+%include	"modules/kernel/sample.s"
 
 ;************************************************************************
 ;	パディング
