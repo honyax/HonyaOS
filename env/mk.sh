@@ -3,6 +3,7 @@ if [ -e kernel.c ]; then
   # kernel.c があればコンパイル＆NASMを生成してアセンブル＆結合
   echo "kernel.c exists."
   nasm.exe boot.s -o boot.bin -l boot.lst
+  rm kernel.tmp.c
   cat *.c > kernel.tmp.c
   gcc.exe -c kernel.tmp.c
   rm kernel.tmp.c
