@@ -6,7 +6,6 @@ if [ -e kernel.c ]; then
   rm -f kernel.tmp.c
   cat *.c > kernel.tmp.c
   gcc.exe -c kernel.tmp.c
-  rm -f kernel.tmp.c
   objconv.exe -fnasm kernel.tmp.o kernel_base.tmp.s
   convert.sh kernel_base.tmp.s kernel_template.s > kernel.tmp.s
   nasm.exe kernel.tmp.s -o kernel.bin -l kernel.lst
