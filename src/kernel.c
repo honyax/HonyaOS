@@ -1,6 +1,4 @@
-void fuga(int);
-int hemo(int, int, int, int, int, int);
-void draw_char(int col, int row, int color, char ch);
+#include "header.h"
 
 int kernel_main() {
     draw_char(0, 0, 0x010F, 'A');
@@ -12,21 +10,4 @@ int kernel_main() {
     int aaa = hemo(12345678, 5678, 78, 76543210, 7654, 76);
     fuga(aaa);
     return aaa;
-}
-
-void fuga(int param) {
-    if (param < 1)
-        return;
-loop:
-    goto loop;
-}
-
-int hemo(int a, int b, int c, int d, int e, int f) {
-    if (a < 10) return 0x11111111;
-    if (b < 11) return 0x22222222;
-    if (c < 12) return 0x33333333;
-    if (d < 20) return 0x44444444;
-    if (e < 21) return 0x55555555;
-    if (f < 22) return 0x66666666;
-    return 0x77777777;
 }
