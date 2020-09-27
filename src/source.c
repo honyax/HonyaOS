@@ -1,4 +1,4 @@
-#include "header.h"
+#include "define.h"
 
 void fuga(int param) {
     if (param < 1)

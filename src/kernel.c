@@ -1,4 +1,4 @@
-#include "header.h"
+#include "define.h"
 
 void write_bios_font_address();
 
