@@ -288,4 +288,3 @@ vram_bit_copy:
 		pop		ebp
 
 		ret
-

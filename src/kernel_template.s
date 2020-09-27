@@ -17,27 +17,14 @@
 ;	エントリポイント
 ;************************************************************************
 kernel:
-		;---------------------------------------
-		; フォントアドレスを取得
-		;---------------------------------------
-		mov		esi, BOOT_LOAD + SECT_SIZE		; ESI   = 0x7C00 + 512
-		movzx	eax, word [esi + 0]				; EAX   = [ESI + 0] // セグメント
-		movzx	ebx, word [esi + 2]				; EBX   = [ESI + 2] // オフセット
-		shl		eax, 4							; EAX <<= 4;
-		add		eax, ebx						; EAX  += EBX;
-		mov		[FONT_ADR], eax					; FONT_ADR[0] = EAX;
+        mov     esp, KERNEL_LOAD                ; スタックポインタをカーネルのものにする
 
 {KERNEL_SOURCECODE}
-
-SECTION .text
-
-ALIGN 4, db 0
-FONT_ADR:	dd	0
-RTC_TIME:	dd	0
 
 ;************************************************************************
 ;	モジュール
 ;************************************************************************
+SECTION .text
 %include	"modules/protect/vga.s"
 %include	"modules/protect/draw_char.s"
 %include	"modules/kernel/sample.s"
@@ -46,4 +33,3 @@ RTC_TIME:	dd	0
 ;	パディング
 ;************************************************************************
 		times	KERNEL_SIZE - ($ - $$)	db	0	; パディング
-
