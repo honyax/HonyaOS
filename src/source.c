@@ -3,9 +3,9 @@
 void fuga(int param) {
     if (param < 1)
         return;
-    draw_char(0, 1, 0x0402, '0');
-    draw_char(1, 1, 0x0212, '1');
-    draw_char(2, 1, 0x0212, '_');
+    //draw_char(0, 1, 0x0402, '0');
+    //draw_char(1, 1, 0x0212, '1');
+    //draw_char(2, 1, 0x0212, '_');
 }
 
 int hemo(int a, int b, int c, int d, int e, int f) {

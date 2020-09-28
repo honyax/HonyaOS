@@ -6,12 +6,21 @@ int kernel_main() {
 
     write_bios_font_address();
 
-    draw_char(0, 0, 0x010F, 'A');
-    draw_char(1, 0, 0x010F, 'B');
-    draw_char(2, 0, 0x010F, 'C');
+    //draw_char(0, 0, 0x010F, 'A');
+    //draw_char(1, 0, 0x010F, 'B');
+    //draw_char(2, 0, 0x010F, 'C');
     int aaa = hemo(12345678, 5678, 78, 76543210, 7654, 76);
     aaa = asm_sample();
     fuga(aaa);
+
+    unsigned int addr;
+    int x;
+    int y;
+    for (int y = 0; y < SCREEN_Y; y++) {
+        for (int x = 0; x < SCREEN_X; x++) {
+            draw_pixel(x, y, (unsigned char)((x + y) & 0xFF));
+        }
+    }
     
     for (;;) ;
 
@@ -28,3 +37,4 @@ void write_bios_font_address()
     unsigned int *param_font_addr = (unsigned int *)PARAM_FONT_ADR;
     *param_font_addr = font_addr;
 }
+
