@@ -14,13 +14,16 @@ int kernel_main() {
     fuga(aaa);
 
     unsigned int addr;
-    int x;
-    int y;
     for (int y = 0; y < SCREEN_Y; y++) {
         for (int x = 0; x < SCREEN_X; x++) {
             draw_pixel(x, y, (unsigned char)((x + y) & 0xFF));
         }
     }
+
+    draw_rect(20, 20, 150, 150, 0x33);
+    draw_rect(40, 40, 150, 150, 0x77);
+    draw_rect(60, 60, 150, 150, 0xCC);
+    draw_line(100, 200, 500, 800, 0x7F);
     
     for (;;) ;
 
