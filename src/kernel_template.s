@@ -25,8 +25,6 @@ kernel:
 ;	モジュール
 ;************************************************************************
 SECTION .text
-%include	"modules/protect/vga.s"
-%include	"modules/protect/draw_char.s"
 %include	"modules/kernel/sample.s"
 
 ;************************************************************************
