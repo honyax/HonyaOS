@@ -19,7 +19,7 @@ do
     cat $INPUT_FILE | while read line
     do
       if [[ ${line} =~ ^global.* ]]; then echo -n ";"; fi
-      if [[ ${line} =~ ^SECTION.*rdata.* ]]; then exit 0; fi
+      if [[ ${line} =~ ^SECTION.*eh_frame.* ]]; then exit 0; fi
       line=${line//noexecute/}
       line=${line//execute/}
       echo ${line}
