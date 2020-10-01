@@ -27,7 +27,7 @@ int kernel_main() {
 
     char text[] = "HonyaOS is my own operating system.";
     draw_text(16, 120, text, 0x44);
-  
+
     for (;;) ;
 
     return 0;
