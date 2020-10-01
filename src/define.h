@@ -32,4 +32,5 @@ void draw_pixel(int x, int y, unsigned char color);
 void draw_line(int x1, int y1, int x2, int y2, unsigned char color);
 void draw_rect(int x, int y, int w, int h, unsigned char color);
 void draw_char(int x, int y, char c, unsigned char color);
+void draw_text(int x, int y, unsigned char* text, unsigned char color);
 void write_mem8(unsigned int addr, unsigned char data);

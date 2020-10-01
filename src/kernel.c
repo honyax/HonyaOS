@@ -21,9 +21,12 @@ int kernel_main() {
     draw_rect(240, 240, 150, 150, 0xCC);
     draw_line(100, 200, 500, 800, 0x22);
 
-    draw_char(16, 80, 'X', 0x11);
-    draw_char(24, 80, 'Y', 0x22);
-    draw_char(32, 80, 'Z', 0x33);
+    draw_char(16, 80, 'X', 0x33);
+    draw_char(24, 80, 'Y', 0x44);
+    draw_char(32, 80, 'Z', 0x55);
+
+    char text[] = "HonyaOS is my own operating system.";
+    draw_text(16, 120, text, 0x44);
   
     for (;;) ;
 
