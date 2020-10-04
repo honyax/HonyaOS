@@ -27,6 +27,11 @@ int kernel_main() {
 
     char text[] = "HonyaOS is my own operating system.";
     draw_text(16, 120, text, 0x44);
+    char test_txt[64];
+    char fmt[] = "This is %d 0x%x 0x%X %s";
+    char param[] = "string parameter";
+    sprintf(test_txt, fmt, 100, 0x12AB, 0x34CD, param);
+    draw_text(16, 160, test_txt, 0x55);
 
     for (;;) ;
 
