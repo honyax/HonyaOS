@@ -1,4 +1,4 @@
-nasm.exe boot.s -o boot.bin -l boot.lst
+nasm.exe boot.asm -o boot.bin -l boot.lst
 
 # no-pic, no-stack-protectorを指定しないとリンクエラーが出る
 gcc -c -m32 -fno-pic -fno-stack-protector *.c
