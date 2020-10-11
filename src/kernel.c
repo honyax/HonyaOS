@@ -1,5 +1,14 @@
 #include "define.h"
 
+extern unsigned int _text_start;
+extern unsigned int _text_end;
+extern unsigned int _rodata_start;
+extern unsigned int _rodata_end;
+extern unsigned int _data_start;
+extern unsigned int _data_end;
+extern unsigned int _bss_start;
+extern unsigned int _bss_end;
+
 void write_bios_font_address();
 
 int kernel_main() {
@@ -25,13 +34,23 @@ int kernel_main() {
     draw_char(24, 80, 'Y', 0x44);
     draw_char(32, 80, 'Z', 0x55);
 
-    char text[] = "HonyaOS is my own operating system.";
-    draw_text(16, 120, text, 0x44);
+    draw_text(16, 120, "HonyaOS is my own operating system.", 0x44);
     char test_txt[64];
-    char fmt[] = "This is %d 0x%x 0x%X %s";
-    char param[] = "string parameter";
-    sprintf(test_txt, fmt, 100, 0x12AB, 0x34CD, param);
+    sprintf(test_txt, "This is %d, 0x%x, 0x%X, string:%s.", 100, 0x12AB, 0x34CD, "string parameter");
     draw_text(16, 160, test_txt, 0x55);
+
+    char addr_txt[128];
+    unsigned int _TEXT_START    = ( unsigned int )&_text_start;
+    unsigned int _TEXT_END      = ( unsigned int )&_text_end;
+    unsigned int _RODATA_START  = ( unsigned int )&_rodata_start;
+    unsigned int _RODATA_END    = ( unsigned int )&_rodata_end;
+    unsigned int _DATA_START    = ( unsigned int )&_data_start;
+    unsigned int _DATA_END      = ( unsigned int )&_data_end;
+    unsigned int _BSS_START     = ( unsigned int )&_bss_start;
+    unsigned int _BSS_END       = ( unsigned int )&_bss_end;
+    sprintf(addr_txt, "text:%X - %X rodata:%X - %X data:%X - %X bss:%X - %X",
+            _TEXT_START, _TEXT_END, _RODATA_START, _RODATA_END, _DATA_START, _DATA_END, _BSS_START, _BSS_END);
+    draw_text(16, 240, addr_txt, 0x33);
 
     for (;;) ;
 

@@ -2,7 +2,8 @@ OUTPUT_FORMAT("binary")
 
 SECTIONS
 {
-	. = 0x00000000;
+	. = 0x00103000;
+
 	.text :
 	{
 		_text_start = .;
@@ -33,4 +34,3 @@ SECTIONS
 
     /DISCARD/ : { *(.eh_frame) }
 }
-

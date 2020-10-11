@@ -68,13 +68,10 @@ int sprintf (char *str, const char *fmt, ...)
                 case 'X':
                     len = hex2asc(str, va_arg (list, int), 'A');
                     break;
-                    /*
-                    TODO: uehara_mitsuaki case文増やすと挙動がおかしくなるのでひとまずコメントアウト
                 case 'c':
                     len = 1;
                     *str = va_arg(list, int);
                     break;
-                    */
                 case 's':
                     len = str2asc(str, va_arg (list, char*));
                     break;
