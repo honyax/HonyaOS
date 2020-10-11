@@ -26,7 +26,7 @@
 
 
 
-int asm_sample();
+int _asm_sample();
 
 void draw_pixel(int x, int y, unsigned char color);
 void draw_line(int x1, int y1, int x2, int y2, unsigned char color);

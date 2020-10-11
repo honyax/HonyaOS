@@ -6,7 +6,7 @@ int kernel_main() {
 
     write_bios_font_address();
 
-    int aaa = asm_sample();
+    int aaa = _asm_sample();
 
 #if 0
     for (int y = 0; y < SCREEN_Y; y++) {
