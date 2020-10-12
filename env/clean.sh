@@ -1,5 +1,6 @@
-rm -rf *.bin
-rm -rf *.lst
-rm -rf *.map
-rm -rf *.img
-rm -rf *.o
+rm -f *.bin
+rm -f *.img
+rm -f */*.bin
+rm -f */*.lst
+rm -f */*.map
+rm -f */*.o
