@@ -49,6 +49,9 @@
         VBE_MODE            equ     (0x107)         ; 1280 x 1024 x 8bitカラー
         SCREEN_X            equ     (1280)          ; 画面サイズ（横）
         SCREEN_Y            equ     (1024)          ; 画面サイズ（縦）
+        ;VBE_MODE           equ     (0x105)         ; 1024 x 768 x 8bitカラー
+        ;SCREEN_X           equ     (1024)          ; 画面サイズ（横）
+        ;SCREEN_Y           equ     (768)           ; 画面サイズ（縦）
         VRAM                equ     (0xe000_0000)   ; VRAMのアドレス
 
         PARAM_FONT_ADR      equ     PARAM_BASE      ; フォントアドレスの位置

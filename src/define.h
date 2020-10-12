@@ -20,6 +20,9 @@
 #define     VBE_MODE                (0x107)         // 1280 x 1024 x 8bitカラー
 #define     SCREEN_X                (1280)          // 画面サイズ（横）
 #define     SCREEN_Y                (1024)          // 画面サイズ（縦）
+//#define   VBE_MODE                (0x105)         // 1024 x 768 x 8bitカラー
+//#define   SCREEN_X                (1024)          // 画面サイズ（横）
+//#define   SCREEN_Y                (768)           // 画面サイズ（縦）
 #define     VRAM                    (0xe0000000)    // VRAMのアドレス
 
 #define     PARAM_FONT_ADR          PARAM_BASE      // フォントアドレスの位置
