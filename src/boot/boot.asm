@@ -83,8 +83,8 @@ boot:                                       ; ブートドライブに関する�
 ;************************************************************************
 ;   モジュール
 ;************************************************************************
-%include    "modules/real/puts.s"
-%include    "modules/real/read_chs.s"
+%include    "modules/puts.s"
+%include    "modules/read_chs.s"
 
 ;************************************************************************
 ;   ブートフラグ（先頭512バイトの終了）
@@ -106,13 +106,13 @@ acpi_data:                                  ; ACPI data
 ;************************************************************************
 ;   モジュール（先頭512バイト以降に配置）
 ;************************************************************************
-%include    "modules/real/itoa.s"
-%include    "modules/real/get_drive_param.s"
-%include    "modules/real/get_font_adr.s"
-%include    "modules/real/get_mem_info.s"
-%include    "modules/real/kbc.s"
-%include    "modules/real/lba_chs.s"
-%include    "modules/real/read_lba.s"
+%include    "modules/itoa.s"
+%include    "modules/get_drive_param.s"
+%include    "modules/get_font_adr.s"
+%include    "modules/get_mem_info.s"
+%include    "modules/kbc.s"
+%include    "modules/lba_chs.s"
+%include    "modules/read_lba.s"
 
 ;************************************************************************
 ;	ブート処理の第2ステージ

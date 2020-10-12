@@ -1,18 +1,22 @@
+cd boot
 nasm.exe boot.asm -o boot.bin -l boot.lst
+cd ..
 
 # no-pic, no-stack-protectorを指定しないとリンクエラーが出る
+cd kernel
 gcc -c -m32 -fno-pic -fno-stack-protector *.c
 
 # アセンブラコードもアセンブルしておく
-gcc -c -m32 modules/kernel/*.s
+gcc -c -m32 *.s
 
 # kernel.oが先頭じゃないといけない。-eで指定してもELF形式じゃないから無駄
 #ld -m elf_i386 -e kernel_main -o kernel.bin -T linkerscript -Map kernel.map kernel.o graphic.o sprintf.o
 ld -m elf_i386 -o kernel.bin -T linkerscript -Map kernel.map kernel.o graphic.o sprintf.o sample.o
+cd ..
 
 # 現在は強制的にカーネル用に8KBロードしているのでゼロ埋め。そのうち何とかしたい
 dd if=/dev/zero of=./zero.bin bs=1 count=8192 > /dev/null 2>/dev/null
-cat boot.bin kernel.bin zero.bin > boot.img
+cat boot/boot.bin kernel/kernel.bin zero.bin > boot.img
 
 
 
