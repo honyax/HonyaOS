@@ -6,7 +6,9 @@ ZERO_BIN	= zero.bin
 BOCHS		= "/mnt/c/Program Files (x86)/Bochs-2.6.9/bochsdbg.exe"
 
 .PHONY: all
-all: $(BOOT_BIN) $(KERNEL_BIN) $(ZERO_BIN)
+all: $(BOOT_IMG)
+
+$(BOOT_IMG): $(BOOT_BIN) $(KERNEL_BIN) $(ZERO_BIN)
 	cat $(BOOT_BIN) $(KERNEL_BIN) $(ZERO_BIN) > $(BOOT_IMG)
 
 $(BOOT_BIN):
@@ -18,8 +20,8 @@ $(KERNEL_BIN):
 $(ZERO_BIN):
 	dd if=/dev/zero of=./zero.bin bs=1 count=8192 > /dev/null 2>/dev/null
 
-.PHONY: boot
-boot:
+.PHONY: run
+run: $(BOOT_IMG)
 	$(BOCHS) -q -f ../env/bochsrc.bxrc -rc ../env/cmd.init
 
 .PHONY: clean
