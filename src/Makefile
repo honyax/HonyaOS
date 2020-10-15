@@ -24,6 +24,10 @@ $(ZERO_BIN):
 run: $(BOOT_IMG)
 	$(BOCHS) -q -f ../env/bochsrc.bxrc -rc ../env/cmd.init
 
+.PHONY: dbg
+dbg: $(BOOT_IMG)
+	$(BOCHS) -q -f ../env/bochsrc.bxrc
+
 .PHONY: clean
 clean:
 	rm -f $(BOOT_IMG)
