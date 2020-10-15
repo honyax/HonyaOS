@@ -54,8 +54,3 @@ void draw_text(int x, int y, unsigned char* text, unsigned char color)
         draw_char(x + 8 * i, y, text[i], color);
     }
 }
-
-void write_mem8(unsigned int addr, unsigned char data) {
-    unsigned char *p_addr = (unsigned char *) addr;
-    *p_addr = data;
-}
