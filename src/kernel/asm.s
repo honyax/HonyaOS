@@ -10,3 +10,11 @@ _load_idt:
 _load_gdt:
     lgdt    gdtr
     ret
+
+
+
+
+.global _asm_sample
+_asm_sample:
+    movl    $1000, %eax
+    ret
