@@ -68,9 +68,10 @@
 #define     COL_WHITE       COL_FCFCFC
 
 
-
+// sample.s
 int _asm_sample();
 
+// graphic.c
 void draw_pixel(int x, int y, unsigned char color);
 void draw_line(int x1, int y1, int x2, int y2, unsigned char color);
 void draw_rect(int x, int y, int w, int h, unsigned char color);
@@ -78,7 +79,12 @@ void draw_char(int x, int y, char c, unsigned char color);
 void draw_text(int x, int y, unsigned char* text, unsigned char color);
 void draw_color_test();
 
+// memory.c
 void write_mem8(unsigned int addr, unsigned char data);
 void hmemset(void *addr, unsigned char c, int size);
 
+// sprintf.c
 int sprintf (char *str, const char *fmt, ...);
+
+// descriptor.c
+void init_descriptor();

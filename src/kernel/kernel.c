@@ -16,6 +16,7 @@ int kernel_main() {
 
     write_bios_font_address();
     init_sections();
+    init_descriptor();
 
     int aaa = _asm_sample();
 
