@@ -54,3 +54,27 @@ void draw_text(int x, int y, unsigned char* text, unsigned char color)
         draw_char(x + 8 * i, y, text[i], color);
     }
 }
+
+void draw_color_test()
+{
+    int dx = SCREEN_X / 16;
+    int dy = SCREEN_Y / 16;
+
+    for (int y = 0; y < 16; y++) {
+        for (int x = 0; x < 16; x++) {
+            unsigned char color = y * 16 + x;
+            draw_rect(dx * x, dy * y, dx, dy, color);
+            char str[5];
+            sprintf(str, "0x%X%X", y, x);
+            unsigned char text_color;
+            if ((x < 10 && y < 3) ||
+                (color >= 0x36 && color <= 0x39) ||
+                color > 0x67) {
+                text_color = COL_FCFCFC;
+            } else {
+                text_color = COL_000000;
+            }
+            draw_text(dx * x + (dx / 2 - 16), dy * y + (dy / 2 - 8), str, text_color);
+        }
+    }
+}

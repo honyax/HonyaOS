@@ -25,32 +25,25 @@ int kernel_main() {
             draw_pixel(x, y, (unsigned char)((x + y) & 0xFF));
         }
     }
-
-    draw_rect(80, 80, 150, 150, 0x3);
-    draw_rect(160, 160, 150, 150, 0x7);
-    draw_rect(240, 240, 150, 150, 0xC);
-    draw_line(100, 200, 500, 800, 0x2);
 #endif
 
-    for (int y = 0; y < 16; y++) {
-        for (int x = 0; x < 16; x++) {
-            unsigned char color = y * 16 + x;
-            draw_rect(80 * x, 64 * y, 80, 64, color);
-            char str[5];
-            sprintf(str, "0x%X%X", y, x);
-            unsigned char text_color = ((x < 8 && y < 3) || color > 0x67) ? 0x0F : 0;
-            draw_text(80 * x + 24, 64 * y + 24, str, text_color);
-        }
-    }
+    draw_rect(80, 80, 150, 150, COL_BLUE);
+    draw_rect(160, 160, 150, 150, COL_RED);
+    draw_rect(240, 240, 150, 150, COL_YELLOW);
+    draw_line(100, 200, 500, 800, COL_GREEN);
 
-    draw_char(16, 80, 'X', 0x3);
-    draw_char(24, 80, 'Y', 0x4);
-    draw_char(32, 80, 'Z', 0x5);
+    draw_char(16, 80, 'X', COL_WHITE);
+    draw_char(24, 80, 'Y', COL_GREY);
+    draw_char(32, 80, 'Z', COL_CYAN);
 
-    draw_text(16, 120, "HonyaOS is my own operating system.", 0x4);
+    draw_text(16, 120, "HonyaOS is my own operating system.", COL_WHITE);
     char test_txt[64];
     sprintf(test_txt, "This is %d, 0x%x, 0x%X, string:%s.", 100, 0x12AB, 0x34CD, "string parameter");
-    draw_text(16, 160, test_txt, 0x5);
+    draw_text(16, 160, test_txt, COL_YELLOW);
+
+#if 0
+    draw_color_test();
+#endif
 
     for (;;) ;
 
@@ -81,7 +74,7 @@ void init_sections()
     unsigned int _BSS_END       = ( unsigned int )&_bss_end;
     sprintf(addr_txt, "text:%X - %X rodata:%X - %X data:%X - %X bss:%X - %X",
             _TEXT_START, _TEXT_END, _RODATA_START, _RODATA_END, _DATA_START, _DATA_END, _BSS_START, _BSS_END);
-    draw_text(16, 480, addr_txt, 0x3);
+    draw_text(16, 480, addr_txt, COL_CYAN);
 
     // BSSを初期化
     hmemset((void *)_BSS_START, 0x00, _BSS_END - _BSS_START);
