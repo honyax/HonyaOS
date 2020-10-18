@@ -3,7 +3,7 @@ BOOT_BIN	= boot/boot.bin
 KERNEL_BIN	= kernel/kernel.bin
 ZERO_BIN	= zero.bin
 
-BOCHS		= "/mnt/c/Program Files (x86)/Bochs-2.6.9/bochsdbg.exe"
+BOCHS		= "bochsdbg.exe"
 
 .PHONY: all
 all: $(BOOT_IMG)
