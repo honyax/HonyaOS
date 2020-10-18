@@ -17,8 +17,7 @@ int kernel_main() {
     write_bios_font_address();
     init_sections();
     init_descriptor();
-
-    int aaa = _asm_sample();
+    init_pic();
 
 #if 0
     for (int y = 0; y < SCREEN_Y; y++) {

@@ -68,8 +68,13 @@
 #define     COL_WHITE       COL_FCFCFC
 
 
-// sample.s
-int _asm_sample();
+// asm.s
+int _in8(int port);
+int _in16(int port);
+int _in32(int port);
+void _out8(int port, int data);
+void _out16(int port, int data);
+void _out32(int port, int data);
 
 // graphic.c
 void draw_pixel(int x, int y, unsigned char color);
@@ -88,3 +93,6 @@ int sprintf (char *str, const char *fmt, ...);
 
 // descriptor.c
 void init_descriptor();
+
+// interrupt.c
+void init_pic();

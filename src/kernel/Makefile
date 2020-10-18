@@ -1,5 +1,5 @@
 KERNEL_BIN	= kernel.bin
-OBJECTS		= kernel.o graphic.o sprintf.o memory.o descriptor.o asm.o
+OBJECTS		= *.o
 
 .PHONY: all
 all: $(OBJECTS)
