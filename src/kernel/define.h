@@ -96,3 +96,4 @@ void init_descriptor();
 
 // interrupt.c
 void init_pic();
+void init_pit();

@@ -18,6 +18,7 @@ int kernel_main() {
     init_sections();
     init_descriptor();
     init_pic();
+    init_pit();
 
 #if 0
     for (int y = 0; y < SCREEN_Y; y++) {
