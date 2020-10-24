@@ -22,7 +22,7 @@ void init_pic()
     _out8(PIC0_ICW1, 0x11); // エッジトリガモード
     _out8(PIC0_ICW2, 0x20); // IRQ0-7は、INT20-27で受ける
     _out8(PIC0_ICW3, 0x04); // PIC1はIRQ2にて接続
-    _out8(PIC0_ICW4, 0x05); // ノンバッファモード
+    _out8(PIC0_ICW4, 0x01); // ノンバッファモード
 
     _out8(PIC1_ICW1, 0x11); // エッジトリガモード
     _out8(PIC1_ICW2, 0x28); // IRQ8-15は、INT28-2Fで受ける
