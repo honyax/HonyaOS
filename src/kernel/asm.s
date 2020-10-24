@@ -14,6 +14,20 @@ _load_gdt:
     lgdt    gdtr
     ret
 
+// STI/CLI
+.global _sti
+.global _cli
+
+// void _sti()
+_sti:
+    sti
+    ret
+
+// void _cli()
+_cli:
+    cli
+    ret
+
 ////////////////////////////////////////////////////////////////
 
 // IN/OUT
@@ -67,3 +81,35 @@ _out32:
     ret
 
 ////////////////////////////////////////////////////////////////
+
+// 割り込みハンドラ
+.global _asm_inthandler_default
+.global _asm_inthandler21
+.extern inthandler_default
+.extern inthandler21
+
+// 割り込みマクロ
+.macro _asm_inthandler  c_inthandler
+    push    %es
+    push    %ds
+    pushal
+    mov     %esp, %eax
+    push    %eax
+    mov     %ss, %ax
+    mov     %ax, %ds
+    mov     %ax, %es
+    call    \c_inthandler
+    pop     %eax
+    popal
+    pop     %ds
+    pop     %es
+    iret
+.endm
+
+// void _asm_inthandler_default
+_asm_inthandler_default:
+    _asm_inthandler inthandler_default
+
+// void _asm_inthandler21
+_asm_inthandler21:
+    _asm_inthandler inthandler21

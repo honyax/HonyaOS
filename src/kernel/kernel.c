@@ -19,6 +19,8 @@ int kernel_main() {
     init_descriptor();
     init_pic();
     init_pit();
+    enable_mouse_keyboard();
+    _sti();
 
 #if 0
     for (int y = 0; y < SCREEN_Y; y++) {

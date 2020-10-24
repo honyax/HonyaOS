@@ -1,3 +1,8 @@
+#include "define.h"
+
+// アライメントを2byteにしないとIDTR, GDTR構造体にパディングが入ってしまう
+#pragma pack(2)
+
 // Gate Descriptorフラグ定義値
 #define IDT_FLAGS_SEGMENT_PRESENT       0x80
 #define IDT_FLAGS_DPL_0                 0x00
@@ -28,8 +33,6 @@ typedef struct
     GATE_DESCRIPTOR*    base;
 } IDTR;
 IDTR idtr;
-
-void _load_idt();
 
 void setup_gate_descriptor(int index, int base, unsigned short selector, unsigned char flags)
 {
@@ -67,8 +70,6 @@ typedef struct
     SEGMENT_DESCRIPTOR* base;
 } GDTR;
 GDTR gdtr;
-
-void _load_gdt();
 
 // Segment Descriptor定義値
 #define GDT_IDX_NULL        0
@@ -116,7 +117,12 @@ void init_descriptor()
     gdtr.base = gdt;
     _load_gdt();
 
+    for (int i = 0; i < NUM_IDT; i++) {
+        setup_interrupt_gate(i, _asm_inthandler_default);
+    }
     idtr.size = NUM_IDT * sizeof(GATE_DESCRIPTOR);
     idtr.base = idt;
     _load_idt();
+
+    //setup_interrupt_gate(0x21, _asm_inthandler21);
 }

@@ -69,12 +69,18 @@
 
 
 // asm.s
+void _load_idt();
+void _load_gdt();
+void _sti();
+void _cli();
 int _in8(int port);
 int _in16(int port);
 int _in32(int port);
 void _out8(int port, int data);
 void _out16(int port, int data);
 void _out32(int port, int data);
+void _asm_inthandler_default();
+void _asm_inthandler21();
 
 // graphic.c
 void draw_pixel(int x, int y, unsigned char color);
@@ -97,3 +103,4 @@ void init_descriptor();
 // interrupt.c
 void init_pic();
 void init_pit();
+void enable_mouse_keyboard();

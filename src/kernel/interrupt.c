@@ -16,21 +16,27 @@
 
 void init_pic()
 {
-    _out8(PIC0_IMR, 0xFF);  // 全ての割り込みを受け付けない
-    _out8(PIC1_IMR, 0xFF);  // 全ての割り込みを受け付けない
+    _out8(PIC0_IMR,  0xFF); // 全ての割り込みを受け付けない
+    _out8(PIC1_IMR,  0xFF); // 全ての割り込みを受け付けない
 
     _out8(PIC0_ICW1, 0x11); // エッジトリガモード
     _out8(PIC0_ICW2, 0x20); // IRQ0-7は、INT20-27で受ける
-    _out8(PIC0_ICW3, 1 << 2);   // PIC1はIRQ2にて接続
-    _out8(PIC0_ICW4, 0x01); // ノンバッファモード
+    _out8(PIC0_ICW3, 0x04); // PIC1はIRQ2にて接続
+    _out8(PIC0_ICW4, 0x05); // ノンバッファモード
 
     _out8(PIC1_ICW1, 0x11); // エッジトリガモード
     _out8(PIC1_ICW2, 0x28); // IRQ8-15は、INT28-2Fで受ける
-    _out8(PIC1_ICW3, 2);    // PIC1はIRQ2にて接続
+    _out8(PIC1_ICW3, 0x02); // PIC1はIRQ2にて接続
     _out8(PIC1_ICW4, 0x01); // ノンバッファモード
 
-    _out8(PIC0_IMR, 0xFB);  // 11111011 PIC1以外は全て禁止
-    _out8(PIC1_IMR, 0xFF);  // 11111111 全ての割り込みを受け付けない
+    _out8(PIC0_IMR,  0xFB); // 11111011 PIC1以外は全て禁止
+    _out8(PIC1_IMR,  0xFF); // 11111111 全ての割り込みを受け付けない
+}
+
+void enable_mouse_keyboard()
+{
+    _out8(PIC0_IMR, 0xF9);  // 11111001 PIC1, Keyboardを許可
+    _out8(PIC1_IMR, 0xEF);  // 11101111 マウスを許可
 }
 
 
@@ -56,4 +62,14 @@ void init_pit()
     _out8(PIT_REG_CONTROL, command);
     _out8(PIT_REG_COUNTER0, (unsigned char)(count & 0xFF));
     _out8(PIT_REG_COUNTER0, (unsigned char)((count >> 8) & 0xFF));
+}
+
+void inthandler21(int *esp)
+{
+    draw_text(16, 240, "1", COL_WHITE);
+}
+
+void inthandler_default(int *esp)
+{
+    return;
 }
