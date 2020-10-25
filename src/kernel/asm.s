@@ -28,6 +28,19 @@ _cli:
     cli
     ret
 
+// HLT
+.global _hlt
+.global _stihlt
+
+// void _hlt()
+_hlt:
+    hlt
+
+// void _stihlt()
+_stihlt:
+    sti
+    hlt
+
 ////////////////////////////////////////////////////////////////
 
 // IN/OUT

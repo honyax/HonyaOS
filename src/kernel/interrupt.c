@@ -64,9 +64,30 @@ void init_pit()
     _out8(PIT_REG_COUNTER0, (unsigned char)((count >> 8) & 0xFF));
 }
 
+#define PORT_KEYDAT         0x60
+
+unsigned char input_key = 0;
+
 void inthandler21(int *esp)
 {
-    draw_text(16, 240, "1", COL_WHITE);
+    _out8(PIC0_OCW2, 0x61);
+    input_key = _in8(PORT_KEYDAT);
+}
+
+void update_interrupt()
+{
+    _cli();
+    if (input_key != 0) {
+        char keyCode[4];
+        sprintf(keyCode, "%X", input_key);
+        draw_rect(16, 240, 16, 16, COL_BLACK);
+        draw_text(16, 240, keyCode, COL_WHITE);
+        input_key = 0;
+        _sti();
+    } else {
+        _stihlt();
+    }
+    return;
 }
 
 void inthandler_default(int *esp)

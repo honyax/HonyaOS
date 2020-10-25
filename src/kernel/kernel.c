@@ -48,7 +48,9 @@ int kernel_main() {
     draw_color_test();
 #endif
 
-    for (;;) ;
+    for (;;) {
+        update_interrupt();
+    }
 
     return 0;
 }
