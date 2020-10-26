@@ -125,4 +125,5 @@ void init_descriptor()
     _load_idt();
 
     setup_interrupt_gate(0x21, _asm_inthandler21);
+    setup_interrupt_gate(0x2c, _asm_inthandler2c);
 }

@@ -83,6 +83,7 @@ void _out16(int port, int data);
 void _out32(int port, int data);
 void _asm_inthandler_default();
 void _asm_inthandler21();
+void _asm_inthandler2c();
 
 // graphic.c
 void draw_pixel(int x, int y, unsigned char color);
@@ -119,6 +120,7 @@ void init_descriptor();
 void init_pic();
 void init_pit();
 void enable_mouse_keyboard();
+void update_interrupt();
 
 // fifo.c
 typedef struct
@@ -134,5 +136,8 @@ int fifo32_put(FIFO32 *fifo, int data);
 int fifo32_get(FIFO32 *fifo);
 
 // keyboard.c
+#define PORT_KEYDAT             0x60
 void init_keyboard();
-void update_keyboard();
+
+// mouse.c
+void init_mouse();

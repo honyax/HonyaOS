@@ -1,5 +1,13 @@
 #include "define.h"
 
+#define PORT_KEYSTA             0x64
+#define KEYSTA_SEND_NOTREADY    0x02
+#define KEYCMD_WRITE_MODE       0x60
+#define KBC_MODE                0x47
+#define KEYCMD_SENDTO_MOUSE     0xD4
+#define MOUSECMD_ENABLE         0xF4
+#define PORT_KEYCMD             0x64
+
 void init_pic()
 {
     _out8(PIC0_IMR,  0xFF); // 全ての割り込みを受け付けない
@@ -19,10 +27,32 @@ void init_pic()
     _out8(PIC1_IMR,  0xFF); // 11111111 全ての割り込みを受け付けない
 }
 
+void wait_kbc_sendready()
+{
+    // キーボードコントローラがデータ送信可能になるのを待つ
+    for (;;) {
+        if ((_in8(PORT_KEYSTA) & KEYSTA_SEND_NOTREADY) == 0) {
+            break;
+        }
+    }
+}
+
 void enable_mouse_keyboard()
 {
     _out8(PIC0_IMR, 0xF9);  // 11111001 PIC1, Keyboardを許可
     _out8(PIC1_IMR, 0xEF);  // 11101111 マウスを許可
+
+    // キーボードコントローラの初期化
+    wait_kbc_sendready();
+    _out8(PORT_KEYCMD, KEYCMD_WRITE_MODE);
+    wait_kbc_sendready();
+    _out8(PORT_KEYDAT, KBC_MODE);
+
+    // マウスの有効化
+    wait_kbc_sendready();
+    _out8(PORT_KEYCMD, KEYCMD_SENDTO_MOUSE);
+    wait_kbc_sendready();
+    _out8(PORT_KEYDAT, MOUSECMD_ENABLE);
 }
 
 // PIT(Programmable Interval Timer)
@@ -52,4 +82,32 @@ void init_pit()
 void inthandler_default(int *esp)
 {
     return;
+}
+
+extern FIFO32 key_input_data;
+extern FIFO32 mouse_input_data;
+
+void update_interrupt()
+{
+    _cli();
+    if (key_input_data.len > 0 || mouse_input_data.len > 0) {
+        for (int i = 0; i < key_input_data.len; i++) {
+            char keyCode[4];
+            int pos_x = 16 + 24 * key_input_data.pos_r;
+            sprintf(keyCode, "%X", fifo32_get(&key_input_data));
+            draw_rect(pos_x, 440, 16, 16, COL_BLACK);
+            draw_text(pos_x, 440, keyCode, COL_WHITE);
+        }
+        for (int i = 0; i < mouse_input_data.len; i++) {
+            char mouseCode[4];
+            int pos_x = 16 + 24 * mouse_input_data.pos_r;
+            sprintf(mouseCode, "%X", fifo32_get(&mouse_input_data));
+            draw_rect(pos_x, 460, 16, 16, COL_BLACK);
+            draw_text(pos_x, 460, mouseCode, COL_WHITE);
+        }
+        _sti();
+    } else {
+        _stihlt();
+    }
+
 }

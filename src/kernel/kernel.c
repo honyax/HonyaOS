@@ -20,8 +20,9 @@ int kernel_main() {
     init_pic();
     init_pit();
     init_keyboard();
-    enable_mouse_keyboard();
+    init_mouse();
     _sti();
+    enable_mouse_keyboard();
 
 #if 0
     for (int y = 0; y < SCREEN_Y; y++) {
@@ -50,7 +51,7 @@ int kernel_main() {
 #endif
 
     for (;;) {
-        update_keyboard();
+        update_interrupt();
     }
 
     return 0;
