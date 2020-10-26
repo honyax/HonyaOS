@@ -107,3 +107,16 @@ void init_pic();
 void init_pit();
 void enable_mouse_keyboard();
 void update_interrupt();
+
+// fifo.c
+typedef struct
+{
+    int *buf;       // データ用バッファ
+    int size;       // バッファのサイズ
+    int pos_r;      // 読み込み位置
+    int pos_w;      // 書き込み位置
+    int len;        // 書き込み位置 - 読み込み位置
+} FIFO32;
+void fifo32_init(FIFO32 *fifo, int size, int *buf);
+int fifo32_put(FIFO32 *fifo, int data);
+int fifo32_get(FIFO32 *fifo);

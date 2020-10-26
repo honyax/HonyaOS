@@ -53,6 +53,8 @@ void enable_mouse_keyboard()
 // counter
 #define DEF_PIT_COM_COUNTER0        0x00
 
+void init_key_input();
+
 void init_pit()
 {
     int freq = 100;
@@ -62,27 +64,38 @@ void init_pit()
     _out8(PIT_REG_CONTROL, command);
     _out8(PIT_REG_COUNTER0, (unsigned char)(count & 0xFF));
     _out8(PIT_REG_COUNTER0, (unsigned char)((count >> 8) & 0xFF));
+
+    init_key_input();
 }
 
 #define PORT_KEYDAT         0x60
+#define KEY_INPUT_BUF_SIZE  32
 
-unsigned char input_key = 0;
+FIFO32 key_input_data;
+int key_input_buff[KEY_INPUT_BUF_SIZE];
+
+void init_key_input() {
+    fifo32_init(&key_input_data, KEY_INPUT_BUF_SIZE, key_input_buff);
+}
 
 void inthandler21(int *esp)
 {
     _out8(PIC0_OCW2, 0x61);
-    input_key = _in8(PORT_KEYDAT);
+    int data = _in8(PORT_KEYDAT);
+    fifo32_put(&key_input_data, data);
 }
 
 void update_interrupt()
 {
     _cli();
-    if (input_key != 0) {
-        char keyCode[4];
-        sprintf(keyCode, "%X", input_key);
-        draw_rect(16, 240, 16, 16, COL_BLACK);
-        draw_text(16, 240, keyCode, COL_WHITE);
-        input_key = 0;
+    if (key_input_data.len > 0) {
+        for (int i = 0; i < key_input_data.len; i++) {
+            char keyCode[4];
+            int pos_x = 16 + 24 * key_input_data.pos_r;
+            sprintf(keyCode, "%X", fifo32_get(&key_input_data));
+            draw_rect(pos_x, 440, 16, 16, COL_BLACK);
+            draw_text(pos_x, 440, keyCode, COL_WHITE);
+        }
         _sti();
     } else {
         _stihlt();
