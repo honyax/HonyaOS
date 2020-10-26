@@ -19,6 +19,7 @@ int kernel_main() {
     init_descriptor();
     init_pic();
     init_pit();
+    init_keyboard();
     enable_mouse_keyboard();
     _sti();
 
@@ -49,7 +50,7 @@ int kernel_main() {
 #endif
 
     for (;;) {
-        update_interrupt();
+        update_keyboard();
     }
 
     return 0;
