@@ -92,18 +92,18 @@ void update_interrupt()
     _cli();
     if (key_input_data.len > 0 || mouse_input_data.len > 0) {
         for (int i = 0; i < key_input_data.len; i++) {
-            char keyCode[4];
+            char key_code[4];
             int pos_x = 16 + 24 * key_input_data.pos_r;
-            sprintf(keyCode, "%X", fifo32_get(&key_input_data));
+            sprintf(key_code, "%X", fifo32_get(&key_input_data));
             draw_rect(pos_x, 440, 16, 16, COL_BLACK);
-            draw_text(pos_x, 440, keyCode, COL_WHITE);
+            draw_text(pos_x, 440, key_code, COL_WHITE);
         }
         for (int i = 0; i < mouse_input_data.len; i++) {
-            char mouseCode[4];
+            char mouse_code[4];
             int pos_x = 16 + 24 * mouse_input_data.pos_r;
-            sprintf(mouseCode, "%X", fifo32_get(&mouse_input_data));
+            sprintf(mouse_code, "%X", fifo32_get(&mouse_input_data));
             draw_rect(pos_x, 460, 16, 16, COL_BLACK);
-            draw_text(pos_x, 460, mouseCode, COL_WHITE);
+            draw_text(pos_x, 460, mouse_code, COL_WHITE);
         }
         _sti();
     } else {
