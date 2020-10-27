@@ -124,6 +124,7 @@ void init_descriptor()
     idtr.base = idt;
     _load_idt();
 
+    setup_interrupt_gate(0x20, _asm_inthandler20);
     setup_interrupt_gate(0x21, _asm_inthandler21);
     setup_interrupt_gate(0x2c, _asm_inthandler2c);
 }

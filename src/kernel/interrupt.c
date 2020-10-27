@@ -39,7 +39,7 @@ void wait_kbc_sendready()
 
 void enable_mouse_keyboard()
 {
-    _out8(PIC0_IMR, 0xF9);  // 11111001 PIC1, Keyboardを許可
+    _out8(PIC0_IMR, 0xF8);  // 11111000 PIT, PIC1, Keyboardを許可
     _out8(PIC1_IMR, 0xEF);  // 11101111 マウスを許可
 
     // キーボードコントローラの初期化

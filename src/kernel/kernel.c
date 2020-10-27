@@ -52,6 +52,7 @@ int kernel_main() {
 
     for (;;) {
         update_interrupt();
+        update_timer();
     }
 
     return 0;

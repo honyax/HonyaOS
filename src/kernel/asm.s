@@ -97,9 +97,11 @@ _out32:
 
 // 割り込みハンドラ
 .global _asm_inthandler_default
+.global _asm_inthandler20
 .global _asm_inthandler21
 .global _asm_inthandler2c
 .extern inthandler_default
+.extern inthandler20
 .extern inthandler21
 .extern inthandler2c
 
@@ -124,6 +126,10 @@ _out32:
 // void _asm_inthandler_default
 _asm_inthandler_default:
     _asm_inthandler inthandler_default
+
+// void _asm_inthandler20
+_asm_inthandler20:
+    _asm_inthandler inthandler20
 
 // void _asm_inthandler21
 _asm_inthandler21:
