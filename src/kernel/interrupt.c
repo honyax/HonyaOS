@@ -84,30 +84,14 @@ void inthandler_default(int *esp)
     return;
 }
 
-extern FIFO32 key_input_data;
-extern FIFO32 mouse_input_data;
-
 void update_interrupt()
 {
     _cli();
-    if (key_input_data.len > 0 || mouse_input_data.len > 0) {
-        for (int i = 0; i < key_input_data.len; i++) {
-            char key_code[4];
-            int pos_x = 16 + 24 * key_input_data.pos_r;
-            sprintf(key_code, "%X", fifo32_get(&key_input_data));
-            draw_rect(pos_x, 440, 16, 16, COL_BLACK);
-            draw_text(pos_x, 440, key_code, COL_WHITE);
-        }
-        for (int i = 0; i < mouse_input_data.len; i++) {
-            char mouse_code[4];
-            int pos_x = 16 + 24 * mouse_input_data.pos_r;
-            sprintf(mouse_code, "%X", fifo32_get(&mouse_input_data));
-            draw_rect(pos_x, 460, 16, 16, COL_BLACK);
-            draw_text(pos_x, 460, mouse_code, COL_WHITE);
-        }
+    int result_keyboard = update_keyboard();
+    int result_mouse = update_mouse();
+    if (result_keyboard > 0 || result_mouse > 0) {
         _sti();
     } else {
         _stihlt();
     }
-
 }

@@ -139,9 +139,11 @@ int fifo32_get(FIFO32 *fifo);
 // keyboard.c
 #define PORT_KEYDAT             0x60
 void init_keyboard();
+int update_keyboard();
 
 // mouse.c
 void init_mouse();
+int update_mouse();
 
 // timer.c
 void update_timer();
