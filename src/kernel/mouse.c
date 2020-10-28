@@ -28,6 +28,23 @@ void init_mouse()
     mouse_data.state = MOUSE_STATE_INIT;
 }
 
+void show_mouse_state()
+{
+    char mouse_code[20];
+    sprintf(mouse_code, "[lcr %d %d]", mouse_data.x, mouse_data.y);
+    if ((mouse_data.button & 0x01) != 0) {
+        mouse_code[1] = 'L';
+    }
+    if ((mouse_data.button & 0x02) != 0) {
+        mouse_code[3] = 'R';
+    }
+    if ((mouse_data.button & 0x04) != 0) {
+        mouse_code[2] = 'C';
+    }
+    draw_rect(16, 460, 96, 16, COL_BLACK);
+    draw_text(16, 460, mouse_code, COL_WHITE);
+}
+
 int update_mouse()
 {
     int length = mouse_input_data.len;
@@ -54,10 +71,17 @@ int update_mouse()
             case MOUSE_STATE_PHASE_3:
                 mouse_data.buf[2] = data;
                 mouse_data.state = MOUSE_STATE_PHASE_1;
-                char mouse_code[16];
-                sprintf(mouse_code, "%X %X %X", mouse_data.buf[0], mouse_data.buf[1], mouse_data.buf[2]);
-                draw_rect(16, 460, 64, 16, COL_BLACK);
-                draw_text(16, 460, mouse_code, COL_WHITE);
+                mouse_data.button = mouse_data.buf[0] & 0x07;
+                mouse_data.x = mouse_data.buf[1];
+                mouse_data.y = mouse_data.buf[2];
+                if ((mouse_data.buf[0] & 0x10) != 0) {
+                    mouse_data.x |= 0xffffff00;
+                }
+                if ((mouse_data.buf[0] & 0x20) != 0) {
+                    mouse_data.y |= 0xffffff00;
+                }
+                mouse_data.y = -mouse_data.y;
+                show_mouse_state();
                 break;
         }
     }

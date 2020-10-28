@@ -5,7 +5,13 @@
 int dec2asc (char *str, int dec)
 {
     int len = 0, len_buf; //桁数
+    int minus = 0;
     int buf[10];
+    if (dec < 0) {
+        *(str++) = '-';
+        dec = -dec;
+        minus = 1;
+    }
     while (1) { //10で割れた回数（つまり桁数）をlenに、各桁をbufに格納
         buf[len++] = dec % 10;
         if (dec < 10) break;
@@ -15,7 +21,7 @@ int dec2asc (char *str, int dec)
     while (len) {
         *(str++) = buf[--len] + 0x30;
     }
-    return len_buf;
+    return len_buf + minus;
 }
  
 //16進数からASCIIコードに変換
