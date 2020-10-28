@@ -14,6 +14,8 @@ typedef struct
 {
     int x;
     int y;
+    int dx;
+    int dy;
     int button;
     unsigned char buf[3];
     unsigned char state;
@@ -25,13 +27,18 @@ void init_mouse()
     // FIFOバッファの初期化
     fifo32_init(&mouse_input_data, MOUSE_INPUT_BUF_SIZE, mouse_input_buff);
 
+    mouse_data.x = SCREEN_X / 2;
+    mouse_data.y = SCREEN_Y / 2;
+    mouse_data.dx = 0;
+    mouse_data.dy = 0;
+    mouse_data.button = 0;
     mouse_data.state = MOUSE_STATE_INIT;
 }
 
 void show_mouse_state()
 {
     char mouse_code[20];
-    sprintf(mouse_code, "[lcr %d %d]", mouse_data.x, mouse_data.y);
+    sprintf(mouse_code, "[lcr %d %d]", mouse_data.dx, mouse_data.dy);
     if ((mouse_data.button & 0x01) != 0) {
         mouse_code[1] = 'L';
     }
@@ -43,6 +50,21 @@ void show_mouse_state()
     }
     draw_rect(16, 460, 96, 16, COL_BLACK);
     draw_text(16, 460, mouse_code, COL_WHITE);
+}
+
+void show_mouse()
+{
+    // マウス移動が無い場合は無処理
+    if (mouse_data.dx == 0 && mouse_data.dy == 0)
+        return;
+
+    // 以前の位置を消して、新たな位置に描画
+    draw_rect(mouse_data.x, mouse_data.y, 4, 4, COL_BLACK);
+    mouse_data.x += mouse_data.dx;
+    mouse_data.y += mouse_data.dy;
+    mouse_data.dx = 0;
+    mouse_data.dy = 0;
+    draw_rect(mouse_data.x, mouse_data.y, 4, 4, COL_WHITE);
 }
 
 int update_mouse()
@@ -72,16 +94,17 @@ int update_mouse()
                 mouse_data.buf[2] = data;
                 mouse_data.state = MOUSE_STATE_PHASE_1;
                 mouse_data.button = mouse_data.buf[0] & 0x07;
-                mouse_data.x = mouse_data.buf[1];
-                mouse_data.y = mouse_data.buf[2];
+                mouse_data.dx = mouse_data.buf[1];
+                mouse_data.dy = mouse_data.buf[2];
                 if ((mouse_data.buf[0] & 0x10) != 0) {
-                    mouse_data.x |= 0xffffff00;
+                    mouse_data.dx |= 0xffffff00;
                 }
                 if ((mouse_data.buf[0] & 0x20) != 0) {
-                    mouse_data.y |= 0xffffff00;
+                    mouse_data.dy |= 0xffffff00;
                 }
-                mouse_data.y = -mouse_data.y;
+                mouse_data.dy = -mouse_data.dy;
                 show_mouse_state();
+                show_mouse();
                 break;
         }
     }
