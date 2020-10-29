@@ -95,3 +95,8 @@ void update_interrupt()
         _stihlt();
     }
 }
+
+void inthandler00(int *esp)
+{
+    // TODO: ゼロ除算割り込み処理
+}
