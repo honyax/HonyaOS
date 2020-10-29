@@ -72,7 +72,6 @@ int update_mouse()
     int length = mouse_input_data.len;
     for (int i = 0; i < length; i++) {
         unsigned char data = (unsigned char) fifo32_get(&mouse_input_data);
-        int pos_x = 0;
         switch (mouse_data.state) {
             case MOUSE_STATE_INIT:
                 if (data == 0xfa) {
