@@ -12,10 +12,10 @@ all: $(BOOT_IMG)
 $(BOOT_IMG): $(BOOT_BIN) $(KERNEL_BIN) $(ZERO_BIN)
 	cat $(BOOT_BIN) $(KERNEL_BIN) $(ZERO_BIN) > $(BOOT_IMG)
 
-$(BOOT_BIN):
+$(BOOT_BIN): boot/*.asm boot/*.s
 	cd boot; make
 
-$(KERNEL_BIN):
+$(KERNEL_BIN): kernel/*.c kernel/*.s
 	cd kernel; make
 
 $(ZERO_BIN):
