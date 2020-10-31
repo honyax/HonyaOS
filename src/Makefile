@@ -4,6 +4,7 @@ KERNEL_BIN	= kernel/kernel.bin
 ZERO_BIN	= zero.bin
 
 BOCHS		= "bochsdbg.exe"
+QEMU		= "qemu-system-i386.exe"
 
 .PHONY: all
 all: $(BOOT_IMG)
@@ -27,6 +28,10 @@ run: $(BOOT_IMG)
 .PHONY: dbg
 dbg: $(BOOT_IMG)
 	$(BOCHS) -q -f ../env/bochsrc.bxrc
+
+.PHONY: qemu
+qemu: $(BOOT_IMG)
+	$(QEMU) -rtc base=localtime -drive file=boot.img,format=raw -boot order=c
 
 .PHONY: clean
 clean:
