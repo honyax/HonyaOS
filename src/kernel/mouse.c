@@ -27,8 +27,8 @@ void init_mouse()
     // FIFOバッファの初期化
     fifo32_init(&mouse_input_data, MOUSE_INPUT_BUF_SIZE, mouse_input_buff);
 
-    mouse_data.x = SCREEN_X / 2;
-    mouse_data.y = SCREEN_Y / 2;
+    mouse_data.x = param_screen_x / 2;
+    mouse_data.y = param_screen_y / 2;
     mouse_data.dx = 0;
     mouse_data.dy = 0;
     mouse_data.button = 0;

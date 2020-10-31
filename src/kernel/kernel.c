@@ -9,12 +9,17 @@ extern unsigned int _data_end;
 extern unsigned int _bss_start;
 extern unsigned int _bss_end;
 
-void write_bios_font_address();
+void init_parameters();
 void init_sections();
+
+unsigned char* param_font_adr;
+unsigned short param_screen_x;
+unsigned short param_screen_y;
+unsigned int param_vram;
 
 int kernel_main() {
 
-    write_bios_font_address();
+    init_parameters();
     init_sections();
     init_descriptor();
     init_pic();
@@ -25,8 +30,8 @@ int kernel_main() {
     enable_mouse_keyboard();
 
 #if 0
-    for (int y = 0; y < SCREEN_Y; y++) {
-        for (int x = 0; x < SCREEN_X; x++) {
+    for (int y = 0; y < param_screen_y; y++) {
+        for (int x = 0; x < param_screen_x; x++) {
             draw_pixel(x, y, (unsigned char)((x + y) & 0xFF));
         }
     }
@@ -58,15 +63,14 @@ int kernel_main() {
     return 0;
 }
 
-void write_bios_font_address()
+// ブートローダから渡されたパラメータを設定
+void init_parameters()
 {
-    // BIOSのフォントアドレスを、パラメータ領域に書き込み
-    unsigned short *font_segment = (unsigned short *)(BOOT_LOAD + SECT_SIZE);
-    unsigned short *font_offset  = (unsigned short *)(BOOT_LOAD + SECT_SIZE + 2);
-    unsigned int font_addr = *font_segment << 4;
-    font_addr += *font_offset;
-    unsigned int *param_font_addr = (unsigned int *)PARAM_FONT_ADR;
-    *param_font_addr = font_addr;
+    // フォントアドレス
+    param_font_adr = (unsigned char *)(*(unsigned int *)PARAM_FONT_ADR);
+    param_screen_x = (unsigned short)(*(unsigned short *)PARAM_SCREEN_X);
+    param_screen_y = (unsigned short)(*(unsigned short *)PARAM_SCREEN_Y);
+    param_vram = (unsigned int)(*(unsigned int *)PARAM_VRAM);
 }
 
 void init_sections()

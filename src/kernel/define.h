@@ -17,21 +17,15 @@
 
 #define     E820_RECORD_SIZE		20
 
-#if 1
-    #define VBE_MODE                (0x107)         // 1280 x 1024 x 8bitカラー
-    #define SCREEN_X                (1280)          // 画面サイズ（横）
-    #define SCREEN_Y                (1024)          // 画面サイズ（縦）
-#else
-    #define VBE_MODE                (0x105)         // 1024 x 768 x 8bitカラー
-    #define SCREEN_X                (1024)          // 画面サイズ（横）
-    #define SCREEN_Y                (768)           // 画面サイズ（縦）
-#endif
+#define     PARAM_FONT_ADR          (PARAM_BASE + 0x00000000)   // フォントアドレスの位置
+#define     PARAM_SCREEN_X          (PARAM_BASE + 0x0004)       // 画面サイズ（横）の位置
+#define     PARAM_SCREEN_Y          (PARAM_BASE + 0x0006)       // 画面サイズ（縦）の位置
+#define     PARAM_VRAM              (PARAM_BASE + 0x00000008)   // VRAMの位置
 
-#define     VRAM                    (0xe0000000)    // VRAMのアドレス
-
-#define     PARAM_FONT_ADR          PARAM_BASE      // フォントアドレスの位置
-
-
+extern unsigned char* param_font_adr;
+extern unsigned short param_screen_x;
+extern unsigned short param_screen_y;
+extern unsigned int param_vram;
 
 // カラーコード
 #define     COL_000000      0

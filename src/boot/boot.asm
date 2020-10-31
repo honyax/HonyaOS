@@ -178,6 +178,10 @@ stage_3:
         cdecl   itoa, word [font.seg], .p1, 4, 16, 0b0100
         cdecl   itoa, word [font.off], .p2, 4, 16, 0b0100
         cdecl   puts, .s1
+        mov     ax, [font.seg]
+        shl     eax, 4
+        add     eax, [font.off]
+        mov     [PARAM_BASE_TEMP + PARAM_FONT_ADR], eax
 
         ;--------------------------------
         ; メモリ情報の取得と表示
@@ -304,6 +308,16 @@ stage_6:
         int     0x10
 
         ;--------------------------------
+        ; パラメータの設定
+        ;--------------------------------
+        mov     ax, SCREEN_X
+        mov     [PARAM_BASE_TEMP + PARAM_SCREEN_X], ax
+        mov     ax, SCREEN_Y
+        mov     [PARAM_BASE_TEMP + PARAM_SCREEN_Y], ax
+        mov     eax, VRAM
+        mov     [PARAM_BASE_TEMP + PARAM_VRAM], eax
+
+        ;--------------------------------
         ; 次のステージへ移行
         ;--------------------------------
         jmp     stage_7                         ; goto stage_7;
@@ -424,9 +438,18 @@ code_32:
 		;---------------------------------------
 		mov		ecx, (KERNEL_SIZE) / 4			; ECX = 4バイト単位でコピー;
 		mov		esi, BOOT_END					; ESI = 0x0000_9C00; // カーネル部
-		mov		edi, KERNEL_LOAD				; EDI = 0x0010_1000; // 上位メモリ
+		mov		edi, KERNEL_LOAD				; EDI = 0x0010_3000; // 上位メモリ
 		cld										; // DFクリア（+方向）
 		rep movsd								; while (--ECX) *EDI++ = *ESI++;
+
+		;---------------------------------------
+		; パラメータ領域をコピー
+		;---------------------------------------
+        mov     ecx, 0x1000 / 4                 ; ECX = 4バイト単位でコピー;
+        mov     esi, PARAM_BASE_TEMP            ; ESI = 0x0000_1000; // パラメータ領域（一時展開）の開始位置
+        mov     edi, PARAM_BASE                 ; EDI = 0x0010_1000; // パラメータ領域の開始位置
+        cld                                     ; // DFクリア（+方向）
+        rep movsd                               ; while (--ECX) *EDI++ = *ESI++;
 
 		;---------------------------------------
 		; カーネル処理に移行

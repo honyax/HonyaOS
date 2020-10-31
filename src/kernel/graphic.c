@@ -2,11 +2,11 @@
 
 void draw_pixel(int x, int y, unsigned char color)
 {
-    if (x < 0 || x >= SCREEN_X)
+    if (x < 0 || x >= param_screen_x)
         return;
-    if (y < 0 || y >= SCREEN_Y)
+    if (y < 0 || y >= param_screen_y)
         return;
-    unsigned int addr = VRAM + SCREEN_X * y + x;
+    unsigned int addr = param_vram + param_screen_x * y + x;
     write_mem8(addr, color);
 }
 
@@ -33,10 +33,9 @@ void draw_rect(int x, int y, int w, int h, unsigned char color)
 
 void draw_char(int x, int y, char c, unsigned char color)
 {
-    unsigned char *param_font_addr = (unsigned char *)(*(unsigned int *)PARAM_FONT_ADR);
     int index = c * 16;
     for (int i = 0; i < 16; i++) {
-        unsigned char data = param_font_addr[index + i];
+        unsigned char data = param_font_adr[index + i];
         if ((data & 0x80) != 0) { draw_pixel(x + 0, y + i, color); }
         if ((data & 0x40) != 0) { draw_pixel(x + 1, y + i, color); }
         if ((data & 0x20) != 0) { draw_pixel(x + 2, y + i, color); }
@@ -57,8 +56,8 @@ void draw_text(int x, int y, unsigned char* text, unsigned char color)
 
 void draw_color_test()
 {
-    int dx = SCREEN_X / 16;
-    int dy = SCREEN_Y / 16;
+    int dx = param_screen_x / 16;
+    int dy = param_screen_y / 16;
 
     for (int y = 0; y < 16; y++) {
         for (int x = 0; x < 16; x++) {
