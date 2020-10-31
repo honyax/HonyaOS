@@ -62,10 +62,10 @@
 
 		E820_RECORD_SIZE	equ		20
 
-        VBE_MODE            equ     (0x107)         ; 1280 x 1024 x 8bitカラー
-        SCREEN_X            equ     (1280)          ; 画面サイズ（横）
-        SCREEN_Y            equ     (1024)          ; 画面サイズ（縦）
-        ;VBE_MODE           equ     (0x105)         ; 1024 x 768 x 8bitカラー
-        ;SCREEN_X           equ     (1024)          ; 画面サイズ（横）
-        ;SCREEN_Y           equ     (768)           ; 画面サイズ（縦）
-        VRAM                equ     (0xe000_0000)   ; VRAMのアドレス
+        ; 画面モード
+        ;  0x100 :  640 x  400 x 8bitカラー
+        ;  0x101 :  640 x  480 x 8bitカラー
+        ;  0x103 :  800 x  600 x 8bitカラー
+        ;  0x105 : 1024 x  768 x 8bitカラー
+        ;  0x107 : 1280 x 1024 x 8bitカラー
+        VBE_MODE            equ     (0x107)         ; 画面モード

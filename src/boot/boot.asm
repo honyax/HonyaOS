@@ -298,28 +298,73 @@ stage_6:
         cdecl   puts, .s0                       ; puts(.s0);
 
         ;--------------------------------
+        ; VBE存在確認
+        ;--------------------------------
+		mov		ax, 0x9000
+		mov		es, ax
+		mov		di, 0
+		mov		ax, 0x4f00
+		int		0x10
+		cmp		ax, 0x004f
+		jne		.error
+
+        ;--------------------------------
+        ; VBEのバージョンチェック
+        ;--------------------------------
+		mov		ax, [es:di+4]
+		cmp		ax, 0x0200
+		jb		.error                          ; if (AX < 0x0200) goto error
+
+        ;--------------------------------
+        ; 画面モード情報を得る
+        ;--------------------------------
+        mov     cx, VBE_MODE
+        mov     ax, 0x4f01
+        int     0x10
+        cmp     ax, 0x004f
+        jne     .error
+
+        cmp     byte [es:di+0x19], 8
+        jne     .error
+        cmp     byte [es:di+0x1b], 4
+        jne     .error
+        mov     ax, [es:di+0x00]
+        and     ax, 0x0080
+        jz      .error
+
+        ;--------------------------------
+        ; パラメータの設定
+        ;--------------------------------
+        mov     ax, [es:di+0x12]
+        mov     [PARAM_BASE_TEMP + PARAM_SCREEN_X], ax
+        mov     ax, [es:di+0x14]
+        mov     [PARAM_BASE_TEMP + PARAM_SCREEN_Y], ax
+        mov     eax, [es:di+0x28]
+        mov     [PARAM_BASE_TEMP + PARAM_VRAM], eax
+
+        ;--------------------------------
         ; ビデオモードを設定する
         ;--------------------------------
-        ;mov     ax, 0x0012                      ; VGA 640x480
-        ;int     0x10                            ; BIOS(0x10, 0x12); // ビデオモードの設定
         mov     bx, 0x4000
         add     bx, VBE_MODE
         mov     ax, 0x4f02
         int     0x10
 
         ;--------------------------------
-        ; パラメータの設定
-        ;--------------------------------
-        mov     ax, SCREEN_X
-        mov     [PARAM_BASE_TEMP + PARAM_SCREEN_X], ax
-        mov     ax, SCREEN_Y
-        mov     [PARAM_BASE_TEMP + PARAM_SCREEN_Y], ax
-        mov     eax, VRAM
-        mov     [PARAM_BASE_TEMP + PARAM_VRAM], eax
-
-        ;--------------------------------
         ; 次のステージへ移行
         ;--------------------------------
+        jmp     stage_7                         ; goto stage_7;
+
+.error:
+        ;--------------------------------
+        ; ビデオモード設定失敗時は、320 x 200 x 8bit モードにする
+        ;--------------------------------
+        mov     al, 0x13
+        mov     ah, 0x00
+        int     0x10
+        mov     word [PARAM_BASE_TEMP + PARAM_SCREEN_X], 320
+        mov     word [PARAM_BASE_TEMP + PARAM_SCREEN_Y], 200
+        mov     dword [PARAM_BASE_TEMP + PARAM_VRAM], 0x000a_0000
         jmp     stage_7                         ; goto stage_7;
 
         ;--------------------------------
