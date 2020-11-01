@@ -4,6 +4,18 @@
 
 FIFO32 key_input_data;
 int key_input_buff[KEY_INPUT_BUF_SIZE];
+int key_input_pos = 0;
+
+static char keytable[0x80] = {
+    0,   0,   '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '^', 0x08,   0,
+    'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '@', '[', 0x0a,   0,   'A', 'S',
+    'D', 'F', 'G', 'H', 'J', 'K', 'L', ';', ':', 0,   0,   ']', 'Z', 'X', 'C', 'V',
+    'B', 'N', 'M', ',', '.', '/', 0,   '*', 0,   ' ', 0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   '7', '8', '9', '-', '4', '5', '6', '+', '1',
+    '2', '3', '0', '.', 0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+    0,   0,   0,   0x5c, 0,  0,   0,   0,   0,   0,   0,   0,   0,   0x5c, 0,  0
+};
 
 void init_keyboard()
 {
@@ -16,11 +28,18 @@ int update_keyboard()
     int length = key_input_data.len;
     for (int i = 0; i < length; i++) {
         int data = fifo32_get(&key_input_data);
-        char key_code[4];
-        int pos_x = 16 + 24 * key_input_data.pos_r;
-        sprintf(key_code, "%X", data);
-        draw_rect(pos_x, 440, 16, 16, COL_BLACK);
-        draw_text(pos_x, 440, key_code, COL_WHITE);
+        if (data < 0x80) {
+            char key_code[4];
+            int pos_x = 16 + 8 * key_input_pos;
+            key_input_pos++;
+            // 画面の右はじの方に行ったら位置を初期化
+            if (pos_x > param_screen_x - 40) {
+                key_input_pos = 0;
+            }
+            sprintf(key_code, "%c", keytable[data]);
+            draw_rect(pos_x, 440, 8, 16, COL_BLACK);
+            draw_text(pos_x, 440, key_code, COL_WHITE);
+        }
     }
     return length;
 }
