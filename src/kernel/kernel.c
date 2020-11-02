@@ -48,7 +48,7 @@ int kernel_main() {
 
     draw_text(16, 120, "HonyaOS is my own operating system.", COL_WHITE);
     char test_txt[64];
-    sprintf(test_txt, "This is %d, 0x%x, 0x%X, string:%s.", 100, 0x12AB, 0x34CD, "string parameter");
+    hsprintf(test_txt, "This is %d, 0x%x, 0x%X, string:%s.", 100, 0x12AB, 0x34CD, "string parameter");
     draw_text(16, 160, test_txt, COL_YELLOW);
 
 #if 0
@@ -84,7 +84,7 @@ void init_sections()
     unsigned int _DATA_END      = ( unsigned int )&_data_end;
     unsigned int _BSS_START     = ( unsigned int )&_bss_start;
     unsigned int _BSS_END       = ( unsigned int )&_bss_end;
-    sprintf(addr_txt, "text:%X - %X rodata:%X - %X data:%X - %X bss:%X - %X",
+    hsprintf(addr_txt, "text:%X - %X rodata:%X - %X data:%X - %X bss:%X - %X",
             _TEXT_START, _TEXT_END, _RODATA_START, _RODATA_END, _DATA_START, _DATA_END, _BSS_START, _BSS_END);
     draw_text(16, 480, addr_txt, COL_CYAN);
 

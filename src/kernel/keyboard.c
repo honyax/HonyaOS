@@ -36,7 +36,7 @@ int update_keyboard()
             if (pos_x > param_screen_x - 40) {
                 key_input_pos = 0;
             }
-            sprintf(key_code, "%c", keytable[data]);
+            hsprintf(key_code, "%c", keytable[data]);
             draw_rect(pos_x, 440, 8, 16, COL_BLACK);
             draw_text(pos_x, 440, key_code, COL_WHITE);
         }

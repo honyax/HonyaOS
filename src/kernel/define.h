@@ -94,7 +94,7 @@ void write_mem8(unsigned int addr, unsigned char data);
 void hmemset(void *addr, unsigned char c, int size);
 
 // sprintf.c
-int sprintf (char *str, const char *fmt, ...);
+int hsprintf (char *str, const char *fmt, ...);
 
 // descriptor.c
 void init_descriptor();

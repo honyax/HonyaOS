@@ -5,7 +5,7 @@ OBJECTS		= *.o
 all: $(OBJECTS)
 	ld -m elf_i386 -o $(KERNEL_BIN) -T linkerscript -Map kernel.map $(OBJECTS)
 
-$(OBJECTS): *.c *.s
+$(OBJECTS): *.c *.s *.h
 	gcc -c -m32 -fno-pic -fno-stack-protector *.c
 	gcc -c -m32 *.s
 

@@ -64,7 +64,7 @@ void draw_color_test()
             unsigned char color = y * 16 + x;
             draw_rect(dx * x, dy * y, dx, dy, color);
             char str[5];
-            sprintf(str, "0x%X%X", y, x);
+            hsprintf(str, "0x%X%X", y, x);
             unsigned char text_color;
             if ((x < 10 && y < 3) ||
                 (color >= 0x36 && color <= 0x39) ||

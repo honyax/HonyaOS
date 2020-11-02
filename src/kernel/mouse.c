@@ -38,7 +38,7 @@ void init_mouse()
 void show_mouse_state()
 {
     char mouse_code[20];
-    sprintf(mouse_code, "[lcr %d %d]", mouse_data.dx, mouse_data.dy);
+    hsprintf(mouse_code, "[lcr %d %d]", mouse_data.dx, mouse_data.dy);
     if ((mouse_data.button & 0x01) != 0) {
         mouse_code[1] = 'L';
     }

@@ -15,7 +15,7 @@ void update_timer()
     if (display_timer_count != timer_count) {
         display_timer_count = timer_count;
         char disp_timer[10];
-        sprintf(disp_timer, "%d", display_timer_count);
+        hsprintf(disp_timer, "%d", display_timer_count);
         draw_rect(16, 500, 80, 16, COL_BLACK);
         draw_text(16, 500, disp_timer, COL_WHITE);
     }

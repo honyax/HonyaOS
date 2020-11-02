@@ -55,7 +55,7 @@ int str2asc (char *str, const char *arg)
     return len;
 }
 
-int sprintf (char *str, const char *fmt, ...)
+int hsprintf (char *str, const char *fmt, ...)
 {
     va_list list;
     int count, len;
