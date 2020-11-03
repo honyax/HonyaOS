@@ -28,6 +28,7 @@ int kernel_main() {
     init_mouse();
     _sti();
     enable_mouse_keyboard();
+    mem_init();
 
 #if 0
     for (int y = 0; y < param_screen_y; y++) {

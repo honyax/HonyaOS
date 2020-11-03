@@ -90,8 +90,12 @@ void draw_text(int x, int y, unsigned char* text, unsigned char color);
 void draw_color_test();
 
 // memory.c
+#define NULL            0
 void write_mem8(unsigned int addr, unsigned char data);
 void hmemset(void *addr, unsigned char c, int size);
+void mem_init();
+void *hmalloc(unsigned int size);
+void hfree(void *ptr);
 
 // sprintf.c
 int hsprintf (char *str, const char *fmt, ...);
