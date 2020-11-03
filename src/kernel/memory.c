@@ -29,7 +29,7 @@ unsigned int alloc_error_count;
 unsigned int free_error_count;
 
 #define HEAP_MEMORY_START   0x00200000
-#define HEAP_MEMORY_END     0x07FF0000
+#define HEAP_MEMORY_END     0x07FE0000
 #define USED_MEMORY_MAX     1024
 USED_MEMORY* used_memories;
 
