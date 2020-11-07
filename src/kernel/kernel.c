@@ -26,9 +26,10 @@ int kernel_main() {
     init_pit();
     init_keyboard();
     init_mouse();
-    _sti();
     enable_mouse_keyboard();
-    mem_init();
+    init_memory();
+    init_paging();
+    _sti();
 
 #if 0
     for (int y = 0; y < param_screen_y; y++) {

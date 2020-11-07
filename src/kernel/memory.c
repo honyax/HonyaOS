@@ -34,7 +34,7 @@ unsigned int free_error_count;
 USED_MEMORY* used_memories;
 
 // メモリ初期化
-void mem_init()
+void init_memory()
 {
     // ヒープメモリとして 0x0020 0000 - 0x07FF 0000 の領域が与えられている
     // まずは管理領域として 0x0020 0000 から USED_MEMORY * USED_MEMORY_MAX 分の領域を確保

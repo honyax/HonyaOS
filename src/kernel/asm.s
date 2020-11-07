@@ -41,6 +41,25 @@ _stihlt:
     sti
     hlt
 
+// CR0/CR3
+.global _get_cr0
+.global _set_cr0
+.global _set_cr3
+
+_get_cr0:
+    mov     %cr0, %eax
+    ret
+
+_set_cr0:
+    mov     0x4(%esp), %eax
+    mov     %eax, %cr0
+    ret
+
+_set_cr3:
+    mov     0x4(%esp), %eax
+    mov     %eax, %cr3
+    ret
+
 ////////////////////////////////////////////////////////////////
 
 // IN/OUT

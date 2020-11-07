@@ -9,6 +9,8 @@
 
 #define     PARAM_BASE              0x00101000      // パラメータ領域の開始位置
 #define     KERNEL_LOAD             0x00103000      // カーネルのロード位置（プロテクトモード）
+#define     KERNEL_PAGE_DIR         0x00108000      // カーネルのページディレクトリ
+#define     KERNEL_PAGE_TABLE       0x00109000      // カーネルのページテーブル
 
 #define     SECT_SIZE               (512)           // セクタサイズ
 
@@ -69,6 +71,9 @@ void _sti();
 void _cli();
 void _hlt();
 void _stihlt();
+unsigned int _get_cr0();
+void _set_cr0(unsigned int value);
+void _set_cr3(unsigned int value);
 int _in8(int port);
 int _in16(int port);
 int _in32(int port);
@@ -93,7 +98,7 @@ void draw_color_test();
 #define NULL            0
 void write_mem8(unsigned int addr, unsigned char data);
 void hmemset(void *addr, unsigned char c, int size);
-void mem_init();
+void init_memory();
 void *hmalloc(unsigned int size);
 void hfree(void *ptr);
 
@@ -146,3 +151,6 @@ int update_mouse();
 
 // timer.c
 void update_timer();
+
+// paging.c
+void init_paging();
