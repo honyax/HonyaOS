@@ -98,5 +98,5 @@ void update_interrupt()
 
 void inthandler00(int *esp)
 {
-    // TODO: ゼロ除算割り込み処理
+    // TODO: ゼロ除算例外処理
 }

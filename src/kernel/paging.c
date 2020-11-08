@@ -32,18 +32,30 @@ unsigned int *kernel_page_table = (unsigned int *) KERNEL_PAGE_TABLE;
 void init_paging()
 {
 
-#if 0
-    // 4MB分のメモリのpaging設定を行う
+#if 1
+    // 先頭4MBと、VRAM領域のメモリのpaging設定を行う
 
-    // ページディレクトリは、先頭だけ設定し、他は全て 0
-    kernel_page_dir[0] = KERNEL_PAGE_TABLE | PDE_FLAGS_P | PDE_FLAGS_RW | PDE_FLAGS_US;
-    for (int i = 1; i < 1024; i++) {
+    // ページディレクトリは、ひとまず全て 0 で初期化
+    for (int i = 0; i < 1024; i++) {
         kernel_page_dir[i] = 0;
     }
+
+    // 先頭 4MB 用の設定
+    kernel_page_dir[0] = KERNEL_PAGE_TABLE | PDE_FLAGS_P | PDE_FLAGS_RW | PDE_FLAGS_US;
+
+    // VRAM用のpagingを行うため、VRAMのアドレスから 4MB はそのまま移行させる
+    // 通常は 1280 x 1024 x 8bit なので、4MB 分対応すれば十分
+    unsigned int vram_index = param_vram >> 22;
+    kernel_page_dir[vram_index] = KERNEL_PAGE_TABLE + 0x1000 | PDE_FLAGS_P | PDE_FLAGS_RW | PDE_FLAGS_US;
 
     // ページテーブルは、メモリアドレス 0 ～ 4MB までの領域を指す
     for (int i = 0; i < 1024; i++) {
         kernel_page_table[i] = 4096 * i | PTE_FLAGS_P | PTE_FLAGS_RW | PTE_FLAGS_US;
+    }
+
+    // VRAM用のマッピングを設定
+    for (int i = 0; i < 1024; i++) {
+        kernel_page_table[1024 + i] = param_vram + 4096 * i | PTE_FLAGS_P | PTE_FLAGS_RW | PTE_FLAGS_US;
     }
 
 #else
@@ -68,4 +80,9 @@ void init_paging()
     unsigned int cr0 = _get_cr0();
     cr0 |= CR0_PAGING_FLAG;
     _set_cr0(cr0);
+}
+
+void inthandler0e(int *esp)
+{
+    // TODO: Page Fault例外処理
 }

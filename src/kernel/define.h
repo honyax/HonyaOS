@@ -82,6 +82,7 @@ void _out16(int port, int data);
 void _out32(int port, int data);
 void _asm_inthandler_default();
 void _asm_inthandler00();
+void _asm_inthandler0e();
 void _asm_inthandler20();
 void _asm_inthandler21();
 void _asm_inthandler2c();
