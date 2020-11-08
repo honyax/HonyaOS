@@ -10,6 +10,9 @@ int mouse_input_buff[MOUSE_INPUT_BUF_SIZE];
 #define MOUSE_STATE_PHASE_2     2   // ２バイト目のデータを待っている状態
 #define MOUSE_STATE_PHASE_3     3   // ３バイト目のデータを待っている状態
 
+#define MOUSE_CURSOR_W          4   // マウスカーソルの幅
+#define MOUSE_CURSOR_H          4   // マウスカーソルの高さ
+
 typedef struct
 {
     int x;
@@ -19,6 +22,7 @@ typedef struct
     int button;
     unsigned char buf[3];
     unsigned char state;
+    unsigned char bg_colors[MOUSE_CURSOR_W][MOUSE_CURSOR_H];
 } MOUSE_DATA;
 MOUSE_DATA mouse_data;
 
@@ -33,6 +37,11 @@ void init_mouse()
     mouse_data.dy = 0;
     mouse_data.button = 0;
     mouse_data.state = MOUSE_STATE_INIT;
+    for (int x = 0; x < MOUSE_CURSOR_W; x++) {
+        for (int y = 0; y < MOUSE_CURSOR_H; y++) {
+            mouse_data.bg_colors[x][y] = COL_NONE;
+        }
+    }
 }
 
 void show_mouse_state()
@@ -59,12 +68,25 @@ void show_mouse()
         return;
 
     // 以前の位置を消して、新たな位置に描画
-    draw_rect(mouse_data.x, mouse_data.y, 4, 4, COL_BLACK);
+    if (mouse_data.bg_colors[0][0] != COL_NONE) {
+        for (int x = 0; x < MOUSE_CURSOR_W; x++) {
+            for (int y = 0; y < MOUSE_CURSOR_H; y++) {
+                draw_pixel(mouse_data.x + x, mouse_data.y + y, mouse_data.bg_colors[x][y]);
+            }
+        }
+    }
     mouse_data.x += mouse_data.dx;
     mouse_data.y += mouse_data.dy;
     mouse_data.dx = 0;
     mouse_data.dy = 0;
-    draw_rect(mouse_data.x, mouse_data.y, 4, 4, COL_WHITE);
+
+    // マウスカーソルの位置のcolorを保存
+    for (int x = 0; x < MOUSE_CURSOR_W; x++) {
+        for (int y = 0; y < MOUSE_CURSOR_H; y++) {
+            mouse_data.bg_colors[x][y] = get_pixel(mouse_data.x + x, mouse_data.y + y);
+        }
+    }
+    draw_rect(mouse_data.x, mouse_data.y, MOUSE_CURSOR_W, MOUSE_CURSOR_H, COL_WHITE);
 }
 
 int update_mouse()

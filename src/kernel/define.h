@@ -62,6 +62,7 @@ extern unsigned int param_vram;
 #define     COL_PURPLE      COL_FC54FC
 #define     COL_YELLOW      COL_FCFC54
 #define     COL_WHITE       COL_FCFCFC
+#define     COL_NONE        255
 
 
 // asm.s
@@ -89,6 +90,7 @@ void _asm_inthandler2c();
 
 // graphic.c
 void draw_pixel(int x, int y, unsigned char color);
+unsigned char get_pixel(int x, int y);
 void draw_line(int x1, int y1, int x2, int y2, unsigned char color);
 void draw_rect(int x, int y, int w, int h, unsigned char color);
 void draw_char(int x, int y, char c, unsigned char color);
@@ -98,6 +100,7 @@ void draw_color_test();
 // memory.c
 #define NULL            0
 void write_mem8(unsigned int addr, unsigned char data);
+unsigned char read_mem8(unsigned int addr);
 void hmemset(void *addr, unsigned char c, int size);
 void init_memory();
 void *hmalloc(unsigned int size);

@@ -10,6 +10,16 @@ void draw_pixel(int x, int y, unsigned char color)
     write_mem8(addr, color);
 }
 
+unsigned char get_pixel(int x, int y)
+{
+    if (x < 0 || x >= param_screen_x)
+        return 0;
+    if (y < 0 || y >= param_screen_y)
+        return 0;
+    unsigned int addr = param_vram + param_screen_x * y + x;
+    return read_mem8(addr);
+}
+
 void draw_line(int x1, int y1, int x2, int y2, unsigned char color)
 {
     int deltaX = x1 > x2 ? x1 - x2 : x2 - x1;
