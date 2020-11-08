@@ -1,3 +1,7 @@
+.intel_syntax noprefix
+
+////////////////////////////////////////////////////////////////
+
 // GDT/IDT
 .global _load_idt
 .global _load_gdt
@@ -47,17 +51,18 @@ _stihlt:
 .global _set_cr3
 
 _get_cr0:
-    mov     %cr0, %eax
+    mov     eax, cr0
     ret
 
 _set_cr0:
-    mov     0x4(%esp), %eax
-    mov     %eax, %cr0
+    mov     eax, [esp + 0x4]
+    mov     cr0, eax
+    jmp     $ + 2
     ret
 
 _set_cr3:
-    mov     0x4(%esp), %eax
-    mov     %eax, %cr3
+    mov     eax, [esp + 0x4]
+    mov     cr3, eax
     ret
 
 ////////////////////////////////////////////////////////////////
@@ -72,44 +77,44 @@ _set_cr3:
 
 // int _in8(int port)
 _in8:
-    mov     0x4(%esp), %edx
-    mov     $0, %eax
-    in      %dx, %al
+    mov     edx, [esp + 0x4]
+    mov     eax, 0
+    in      al, dx
     ret
 
 // int _in16(int port)
 _in16:
-    mov     0x4(%esp), %edx
-    mov     $0, %eax
-    in      %dx, %ax
+    mov     edx, [esp + 0x4]
+    mov     eax, 0
+    in      ax, dx
     ret
 
 // int _in32(int port)
 _in32:
-    mov     0x4(%esp), %edx
-    mov     $0, %eax
-    in      %dx, %eax
+    mov     edx, [esp + 0x4]
+    mov     eax, 0
+    in      eax, dx
     ret
 
 // void _out8(int port, int data)
 _out8:
-    mov     0x4(%esp), %edx
-    mov     0x8(%esp), %al
-    out     %al, %dx
+    mov     edx, [esp + 0x4]
+    mov     al, [esp + 0x8]
+    out     dx, al
     ret
 
 // void _out16(int port, int data)
 _out16:
-    mov     0x4(%esp), %edx
-    mov     0x8(%esp), %eax
-    out     %ax, %dx
+    mov     edx, [esp + 0x4]
+    mov     eax, [esp + 0x8]
+    out     dx, ax
     ret
 
 // void _out32(int port, int data)
 _out32:
-    mov     0x4(%esp), %edx
-    mov     0x8(%esp), %eax
-    out     %eax, %dx
+    mov     edx, [esp + 0x4]
+    mov     eax, [esp + 0x8]
+    out     dx, eax
     ret
 
 ////////////////////////////////////////////////////////////////
@@ -130,19 +135,19 @@ _out32:
 
 // 割り込みマクロ
 .macro _asm_inthandler  c_inthandler
-    push    %es
-    push    %ds
-    pushal
-    mov     %esp, %eax
-    push    %eax
-    mov     %ss, %ax
-    mov     %ax, %ds
-    mov     %ax, %es
+    push    es
+    push    ds
+    pusha
+    mov     eax, esp
+    push    eax
+    mov     ax, ss
+    mov     ds, ax
+    mov     es, ax
     call    \c_inthandler
-    pop     %eax
-    popal
-    pop     %ds
-    pop     %es
+    pop     eax
+    popa
+    pop     ds
+    pop     es
     iret
 .endm
 
