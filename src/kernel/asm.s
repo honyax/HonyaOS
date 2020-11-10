@@ -39,11 +39,13 @@ _cli:
 // void _hlt()
 _hlt:
     hlt
+    ret
 
 // void _stihlt()
 _stihlt:
     sti
     hlt
+    ret
 
 // CR0/CR3
 .global _get_cr0
