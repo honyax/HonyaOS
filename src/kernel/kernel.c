@@ -31,6 +31,8 @@ int kernel_main() {
     init_paging();
     _sti();
 
+    init_task();
+
 #if 0
     for (int y = 0; y < param_screen_y; y++) {
         for (int x = 0; x < param_screen_x; x++) {

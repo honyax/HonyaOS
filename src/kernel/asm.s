@@ -47,21 +47,39 @@ _stihlt:
     hlt
     ret
 
+// Task
+.global _load_tr
+.global _tmp_task_switch
+
+// void _load_tr(int tr)
+_load_tr:
+    ltr     [esp + 0x4]
+    ret
+
+// TODO: ひとまず固定で index 4 のタスクに切り替える
+// void _tmp_task_switch()
+_tmp_task_switch:
+    jmp     32:0
+    ret
+
 // CR0/CR3
 .global _get_cr0
 .global _set_cr0
 .global _set_cr3
 
+// unsigned int _get_cr0()
 _get_cr0:
     mov     eax, cr0
     ret
 
+// void _set_cr0(unsigned int value)
 _set_cr0:
     mov     eax, [esp + 0x4]
     mov     cr0, eax
     jmp     $ + 2
     ret
 
+// void _set_cr3(unsigned int value)
 _set_cr3:
     mov     eax, [esp + 0x4]
     mov     cr3, eax

@@ -39,6 +39,11 @@ int update_keyboard()
             hsprintf(key_code, "%c", keytable[data]);
             draw_rect(pos_x, 440, 8, 16, COL_BLACK);
             draw_text(pos_x, 440, key_code, COL_WHITE);
+
+            // TODO: sキー押下でタスク切替するテスト
+            if (keytable[data] == 'S') {
+                task_switch();
+            }
         }
     }
     return length;
