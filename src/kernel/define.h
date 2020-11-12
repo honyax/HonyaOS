@@ -75,7 +75,7 @@ void _cli();
 void _hlt();
 void _stihlt();
 void _load_tr(int tr);
-void _tmp_task_switch();
+void _farjmp(int eip, short cs);
 unsigned int _get_cr0();
 void _set_cr0(unsigned int value);
 void _set_cr3(unsigned int value);

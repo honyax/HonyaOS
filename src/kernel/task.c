@@ -48,7 +48,7 @@ void init_task()
 }
 
 void task_switch() {
-    _tmp_task_switch();
+    _farjmp(0, 4 * 8);
 }
 
 void task_b_main()

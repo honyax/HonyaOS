@@ -49,17 +49,16 @@ _stihlt:
 
 // Task
 .global _load_tr
-.global _tmp_task_switch
+.global _farjmp
 
 // void _load_tr(int tr)
 _load_tr:
     ltr     [esp + 0x4]
     ret
 
-// TODO: ひとまず固定で index 4 のタスクに切り替える
-// void _tmp_task_switch()
-_tmp_task_switch:
-    jmp     32:0
+// void _farjmp(int eip, short cs)
+_farjmp:
+    jmp fword ptr [esp+4]
     ret
 
 // CR0/CR3
