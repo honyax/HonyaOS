@@ -47,8 +47,18 @@ void init_task()
     task_b.gs = 2 * 8;
 }
 
-void task_switch(int task_id) {
-    _farjmp(0, task_id * 8);
+int current_task = 3;
+
+void task_switch() {
+    switch (current_task) {
+        case 3:
+            current_task = 4;
+            break;
+        case 4:
+            current_task = 3;
+            break;
+    }
+    _farjmp(0, current_task * 8);
 }
 
 void task_b_main()
@@ -57,7 +67,5 @@ void task_b_main()
 
     for (;;) {
         _hlt();
-        update_interrupt();
-        update_timer();
     }
 }
