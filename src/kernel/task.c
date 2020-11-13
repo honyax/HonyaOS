@@ -47,13 +47,17 @@ void init_task()
     task_b.gs = 2 * 8;
 }
 
-void task_switch() {
-    _farjmp(0, 4 * 8);
+void task_switch(int task_id) {
+    _farjmp(0, task_id * 8);
 }
 
 void task_b_main()
 {
+    draw_text(80, 540, "This is task_b_main!", COL_CYAN);
+
     for (;;) {
         _hlt();
+        update_interrupt();
+        update_timer();
     }
 }

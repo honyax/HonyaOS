@@ -165,4 +165,4 @@ void init_paging();
 
 // task.c
 void init_task();
-void task_switch();
+void task_switch(int task_id);
