@@ -31,13 +31,13 @@ typedef struct
     unsigned int size;
 } USED_MEMORY;
 
-unsigned int allocatable_start_addr;
-unsigned int total_size;
-unsigned int alloc_error_count;
-unsigned int free_error_count;
+static unsigned int allocatable_start_addr;
+static unsigned int total_size;
+static unsigned int alloc_error_count;
+static unsigned int free_error_count;
 
 #define USED_MEMORY_MAX     1024
-USED_MEMORY* used_memories;
+static USED_MEMORY* used_memories;
 
 // メモリ初期化
 void init_memory()

@@ -26,8 +26,8 @@
 
 #define CR0_PAGING_FLAG             0x80000000
 
-unsigned int *kernel_page_dir;
-unsigned int *kernel_page_table;
+static unsigned int *kernel_page_dir;
+static unsigned int *kernel_page_table;
 
 void init_paging()
 {

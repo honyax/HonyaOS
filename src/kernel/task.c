@@ -8,17 +8,17 @@ typedef struct
     int ldtr, iomap;
 } TSS;
 
-TSS task_a;
-TSS task_b;
-TSS task_c;
+static TSS task_a;
+static TSS task_b;
+static TSS task_c;
 
 #define LDT_NUM 10
 #define LDT_GDT_INDEX 3
-unsigned long long ldt[LDT_NUM];
+static unsigned long long ldt[LDT_NUM];
 
 void setup_segment_descriptor(int index, int limit, int base, unsigned short flags);
 
-int task_index;
+static int task_index;
 
 void task_b_main();
 void task_c_main();

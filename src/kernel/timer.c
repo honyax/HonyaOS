@@ -1,9 +1,9 @@
 #include "define.h"
 
-int timer_count;
+static int timer_count;
 
-int display_timer_count;
-char disp_timer[10];
+static int display_timer_count;
+static char disp_timer[10];
 
 void init_timer() {
     timer_count = 0;

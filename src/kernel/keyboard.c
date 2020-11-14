@@ -2,9 +2,9 @@
 
 #define KEY_INPUT_BUF_SIZE  32
 
-FIFO32 key_input_data;
-int key_input_buff[KEY_INPUT_BUF_SIZE];
-int key_input_pos = 0;
+static FIFO32 key_input_data;
+static int key_input_buff[KEY_INPUT_BUF_SIZE];
+static int key_input_pos;
 
 static char keytable[0x80] = {
     0,   0,   '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '^', 0x08,   0,
@@ -21,6 +21,8 @@ void init_keyboard()
 {
     // FIFOバッファの初期化
     fifo32_init(&key_input_data, KEY_INPUT_BUF_SIZE, key_input_buff);
+
+    key_input_pos = 0;
 }
 
 int update_keyboard()

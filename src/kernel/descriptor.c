@@ -24,9 +24,9 @@ typedef struct
     unsigned char   flags;
     unsigned short  base_hi;
 } GATE_DESCRIPTOR;
-GATE_DESCRIPTOR idt[NUM_IDT];
+static GATE_DESCRIPTOR idt[NUM_IDT];
 
-// IDTRを定義
+// IDTRを定義（asm.sから参照するためstaticにしない）
 typedef struct 
 {
     unsigned short      size;
@@ -61,9 +61,9 @@ typedef struct
     unsigned char   limit_hi_flags;
     unsigned char   base_hi;
 } SEGMENT_DESCRIPTOR;
-SEGMENT_DESCRIPTOR gdt[NUM_GDT];
+static SEGMENT_DESCRIPTOR gdt[NUM_GDT];
 
-// GDTRを定義
+// GDTRを定義（asm.sから参照するためstaticにしない）
 typedef struct
 {
     unsigned short      size;

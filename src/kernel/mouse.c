@@ -2,8 +2,8 @@
 
 #define MOUSE_INPUT_BUF_SIZE    128     // マウスのインプットデータを格納するバッファのサイズ
 
-FIFO32 mouse_input_data;
-int mouse_input_buff[MOUSE_INPUT_BUF_SIZE];
+static FIFO32 mouse_input_data;
+static int mouse_input_buff[MOUSE_INPUT_BUF_SIZE];
 
 #define MOUSE_STATE_INIT        0   // 最初の0xFAが来る前の状態
 #define MOUSE_STATE_PHASE_1     1   // １バイト目のデータを待っている状態
@@ -24,7 +24,7 @@ typedef struct
     unsigned char state;
     unsigned char bg_colors[MOUSE_CURSOR_W][MOUSE_CURSOR_H];
 } MOUSE_DATA;
-MOUSE_DATA mouse_data;
+static MOUSE_DATA mouse_data;
 
 void init_mouse()
 {

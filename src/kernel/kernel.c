@@ -12,6 +12,7 @@ extern unsigned int _bss_end;
 void init_parameters();
 void init_sections();
 
+// 以下は他のファイルからも参照可能なグローバル変数
 unsigned char* param_font_adr;
 unsigned short param_screen_x;
 unsigned short param_screen_y;
