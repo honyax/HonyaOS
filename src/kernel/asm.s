@@ -193,3 +193,11 @@ _asm_inthandler21:
 // void _asm_inthandler2c
 _asm_inthandler2c:
     _asm_inthandler inthandler2c
+
+////////////////////////////////////////////////////////////////
+
+// Magic break
+.global _magic_break
+_magic_break:
+    xchg    bx, bx
+    ret
