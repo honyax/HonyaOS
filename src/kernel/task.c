@@ -10,14 +10,18 @@ typedef struct
 
 TSS task_a;
 TSS task_b;
+TSS task_c;
 
-#define LDT_NUM 5
+#define LDT_NUM 10
 #define LDT_GDT_INDEX 3
 unsigned long long ldt[LDT_NUM];
 
 void setup_segment_descriptor(int index, int limit, int base, unsigned short flags);
 
+int task_index;
+
 void task_b_main();
+void task_c_main();
 
 void init_task()
 {
@@ -27,6 +31,8 @@ void init_task()
     ldt[2] = 0x00CF92000000FFFF;    // task a ds
     ldt[3] = 0x00CF9A000000FFFF;    // task b cs
     ldt[4] = 0x00CF92000000FFFF;    // task b ds
+    ldt[5] = 0x00CF9A000000FFFF;    // task c cs
+    ldt[6] = 0x00CF92000000FFFF;    // task c ds
 
     setup_segment_descriptor(LDT_GDT_INDEX, LDT_NUM * 8 - 1, (unsigned int)ldt, 0x0082);
 
@@ -36,9 +42,13 @@ void init_task()
     task_b.cr3 = KERNEL_PAGE_DIR;
     task_b.ldtr = LDT_GDT_INDEX * 8;
     task_b.iomap = 0x40000000;
+    task_c.cr3 = KERNEL_PAGE_DIR;
+    task_c.ldtr = LDT_GDT_INDEX * 8;
+    task_c.iomap = 0x40000000;
 
     setup_segment_descriptor(4, 103, (unsigned int) &task_a, 0x0089);
     setup_segment_descriptor(5, 103, (unsigned int) &task_b, 0x0089);
+    setup_segment_descriptor(6, 103, (unsigned int) &task_c, 0x0089);
     _load_tr(4 * 8);
 
     int task_b_esp = ((int)hmalloc(64 * 1024)) + 64 * 1024;
@@ -60,26 +70,47 @@ void init_task()
     task_b.fs = 4 * 8 | 4;
     task_b.gs = 4 * 8 | 4;
 
+    int task_c_esp = ((int)hmalloc(64 * 1024)) + 64 * 1024;
+    task_c.eip = (int) &task_c_main;
+    task_c.eflags = 0x00000202; /* IF = 1; */
+    task_c.eax = 0;
+    task_c.ecx = 0;
+    task_c.edx = 0;
+    task_c.ebx = 0;
+    task_c.esp = task_c_esp;
+    task_c.ebp = 0;
+    task_c.esi = 0;
+    task_c.edi = 0;
+    task_c.es = 6 * 8 | 4;
+    task_c.cs = 5 * 8 | 4;
+    task_c.ss = 6 * 8 | 4;
+    task_c.ds = 6 * 8 | 4;
+    task_c.fs = 6 * 8 | 4;
+    task_c.gs = 6 * 8 | 4;
+
     _load_gdt();
+
+    task_index = 0;
 }
 
-int current_task = 4;
-
 void task_switch() {
-    switch (current_task) {
-        case 4:
-            current_task = 5;
-            break;
-        case 5:
-            current_task = 4;
-            break;
-    }
-    _farjmp(0, current_task * 8);
+    // task_indexは0～2を繰り返し
+    task_index = (task_index + 1) % 3;
+    _farjmp(0, (task_index + 4) * 8);
 }
 
 void task_b_main()
 {
     draw_text(80, 540, "This is task_b_main!", COL_CYAN);
+
+    for (;;) {
+        _hlt();
+    }
+}
+
+void task_c_main()
+{
+    draw_text(80, 600, "This is task_c_main!", COL_CYAN);
 
     for (;;) {
         _hlt();
