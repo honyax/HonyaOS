@@ -63,12 +63,14 @@ void init_task()
     task_b.esi = 0;
     task_b.edi = 0;
     // TODO: ひとまずCS/DSをハードコーディング
-    task_b.es = 4 * 8 | 4;
-    task_b.cs = 3 * 8 | 4;
-    task_b.ss = 4 * 8 | 4;
-    task_b.ds = 4 * 8 | 4;
-    task_b.fs = 4 * 8 | 4;
-    task_b.gs = 4 * 8 | 4;
+    int task_b_cs = 3 * 8 | 4;
+    int task_b_ds = 4 * 8 | 4;
+    task_b.es = task_b_ds;
+    task_b.cs = task_b_cs;
+    task_b.ss = task_b_ds;
+    task_b.ds = task_b_ds;
+    task_b.fs = task_b_ds;
+    task_b.gs = task_b_ds;
 
     int task_c_esp = ((int)hmalloc(64 * 1024)) + 64 * 1024;
     task_c.eip = (int) &task_c_main;
@@ -81,12 +83,14 @@ void init_task()
     task_c.ebp = 0;
     task_c.esi = 0;
     task_c.edi = 0;
-    task_c.es = 6 * 8 | 4;
-    task_c.cs = 5 * 8 | 4;
-    task_c.ss = 6 * 8 | 4;
-    task_c.ds = 6 * 8 | 4;
-    task_c.fs = 6 * 8 | 4;
-    task_c.gs = 6 * 8 | 4;
+    int task_c_cs = 5 * 8 | 4;
+    int task_c_ds = 6 * 8 | 4;
+    task_c.es = task_c_ds;
+    task_c.cs = task_c_cs;
+    task_c.ss = task_c_ds;
+    task_c.ds = task_c_ds;
+    task_c.fs = task_c_ds;
+    task_c.gs = task_c_ds;
 
     _load_gdt();
 
