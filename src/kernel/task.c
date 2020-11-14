@@ -10,7 +10,10 @@ typedef struct
 
 TSS task_a;
 TSS task_b;
-unsigned long long ldt[5];
+
+#define LDT_NUM 5
+#define LDT_GDT_INDEX 3
+unsigned long long ldt[LDT_NUM];
 
 void setup_segment_descriptor(int index, int limit, int base, unsigned short flags);
 
@@ -18,16 +21,25 @@ void task_b_main();
 
 void init_task()
 {
+    // TODO: ひとまずLDTの中身をハードコーディング
+    ldt[0] = 0x0000000000000000;    // zero
+    ldt[1] = 0x00CF9A000000FFFF;    // task a cs
+    ldt[2] = 0x00CF92000000FFFF;    // task a ds
+    ldt[3] = 0x00CF9A000000FFFF;    // task b cs
+    ldt[4] = 0x00CF92000000FFFF;    // task b ds
+
+    setup_segment_descriptor(LDT_GDT_INDEX, LDT_NUM * 8 - 1, (unsigned int)ldt, 0x0082);
+
     task_a.cr3 = KERNEL_PAGE_DIR;
-    task_a.ldtr = 5 * 8;
+    task_a.ldtr = LDT_GDT_INDEX * 8;
     task_a.iomap = 0x40000000;
     task_b.cr3 = KERNEL_PAGE_DIR;
-    task_b.ldtr = 5 * 8;
+    task_b.ldtr = LDT_GDT_INDEX * 8;
     task_b.iomap = 0x40000000;
 
-    setup_segment_descriptor(3, 103, (unsigned int) &task_a, 0x0089);
-    setup_segment_descriptor(4, 103, (unsigned int) &task_b, 0x0089);
-    _load_tr(3 * 8);
+    setup_segment_descriptor(4, 103, (unsigned int) &task_a, 0x0089);
+    setup_segment_descriptor(5, 103, (unsigned int) &task_b, 0x0089);
+    _load_tr(4 * 8);
 
     int task_b_esp = ((int)hmalloc(64 * 1024)) + 64 * 1024;
     task_b.eip = (int) &task_b_main;
@@ -48,27 +60,18 @@ void init_task()
     task_b.fs = 4 * 8 | 4;
     task_b.gs = 4 * 8 | 4;
 
-    // TODO: ひとまずLDTの中身をハードコーディング
-    ldt[0] = 0x0000000000000000;    // zero
-    ldt[1] = 0x00CF9A000000FFFF;    // task a cs
-    ldt[2] = 0x00CF92000000FFFF;    // task a ds
-    ldt[3] = 0x00CF9A000000FFFF;    // task b cs
-    ldt[4] = 0x00CF92000000FFFF;    // task b ds
-
-    setup_segment_descriptor(5, 8 * 5 - 1, (unsigned int)ldt, 0x0082);
-
     _load_gdt();
 }
 
-int current_task = 3;
+int current_task = 4;
 
 void task_switch() {
     switch (current_task) {
-        case 3:
-            current_task = 4;
-            break;
         case 4:
-            current_task = 3;
+            current_task = 5;
+            break;
+        case 5:
+            current_task = 4;
             break;
     }
     _farjmp(0, current_task * 8);
