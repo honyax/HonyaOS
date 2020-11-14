@@ -26,11 +26,13 @@
 
 #define CR0_PAGING_FLAG             0x80000000
 
-unsigned int *kernel_page_dir = (unsigned int *) KERNEL_PAGE_DIR;
-unsigned int *kernel_page_table = (unsigned int *) KERNEL_PAGE_TABLE;
+unsigned int *kernel_page_dir;
+unsigned int *kernel_page_table;
 
 void init_paging()
 {
+    kernel_page_dir = (unsigned int *) KERNEL_PAGE_DIR;
+    kernel_page_table = (unsigned int *) KERNEL_PAGE_TABLE;
 
 #if 1
     // 128MB分のメモリと、VRAM領域のメモリのpaging設定を行う

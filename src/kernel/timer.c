@@ -1,6 +1,14 @@
 #include "define.h"
 
-int timer_count = 0;
+int timer_count;
+
+int display_timer_count;
+char disp_timer[10];
+
+void init_timer() {
+    timer_count = 0;
+    display_timer_count = 0;
+}
 
 void inthandler20(int *esp)
 {
@@ -9,9 +17,6 @@ void inthandler20(int *esp)
 
     task_switch();
 }
-
-int display_timer_count = 0;
-char disp_timer[10];
 
 void update_timer()
 {

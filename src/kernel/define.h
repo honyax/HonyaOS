@@ -158,6 +158,7 @@ void init_mouse();
 int update_mouse();
 
 // timer.c
+void init_timer();
 void update_timer();
 
 // paging.c

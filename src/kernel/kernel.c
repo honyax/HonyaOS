@@ -28,6 +28,7 @@ int kernel_main() {
     init_mouse();
     enable_mouse_keyboard();
     init_memory();
+    init_timer();
     init_paging();
     init_task();
 
