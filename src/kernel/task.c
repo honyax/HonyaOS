@@ -10,6 +10,7 @@ typedef struct
 
 TSS task_a;
 TSS task_b;
+unsigned long long ldt[5];
 
 void setup_segment_descriptor(int index, int limit, int base, unsigned short flags);
 
@@ -18,10 +19,10 @@ void task_b_main();
 void init_task()
 {
     task_a.cr3 = KERNEL_PAGE_DIR;
-    task_a.ldtr = 0;
+    task_a.ldtr = 5 * 8;
     task_a.iomap = 0x40000000;
     task_b.cr3 = KERNEL_PAGE_DIR;
-    task_b.ldtr = 0;
+    task_b.ldtr = 5 * 8;
     task_b.iomap = 0x40000000;
 
     setup_segment_descriptor(3, 103, (unsigned int) &task_a, 0x0089);
@@ -39,12 +40,24 @@ void init_task()
     task_b.ebp = 0;
     task_b.esi = 0;
     task_b.edi = 0;
-    task_b.es = 2 * 8;
-    task_b.cs = 1 * 8;
-    task_b.ss = 2 * 8;
-    task_b.ds = 2 * 8;
-    task_b.fs = 2 * 8;
-    task_b.gs = 2 * 8;
+    // TODO: ひとまずCS/DSをハードコーディング
+    task_b.es = 4 * 8 | 4;
+    task_b.cs = 3 * 8 | 4;
+    task_b.ss = 4 * 8 | 4;
+    task_b.ds = 4 * 8 | 4;
+    task_b.fs = 4 * 8 | 4;
+    task_b.gs = 4 * 8 | 4;
+
+    // TODO: ひとまずLDTの中身をハードコーディング
+    ldt[0] = 0x0000000000000000;    // zero
+    ldt[1] = 0x00CF9A000000FFFF;    // task a cs
+    ldt[2] = 0x00CF92000000FFFF;    // task a ds
+    ldt[3] = 0x00CF9A000000FFFF;    // task b cs
+    ldt[4] = 0x00CF92000000FFFF;    // task b ds
+
+    setup_segment_descriptor(5, 8 * 5 - 1, (unsigned int)ldt, 0x0082);
+
+    _load_gdt();
 }
 
 int current_task = 3;
