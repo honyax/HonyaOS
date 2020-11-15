@@ -29,10 +29,10 @@ void init_task()
     ldt[0] = 0x0000000000000000;    // zero
     ldt[1] = 0x00CF9A000000FFFF;    // task a cs
     ldt[2] = 0x00CF92000000FFFF;    // task a ds
-    ldt[3] = 0x00CF9A000000FFFF;    // task b cs
-    ldt[4] = 0x00CF92000000FFFF;    // task b ds
-    ldt[5] = 0x00CF9A000000FFFF;    // task c cs
-    ldt[6] = 0x00CF92000000FFFF;    // task c ds
+    ldt[3] = 0x00CFFA000000FFFF;    // task b cs
+    ldt[4] = 0x00CFF2000000FFFF;    // task b ds
+    ldt[5] = 0x00CFFA000000FFFF;    // task c cs
+    ldt[6] = 0x00CFF2000000FFFF;    // task c ds
 
     setup_segment_descriptor(LDT_GDT_INDEX, LDT_NUM * 8 - 1, (unsigned int)ldt, 0x0082);
 
@@ -52,6 +52,9 @@ void init_task()
     _load_tr(4 * 8);
 
     int task_b_esp = ((int)hmalloc(64 * 1024)) + 64 * 1024;
+    // 権限0で動作するときのss, espを設定
+    task_b.ss0 = 2 * 8;
+    task_b.esp0 = task_b_esp - 32 * 1024;
     task_b.eip = (int) &task_b_main;
     task_b.eflags = 0x00000202; /* IF = 1; */
     task_b.eax = 0;
@@ -63,8 +66,8 @@ void init_task()
     task_b.esi = 0;
     task_b.edi = 0;
     // TODO: ひとまずCS/DSをハードコーディング
-    int task_b_cs = 3 * 8 | 4;
-    int task_b_ds = 4 * 8 | 4;
+    int task_b_cs = 3 * 8 | 4 | 3;
+    int task_b_ds = 4 * 8 | 4 | 3;
     task_b.es = task_b_ds;
     task_b.cs = task_b_cs;
     task_b.ss = task_b_ds;
@@ -73,6 +76,8 @@ void init_task()
     task_b.gs = task_b_ds;
 
     int task_c_esp = ((int)hmalloc(64 * 1024)) + 64 * 1024;
+    task_c.ss0 = 2 * 8;
+    task_c.esp0 = task_c_esp - 32 * 1024;
     task_c.eip = (int) &task_c_main;
     task_c.eflags = 0x00000202; /* IF = 1; */
     task_c.eax = 0;
@@ -83,8 +88,8 @@ void init_task()
     task_c.ebp = 0;
     task_c.esi = 0;
     task_c.edi = 0;
-    int task_c_cs = 5 * 8 | 4;
-    int task_c_ds = 6 * 8 | 4;
+    int task_c_cs = 5 * 8 | 4 | 3;
+    int task_c_ds = 6 * 8 | 4 | 3;
     task_c.es = task_c_ds;
     task_c.cs = task_c_cs;
     task_c.ss = task_c_ds;
@@ -108,7 +113,6 @@ void task_b_main()
     draw_text(80, 540, "This is task_b_main!", COL_CYAN);
 
     for (;;) {
-        _hlt();
     }
 }
 
@@ -117,6 +121,5 @@ void task_c_main()
     draw_text(80, 600, "This is task_c_main!", COL_CYAN);
 
     for (;;) {
-        _hlt();
     }
 }
