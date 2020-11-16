@@ -13,3 +13,4 @@ $(OBJECTS): *.c *.s *.h
 clean:
 	rm -f $(KERNEL_BIN)
 	rm -f *.o
+	rm -f kernel.map
