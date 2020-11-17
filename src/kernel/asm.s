@@ -202,17 +202,37 @@ _asm_inthandler2c:
 
 // void _asm_syscall
 _asm_syscall:
+    sti
     push    es
     push    ds
-    pusha
-    mov     eax, esp
+
+    // この push eax は後に戻り値として利用する領域（なので push 時は eax でなくて良い）
     push    eax
+
+    // システムコールの引数としてのレジスタをpush
+    push    eax
+    push    ecx
+    push    edx
+    push    ebx
+    push    esi
+    push    edi
+    
     mov     ax, ss
     mov     ds, ax
     mov     es, ax
     call    syscall
+
+    // 引数のレジスタをpop
+    pop     edi
+    pop     esi
+    pop     ebx
+    pop     edx
+    pop     ecx
     pop     eax
-    popa
+
+    // 戻り値としての eax を pop する
+    pop     eax
+
     pop     ds
     pop     es
     iret

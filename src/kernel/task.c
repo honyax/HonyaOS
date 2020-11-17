@@ -119,7 +119,10 @@ void task_b_main()
 
 void task_c_main()
 {
-    draw_text(80, 600, "This is task_c_main!", COL_CYAN);
+    int result = _sc_example(0x11111111, 0x22222222, 0x33333333, 0x44444444, 0x55555555);
+    char str[32];
+    hsprintf(str, "This is task_c_main! %X", result);
+    draw_text(80, 600, str, COL_CYAN);
 
     for (;;) {
     }
