@@ -111,6 +111,7 @@ void task_switch() {
 void task_b_main()
 {
     draw_text(80, 540, "This is task_b_main!", COL_CYAN);
+    _sc_putchar('a');
 
     for (;;) {
     }

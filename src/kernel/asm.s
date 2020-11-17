@@ -196,6 +196,29 @@ _asm_inthandler2c:
 
 ////////////////////////////////////////////////////////////////
 
+// システムコール割り込み（int 0x40）処理
+.global _asm_syscall
+.extern syscall
+
+// void _asm_syscall
+_asm_syscall:
+    push    es
+    push    ds
+    pusha
+    mov     eax, esp
+    push    eax
+    mov     ax, ss
+    mov     ds, ax
+    mov     es, ax
+    call    syscall
+    pop     eax
+    popa
+    pop     ds
+    pop     es
+    iret
+
+////////////////////////////////////////////////////////////////
+
 // Magic break
 .global _magic_break
 _magic_break:

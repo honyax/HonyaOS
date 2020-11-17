@@ -91,7 +91,11 @@ void _asm_inthandler0e();
 void _asm_inthandler20();
 void _asm_inthandler21();
 void _asm_inthandler2c();
+void _asm_syscall();
 void _magic_break();
+
+// asm_syscall.s
+void _sc_putchar(int c);
 
 // graphic.c
 void draw_pixel(int x, int y, unsigned char color);

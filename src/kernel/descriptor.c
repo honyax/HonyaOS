@@ -49,6 +49,12 @@ void setup_interrupt_gate(int index, void *handler)
             IDT_FLAGS_SEGMENT_PRESENT | IDT_FLAGS_DPL_0 | IDT_FLAGS_INTGATE);
 }
 
+void setup_syscall(int index, void *handler)
+{
+    setup_gate_descriptor(index, (int)handler, IDT_INT_SELECTOR,
+            IDT_FLAGS_SEGMENT_PRESENT | IDT_FLAGS_DPL_3 | IDT_FLAGS_TRAPGATE);
+}
+
 // GDTは十分に用意しておく
 #define     NUM_GDT     1024
 // セグメントディスクリプタ
@@ -129,4 +135,5 @@ void init_descriptor()
     setup_interrupt_gate(0x20, _asm_inthandler20);
     setup_interrupt_gate(0x21, _asm_inthandler21);
     setup_interrupt_gate(0x2c, _asm_inthandler2c);
+    setup_syscall(0x40, _asm_syscall);
 }
