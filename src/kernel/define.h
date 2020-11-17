@@ -8,11 +8,11 @@
 #define     BOOT_END				(BOOT_LOAD + BOOT_SIZE)
 
 #define     PARAM_BASE              0x00101000      // パラメータ領域の開始位置
-#define     KERNEL_LOAD             0x00103000      // カーネルのロード位置（プロテクトモード）
-#define     KERNEL_PAGE_DIR         0x00108000      // カーネルのページディレクトリ
-#define     KERNEL_PAGE_TABLE       0x00109000      // カーネルのページテーブル
-#define     HEAP_MEMORY_START       0x00200000      // ヒープメモリの開始位置
-#define     HEAP_MEMORY_END         0x07FE0000      // ヒープメモリの終了位置
+#define     KERNEL_LOAD             0x00112000      // カーネルのロード位置（プロテクトモード）
+#define     KERNEL_PAGE_DIR         0x00200000      // カーネルのページディレクトリ
+#define     KERNEL_PAGE_TABLE       0x00201000      // カーネルのページテーブル
+#define     HEAP_MEMORY_START       0x00600000      // ヒープメモリの開始位置
+#define     HEAP_MEMORY_END         0x07FF0000      // ヒープメモリの終了位置
 
 #define     SECT_SIZE               (512)           // セクタサイズ
 

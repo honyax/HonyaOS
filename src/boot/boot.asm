@@ -483,7 +483,7 @@ code_32:
 		;---------------------------------------
 		mov		ecx, (KERNEL_SIZE) / 4			; ECX = 4バイト単位でコピー;
 		mov		esi, BOOT_END					; ESI = 0x0000_9C00; // カーネル部
-		mov		edi, KERNEL_LOAD				; EDI = 0x0010_3000; // 上位メモリ
+		mov		edi, KERNEL_LOAD				; EDI = 0x0011_2000; // 上位メモリ
 		cld										; // DFクリア（+方向）
 		rep movsd								; while (--ECX) *EDI++ = *ESI++;
 

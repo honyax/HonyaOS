@@ -19,7 +19,7 @@ $(KERNEL_BIN): kernel/*.c kernel/*.s
 	cd kernel; make
 
 $(ZERO_BIN):
-	dd if=/dev/zero of=./zero.bin bs=1 count=8192 > /dev/null 2>/dev/null
+	dd if=/dev/zero of=./zero.bin bs=1 count=16384 > /dev/null 2>/dev/null
 
 .PHONY: run
 run: $(BOOT_IMG)
