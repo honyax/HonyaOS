@@ -21,11 +21,11 @@ _sc_example:
     // int edi, int esi, int ebx, int edx, int ecx, int eax
     // システムコール番号:0xffff
     mov     edi, 0xffff
-    mov     eax, [ebp+ 8]
-    mov     ecx, [ebp+12]
+    mov     esi, [ebp+ 8]
+    mov     ebx, [ebp+12]
     mov     edx, [ebp+16]
-    mov     ebx, [ebp+20]
-    mov     esi, [ebp+24]
+    mov     ecx, [ebp+20]
+    mov     eax, [ebp+24]
     int     0x40
 
     pop     ecx
