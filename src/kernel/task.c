@@ -25,6 +25,8 @@ void task_c_main();
 
 void init_task()
 {
+    setup_segment_descriptor(LDT_GDT_INDEX, LDT_NUM * 8 - 1, (unsigned int)ldt, 0x0082);
+
     // TODO: ひとまずLDTの中身をハードコーディング
     ldt[0] = 0x0000000000000000;    // zero
     ldt[1] = 0x00CF9A000000FFFF;    // task a cs
@@ -33,8 +35,6 @@ void init_task()
     ldt[4] = 0x00CFF2000000FFFF;    // task b ds
     ldt[5] = 0x00CFFA000000FFFF;    // task c cs
     ldt[6] = 0x00CFF2000000FFFF;    // task c ds
-
-    setup_segment_descriptor(LDT_GDT_INDEX, LDT_NUM * 8 - 1, (unsigned int)ldt, 0x0082);
 
     task_a.cr3 = KERNEL_PAGE_DIR;
     task_a.ldtr = LDT_GDT_INDEX * 8;
