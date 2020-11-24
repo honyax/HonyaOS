@@ -31,6 +31,8 @@ extern unsigned short param_screen_x;
 extern unsigned short param_screen_y;
 extern unsigned int param_vram;
 
+#define NULL            0
+
 // カラーコード
 #define     COL_000000      0
 #define     COL_0000A8      1
@@ -66,6 +68,53 @@ extern unsigned int param_vram;
 #define     COL_WHITE       COL_FCFCFC
 #define     COL_NONE        255
 
+// Global Segment Descriptor定義値
+#define GDT_IDX_NULL        0
+#define GDT_IDX_CODE        1
+#define GDT_IDX_DATA        2
+#define GDT_IDX_LDT         3
+#define GDT_IDX_ROOT_TSS    4
+
+// Local Segment Descriptor定義値
+#define LDT_IDX_NULL        0
+#define LDT_IDX_ROOT_CS     1
+#define LDT_IDX_ROOT_DS     2
+
+// PIC(Programmable Interrupt Controller)
+#define PIC0_ICW1		0x0020
+#define PIC0_OCW2		0x0020
+#define PIC0_IMR		0x0021
+#define PIC0_ICW2		0x0021
+#define PIC0_ICW3		0x0021
+#define PIC0_ICW4		0x0021
+#define PIC1_ICW1		0x00a0
+#define PIC1_OCW2		0x00a0
+#define PIC1_IMR		0x00a1
+#define PIC1_ICW2		0x00a1
+#define PIC1_ICW3		0x00a1
+#define PIC1_ICW4		0x00a1
+
+// keyboard
+#define PORT_KEYDAT             0x60
+
+// fifo
+typedef struct
+{
+    int *buf;       // データ用バッファ
+    int size;       // バッファのサイズ
+    int pos_r;      // 読み込み位置
+    int pos_w;      // 書き込み位置
+    int len;        // 書き込み位置 - 読み込み位置
+} FIFO32;
+
+// task
+typedef struct
+{
+    int backlink, esp0, ss0, esp1, ss1, esp2, ss2, cr3;
+    int eip, eflags, eax, ecx, edx, ebx, esp, ebp, esi, edi;
+    int es, cs, ss, ds, fs, gs;
+    int ldtr, iomap;
+} TSS;
 
 // asm.s
 void _load_idt();
@@ -108,7 +157,6 @@ void draw_text(int x, int y, unsigned char* text, unsigned char color);
 void draw_color_test();
 
 // memory.c
-#define NULL            0
 void write_mem8(unsigned int addr, unsigned char data);
 unsigned char read_mem8(unsigned int addr);
 void hmemset(void *addr, unsigned char c, int size);
@@ -121,41 +169,21 @@ int hsprintf (char *str, const char *fmt, ...);
 
 // descriptor.c
 void init_descriptor();
+void create_root_task(TSS *task);
+void create_task(TSS *task, int task_index);
 
 // interrupt.c
-// PIC(Programmable Interrupt Controller)
-#define PIC0_ICW1		0x0020
-#define PIC0_OCW2		0x0020
-#define PIC0_IMR		0x0021
-#define PIC0_ICW2		0x0021
-#define PIC0_ICW3		0x0021
-#define PIC0_ICW4		0x0021
-#define PIC1_ICW1		0x00a0
-#define PIC1_OCW2		0x00a0
-#define PIC1_IMR		0x00a1
-#define PIC1_ICW2		0x00a1
-#define PIC1_ICW3		0x00a1
-#define PIC1_ICW4		0x00a1
 void init_pic();
 void init_pit();
 void enable_mouse_keyboard();
 void update_interrupt();
 
 // fifo.c
-typedef struct
-{
-    int *buf;       // データ用バッファ
-    int size;       // バッファのサイズ
-    int pos_r;      // 読み込み位置
-    int pos_w;      // 書き込み位置
-    int len;        // 書き込み位置 - 読み込み位置
-} FIFO32;
 void fifo32_init(FIFO32 *fifo, int size, int *buf);
 int fifo32_put(FIFO32 *fifo, int data);
 int fifo32_get(FIFO32 *fifo);
 
 // keyboard.c
-#define PORT_KEYDAT             0x60
 void init_keyboard();
 int update_keyboard();
 
