@@ -79,9 +79,28 @@ void init_pit()
     _out8(PIT_REG_COUNTER0, (unsigned char)((count >> 8) & 0xFF));
 }
 
+void interrupt_stop(char *header, int *esp)
+{
+    // 1280 x 1024
+    char text[16];
+    draw_rect(1140, 940, 128, 80, COL_YELLOW);
+    draw_text(1140, 940, header, COL_BLACK);
+    hsprintf(text, "ESP+ 0:%X", esp[0]);
+    draw_text(1140, 956, text, COL_BLACK);
+    hsprintf(text, "ESP+ 4:%X", esp[1]);
+    draw_text(1140, 972, text, COL_BLACK);
+    hsprintf(text, "ESP+ 8:%X", esp[2]);
+    draw_text(1140, 988, text, COL_BLACK);
+    hsprintf(text, "ESP+12:%X", esp[3]);
+    draw_text(1140, 1004, text, COL_BLACK);
+
+    // ひとまず無限ループで処理を停止
+    for (;;) ;
+}
+
 void inthandler_default(int *esp)
 {
-    return;
+    interrupt_stop(" < Interrupt! > ", esp);
 }
 
 void update_interrupt()
@@ -98,5 +117,12 @@ void update_interrupt()
 
 void inthandler00(int *esp)
 {
-    // TODO: ゼロ除算例外処理
+    // ゼロ除算例外処理
+    interrupt_stop(" < ZERO Div!! > ", esp);
+}
+
+void inthandler0e(int *esp)
+{
+    // Page Fault例外処理
+    interrupt_stop(" <Page Fault!!> ", esp);
 }

@@ -85,8 +85,3 @@ void init_paging()
     cr0 |= CR0_PAGING_FLAG;
     _set_cr0(cr0);
 }
-
-void inthandler0e(int *esp)
-{
-    // TODO: Page Fault例外処理
-}

@@ -159,11 +159,11 @@ void init_descriptor()
     idtr.base = idt;
     _load_idt();
 
-    setup_interrupt_gate(0x00, _asm_inthandler00);
-    setup_interrupt_gate(0x0e, _asm_inthandler0e);
-    setup_interrupt_gate(0x20, _asm_inthandler20);
-    setup_interrupt_gate(0x21, _asm_inthandler21);
-    setup_interrupt_gate(0x2c, _asm_inthandler2c);
+    setup_interrupt_gate(0x00, _asm_inthandler00);      // 0除算
+    setup_interrupt_gate(0x0e, _asm_inthandler0e);      // ページフォールト
+    setup_interrupt_gate(0x20, _asm_inthandler20);      // タイマ割り込み
+    setup_interrupt_gate(0x21, _asm_inthandler21);      // キーボード割り込み
+    setup_interrupt_gate(0x2c, _asm_inthandler2c);      // マウス割り込み
     setup_syscall(0x40, _asm_syscall);
 }
 

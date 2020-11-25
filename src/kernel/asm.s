@@ -154,10 +154,10 @@ _out32:
 
 // 割り込みマクロ
 .macro _asm_inthandler  c_inthandler
+    mov     eax, esp
     push    es
     push    ds
     pusha
-    mov     eax, esp
     push    eax
     mov     ax, ss
     mov     ds, ax
