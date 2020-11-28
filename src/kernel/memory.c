@@ -1,22 +1,22 @@
 #include "define.h"
 
-void write_mem8(unsigned int addr, unsigned char data)
+void write_mem8(uint addr, byte data)
 {
-    unsigned char *p_addr = (unsigned char *) addr;
+    byte *p_addr = (byte *) addr;
     *p_addr = data;
 
     return;
 }
 
-unsigned char read_mem8(unsigned int addr)
+byte read_mem8(uint addr)
 {
-    unsigned char *p_addr = (unsigned char *) addr;
+    byte *p_addr = (byte *) addr;
     return *p_addr;
 }
 
-void hmemset(void *addr, unsigned char c, int size)
+void hmemset(void *addr, byte c, int size)
 {
-    unsigned char *p_addr = (unsigned char *) addr;
+    byte *p_addr = (byte *) addr;
     for (int i = 0; i < size; i++) {
         *p_addr = c;
         p_addr++;
@@ -27,14 +27,14 @@ void hmemset(void *addr, unsigned char c, int size)
 
 typedef struct
 {
-    unsigned int start_addr;
-    unsigned int size;
+    uint start_addr;
+    uint size;
 } USED_MEMORY;
 
-static unsigned int allocatable_start_addr;
-static unsigned int total_size;
-static unsigned int alloc_error_count;
-static unsigned int free_error_count;
+static uint allocatable_start_addr;
+static uint total_size;
+static uint alloc_error_count;
+static uint free_error_count;
 
 #define USED_MEMORY_MAX     1024
 static USED_MEMORY* used_memories;
@@ -45,7 +45,7 @@ void init_memory()
     // ヒープメモリとして 0x0020 0000 - 0x07FF 0000 の領域が与えられている
     // まずは管理領域として 0x0020 0000 から USED_MEMORY * USED_MEMORY_MAX 分の領域を確保
     used_memories = (USED_MEMORY*) HEAP_MEMORY_START;
-    unsigned int manage_memory_size = sizeof(USED_MEMORY) * USED_MEMORY_MAX;
+    uint manage_memory_size = sizeof(USED_MEMORY) * USED_MEMORY_MAX;
     allocatable_start_addr = HEAP_MEMORY_START + manage_memory_size;
     total_size = HEAP_MEMORY_END - allocatable_start_addr;
     alloc_error_count = 0;
@@ -57,10 +57,10 @@ void init_memory()
 }
 
 // メモリ確保
-void *hmalloc(unsigned int size)
+void *hmalloc(uint size)
 {
     // スタート地点から探索して指定したsize分の空きがある箇所を探す
-    unsigned int alloc_addr = allocatable_start_addr;
+    uint alloc_addr = allocatable_start_addr;
     for (int i = 0; i < USED_MEMORY_MAX; i++) {
         if (used_memories[i].size == 0) {
             // 未使用の領域に到達したら、そこからメモリを確保
@@ -99,7 +99,7 @@ void *hmalloc(unsigned int size)
 
 void hfree(void *ptr)
 {
-    unsigned int free_addr = (unsigned int) ptr;
+    uint free_addr = (uint) ptr;
     for (int i = 0; i < USED_MEMORY_MAX; i++) {
         if (used_memories[i].start_addr == free_addr) {
             // 開放する領域が見つかったら、以降の確保領域のインデックスを全て -1

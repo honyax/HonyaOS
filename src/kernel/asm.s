@@ -66,19 +66,19 @@ _farjmp:
 .global _set_cr0
 .global _set_cr3
 
-// unsigned int _get_cr0()
+// uint _get_cr0()
 _get_cr0:
     mov     eax, cr0
     ret
 
-// void _set_cr0(unsigned int value)
+// void _set_cr0(uint value)
 _set_cr0:
     mov     eax, [esp + 0x4]
     mov     cr0, eax
     jmp     $ + 2
     ret
 
-// void _set_cr3(unsigned int value)
+// void _set_cr3(uint value)
 _set_cr3:
     mov     eax, [esp + 0x4]
     mov     cr3, eax

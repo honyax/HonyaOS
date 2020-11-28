@@ -71,12 +71,12 @@ void enable_mouse_keyboard()
 void init_pit()
 {
     int freq = 100;
-    unsigned short count = (unsigned short)(DEF_PIT_CLOCK / freq);
-    unsigned char command = DEF_PIT_COM_MODE_SQUAREWAVE | DEF_PIT_COM_RL_DATA | DEF_PIT_COM_COUNTER0;
+    ushort count = (ushort)(DEF_PIT_CLOCK / freq);
+    byte command = DEF_PIT_COM_MODE_SQUAREWAVE | DEF_PIT_COM_RL_DATA | DEF_PIT_COM_COUNTER0;
 
     _out8(PIT_REG_CONTROL, command);
-    _out8(PIT_REG_COUNTER0, (unsigned char)(count & 0xFF));
-    _out8(PIT_REG_COUNTER0, (unsigned char)((count >> 8) & 0xFF));
+    _out8(PIT_REG_COUNTER0, (byte)(count & 0xFF));
+    _out8(PIT_REG_COUNTER0, (byte)((count >> 8) & 0xFF));
 }
 
 void interrupt_stop(char *header, int *esp)

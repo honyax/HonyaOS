@@ -1,26 +1,26 @@
 #include "define.h"
 
-void draw_pixel(int x, int y, unsigned char color)
+void draw_pixel(int x, int y, byte color)
 {
     if (x < 0 || x >= param_screen_x)
         return;
     if (y < 0 || y >= param_screen_y)
         return;
-    unsigned int addr = param_vram + param_screen_x * y + x;
+    uint addr = param_vram + param_screen_x * y + x;
     write_mem8(addr, color);
 }
 
-unsigned char get_pixel(int x, int y)
+byte get_pixel(int x, int y)
 {
     if (x < 0 || x >= param_screen_x)
         return 0;
     if (y < 0 || y >= param_screen_y)
         return 0;
-    unsigned int addr = param_vram + param_screen_x * y + x;
+    uint addr = param_vram + param_screen_x * y + x;
     return read_mem8(addr);
 }
 
-void draw_line(int x1, int y1, int x2, int y2, unsigned char color)
+void draw_line(int x1, int y1, int x2, int y2, byte color)
 {
     int deltaX = x1 > x2 ? x1 - x2 : x2 - x1;
     int deltaY = y1 > y2 ? y1 - y2 : y2 - y1;
@@ -32,7 +32,7 @@ void draw_line(int x1, int y1, int x2, int y2, unsigned char color)
     }
 }
 
-void draw_rect(int x, int y, int w, int h, unsigned char color)
+void draw_rect(int x, int y, int w, int h, byte color)
 {
     for (int i = x; i < x + w; i++) {
         for (int j = y; j < y + h; j++) {
@@ -41,11 +41,11 @@ void draw_rect(int x, int y, int w, int h, unsigned char color)
     }
 }
 
-void draw_char(int x, int y, char c, unsigned char color)
+void draw_char(int x, int y, char c, byte color)
 {
     int index = c * 16;
     for (int i = 0; i < 16; i++) {
-        unsigned char data = param_font_adr[index + i];
+        byte data = param_font_adr[index + i];
         if ((data & 0x80) != 0) { draw_pixel(x + 0, y + i, color); }
         if ((data & 0x40) != 0) { draw_pixel(x + 1, y + i, color); }
         if ((data & 0x20) != 0) { draw_pixel(x + 2, y + i, color); }
@@ -57,7 +57,7 @@ void draw_char(int x, int y, char c, unsigned char color)
     }
 }
 
-void draw_text(int x, int y, unsigned char* text, unsigned char color)
+void draw_text(int x, int y, byte* text, byte color)
 {
     for (int i = 0; *(text + i) != 0x00; i++) {
         draw_char(x + 8 * i, y, text[i], color);
@@ -71,11 +71,11 @@ void draw_color_test()
 
     for (int y = 0; y < 16; y++) {
         for (int x = 0; x < 16; x++) {
-            unsigned char color = y * 16 + x;
+            byte color = y * 16 + x;
             draw_rect(dx * x, dy * y, dx, dy, color);
             char str[5];
             hsprintf(str, "0x%X%X", y, x);
-            unsigned char text_color;
+            byte text_color;
             if ((x < 10 && y < 3) ||
                 (color >= 0x36 && color <= 0x39) ||
                 color > 0x67) {

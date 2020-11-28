@@ -20,9 +20,9 @@ typedef struct
     int dx;
     int dy;
     int button;
-    unsigned char buf[3];
-    unsigned char state;
-    unsigned char bg_colors[MOUSE_CURSOR_W][MOUSE_CURSOR_H];
+    byte buf[3];
+    byte state;
+    byte bg_colors[MOUSE_CURSOR_W][MOUSE_CURSOR_H];
 } MOUSE_DATA;
 static MOUSE_DATA mouse_data;
 
@@ -93,7 +93,7 @@ int update_mouse()
 {
     int length = mouse_input_data.len;
     for (int i = 0; i < length; i++) {
-        unsigned char data = (unsigned char) fifo32_get(&mouse_input_data);
+        byte data = (byte) fifo32_get(&mouse_input_data);
         switch (mouse_data.state) {
             case MOUSE_STATE_INIT:
                 if (data == 0xfa) {

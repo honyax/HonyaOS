@@ -26,13 +26,13 @@
 
 #define CR0_PAGING_FLAG             0x80000000
 
-static unsigned int *kernel_page_dir;
-static unsigned int *kernel_page_table;
+static uint *kernel_page_dir;
+static uint *kernel_page_table;
 
 void init_paging()
 {
-    kernel_page_dir = (unsigned int *) KERNEL_PAGE_DIR;
-    kernel_page_table = (unsigned int *) KERNEL_PAGE_TABLE;
+    kernel_page_dir = (uint *) KERNEL_PAGE_DIR;
+    kernel_page_table = (uint *) KERNEL_PAGE_TABLE;
 
 #if 1
     // 128MB分のメモリと、VRAM領域のメモリのpaging設定を行う
@@ -49,7 +49,7 @@ void init_paging()
 
     // VRAM用のpagingを行うため、VRAMのアドレスから 4MB はそのまま移行させる
     // 通常は 1280 x 1024 x 8bit なので、4MB 分対応すれば十分
-    unsigned int vram_index = param_vram >> 22;
+    uint vram_index = param_vram >> 22;
     kernel_page_dir[vram_index] = KERNEL_PAGE_TABLE + 0x1000 * 32 | PDE_FLAGS_P | PDE_FLAGS_RW | PDE_FLAGS_US;
 
     // ページテーブルは、メモリアドレス 0 ～ 128MB までの領域を指す
@@ -78,10 +78,10 @@ void init_paging()
 #endif
 
     // CR3にページディレクトリのアドレスを設定
-    _set_cr3((unsigned int)kernel_page_dir);
+    _set_cr3((uint)kernel_page_dir);
 
     // CR0のページング使用フラグをON
-    unsigned int cr0 = _get_cr0();
+    uint cr0 = _get_cr0();
     cr0 |= CR0_PAGING_FLAG;
     _set_cr0(cr0);
 }

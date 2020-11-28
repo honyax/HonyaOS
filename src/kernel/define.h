@@ -26,12 +26,14 @@
 #define     PARAM_SCREEN_Y          (PARAM_BASE + 0x0006)       // 画面サイズ（縦）の位置
 #define     PARAM_VRAM              (PARAM_BASE + 0x00000008)   // VRAMの位置
 
-extern unsigned char* param_font_adr;
-extern unsigned short param_screen_x;
-extern unsigned short param_screen_y;
-extern unsigned int param_vram;
-
-#define NULL            0
+// 共通
+#define     NULL            0
+#define     TRUE            1
+#define     FALSE           0
+typedef     unsigned char   bool;
+typedef     unsigned char   byte;
+typedef     unsigned short  ushort;
+typedef     unsigned int    uint;
 
 // カラーコード
 #define     COL_000000      0
@@ -116,6 +118,12 @@ typedef struct
     int ldtr, iomap;
 } TSS;
 
+// kernel.c
+extern byte* param_font_adr;
+extern ushort param_screen_x;
+extern ushort param_screen_y;
+extern uint param_vram;
+
 // asm.s
 void _load_idt();
 void _load_gdt();
@@ -125,9 +133,9 @@ void _hlt();
 void _stihlt();
 void _load_tr(int tr);
 void _farjmp(int eip, short cs);
-unsigned int _get_cr0();
-void _set_cr0(unsigned int value);
-void _set_cr3(unsigned int value);
+uint _get_cr0();
+void _set_cr0(uint value);
+void _set_cr3(uint value);
 int _in8(int port);
 int _in16(int port);
 int _in32(int port);
@@ -148,20 +156,20 @@ int _sc_example(int param1, int param2, int param3, int param4, int param5);
 void _sc_putchar(int c);
 
 // graphic.c
-void draw_pixel(int x, int y, unsigned char color);
-unsigned char get_pixel(int x, int y);
-void draw_line(int x1, int y1, int x2, int y2, unsigned char color);
-void draw_rect(int x, int y, int w, int h, unsigned char color);
-void draw_char(int x, int y, char c, unsigned char color);
-void draw_text(int x, int y, unsigned char* text, unsigned char color);
+void draw_pixel(int x, int y, byte color);
+byte get_pixel(int x, int y);
+void draw_line(int x1, int y1, int x2, int y2, byte color);
+void draw_rect(int x, int y, int w, int h, byte color);
+void draw_char(int x, int y, char c, byte color);
+void draw_text(int x, int y, byte* text, byte color);
 void draw_color_test();
 
 // memory.c
-void write_mem8(unsigned int addr, unsigned char data);
-unsigned char read_mem8(unsigned int addr);
-void hmemset(void *addr, unsigned char c, int size);
+void write_mem8(uint addr, byte data);
+byte read_mem8(uint addr);
+void hmemset(void *addr, byte c, int size);
 void init_memory();
-void *hmalloc(unsigned int size);
+void *hmalloc(uint size);
 void hfree(void *ptr);
 
 // sprintf.c

@@ -1,22 +1,22 @@
 #include "define.h"
 
-extern unsigned int _text_start;
-extern unsigned int _text_end;
-extern unsigned int _rodata_start;
-extern unsigned int _rodata_end;
-extern unsigned int _data_start;
-extern unsigned int _data_end;
-extern unsigned int _bss_start;
-extern unsigned int _bss_end;
+extern uint _text_start;
+extern uint _text_end;
+extern uint _rodata_start;
+extern uint _rodata_end;
+extern uint _data_start;
+extern uint _data_end;
+extern uint _bss_start;
+extern uint _bss_end;
 
 void init_parameters();
 void init_sections();
 
 // 以下は他のファイルからも参照可能なグローバル変数
-unsigned char* param_font_adr;
-unsigned short param_screen_x;
-unsigned short param_screen_y;
-unsigned int param_vram;
+byte* param_font_adr;
+ushort param_screen_x;
+ushort param_screen_y;
+uint param_vram;
 
 int kernel_main() {
 
@@ -38,7 +38,7 @@ int kernel_main() {
 #if 0
     for (int y = 0; y < param_screen_y; y++) {
         for (int x = 0; x < param_screen_x; x++) {
-            draw_pixel(x, y, (unsigned char)((x + y) & 0xFF));
+            draw_pixel(x, y, (byte)((x + y) & 0xFF));
         }
     }
 #endif
@@ -73,23 +73,23 @@ int kernel_main() {
 void init_parameters()
 {
     // フォントアドレス
-    param_font_adr = (unsigned char *)(*(unsigned int *)PARAM_FONT_ADR);
-    param_screen_x = (unsigned short)(*(unsigned short *)PARAM_SCREEN_X);
-    param_screen_y = (unsigned short)(*(unsigned short *)PARAM_SCREEN_Y);
-    param_vram = (unsigned int)(*(unsigned int *)PARAM_VRAM);
+    param_font_adr = (byte *)(*(uint *)PARAM_FONT_ADR);
+    param_screen_x = (ushort)(*(ushort *)PARAM_SCREEN_X);
+    param_screen_y = (ushort)(*(ushort *)PARAM_SCREEN_Y);
+    param_vram = (uint)(*(uint *)PARAM_VRAM);
 }
 
 void init_sections()
 {
     char addr_txt[128];
-    unsigned int _TEXT_START    = ( unsigned int )&_text_start;
-    unsigned int _TEXT_END      = ( unsigned int )&_text_end;
-    unsigned int _RODATA_START  = ( unsigned int )&_rodata_start;
-    unsigned int _RODATA_END    = ( unsigned int )&_rodata_end;
-    unsigned int _DATA_START    = ( unsigned int )&_data_start;
-    unsigned int _DATA_END      = ( unsigned int )&_data_end;
-    unsigned int _BSS_START     = ( unsigned int )&_bss_start;
-    unsigned int _BSS_END       = ( unsigned int )&_bss_end;
+    uint _TEXT_START    = ( uint )&_text_start;
+    uint _TEXT_END      = ( uint )&_text_end;
+    uint _RODATA_START  = ( uint )&_rodata_start;
+    uint _RODATA_END    = ( uint )&_rodata_end;
+    uint _DATA_START    = ( uint )&_data_start;
+    uint _DATA_END      = ( uint )&_data_end;
+    uint _BSS_START     = ( uint )&_bss_start;
+    uint _BSS_END       = ( uint )&_bss_end;
     hsprintf(addr_txt, "text:%X - %X rodata:%X - %X data:%X - %X bss:%X - %X",
             _TEXT_START, _TEXT_END, _RODATA_START, _RODATA_END, _DATA_START, _DATA_END, _BSS_START, _BSS_END);
     draw_text(16, 480, addr_txt, COL_CYAN);
