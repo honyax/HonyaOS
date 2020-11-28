@@ -11,6 +11,7 @@ extern uint _bss_end;
 
 void init_parameters();
 void init_sections();
+void draw_sections();
 
 // 以下は他のファイルからも参照可能なグローバル変数
 byte* param_font_adr;
@@ -32,6 +33,7 @@ int kernel_main() {
     init_timer();
     init_paging();
     init_task();
+    init_window();
 
     _sti();
 
@@ -43,10 +45,8 @@ int kernel_main() {
     }
 #endif
 
-    draw_rect(80, 80, 150, 150, COL_BLUE);
-    draw_rect(160, 160, 150, 150, COL_RED);
-    draw_rect(240, 240, 150, 150, COL_YELLOW);
     draw_line(100, 200, 500, 800, COL_GREEN);
+    draw_sections();
 
     draw_char(16, 80, 'X', COL_WHITE);
     draw_char(24, 80, 'Y', COL_GREY);
@@ -64,6 +64,7 @@ int kernel_main() {
     for (;;) {
         update_interrupt();
         update_timer();
+        update_window();
     }
 
     return 0;
@@ -81,6 +82,15 @@ void init_parameters()
 
 void init_sections()
 {
+    uint _BSS_START     = ( uint )&_bss_start;
+    uint _BSS_END       = ( uint )&_bss_end;
+
+    // BSSを初期化
+    hmemset((void *)_BSS_START, 0x00, _BSS_END - _BSS_START);
+}
+
+void draw_sections()
+{
     char addr_txt[128];
     uint _TEXT_START    = ( uint )&_text_start;
     uint _TEXT_END      = ( uint )&_text_end;
@@ -93,7 +103,4 @@ void init_sections()
     hsprintf(addr_txt, "text:%X - %X rodata:%X - %X data:%X - %X bss:%X - %X",
             _TEXT_START, _TEXT_END, _RODATA_START, _RODATA_END, _DATA_START, _DATA_END, _BSS_START, _BSS_END);
     draw_text(16, 480, addr_txt, COL_CYAN);
-
-    // BSSを初期化
-    hmemset((void *)_BSS_START, 0x00, _BSS_END - _BSS_START);
 }

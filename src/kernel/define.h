@@ -118,6 +118,22 @@ typedef struct
     int ldtr, iomap;
 } TSS;
 
+// window
+typedef struct window
+{
+    short x, y;
+    short w, h;
+    byte *pixels;
+    struct window *prev;
+    struct window *next;
+} WINDOW;
+
+typedef struct
+{
+    WINDOW *background;      // 背景
+    WINDOW *foreground;      // 前景（ダミーのシート。番兵）
+} WINDOW_MANAGER;
+
 // kernel.c
 extern byte* param_font_adr;
 extern ushort param_screen_x;
@@ -209,3 +225,9 @@ void init_paging();
 // task.c
 void init_task();
 void task_switch();
+
+// window.c
+void init_window();
+void update_window();
+void win_draw_pixel(WINDOW* win, int x, int y, byte color);
+void win_draw_rect(WINDOW* win, int x, int y, int w, int h, byte color);
