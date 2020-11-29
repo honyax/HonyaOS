@@ -1,5 +1,8 @@
 #include "define.h"
 
+// カラーテストを行う場合は以下をTRUEにする
+#define DRAW_COLOR_TEST FALSE
+
 WINDOW_MANAGER window_manager;
 
 void init_background(WINDOW* bg);
@@ -34,6 +37,8 @@ void init_window()
 
 void init_background(WINDOW* bg)
 {
+#if !DRAW_COLOR_TEST
+
     win_draw_rect(bg, 0, 0, bg->w, bg->h, COL_DARKBLUE);
     win_draw_rect(bg, 80, 80, 150, 150, COL_BLUE);
     win_draw_rect(bg, 160, 160, 150, 150, COL_RED);
@@ -43,7 +48,7 @@ void init_background(WINDOW* bg)
     win_draw_char(bg, 24, 80, 'Y', COL_GREY);
     win_draw_char(bg, 32, 80, 'Z', COL_CYAN);
     win_draw_text(bg, 16, 120, "HonyaOS is my own operating system.", COL_WHITE);
-    
+
     char test_txt[128];
     hsprintf(test_txt, "This is %d, 0x%x, 0x%X, string:%s.", 100, 0x12AB, 0x34CD, "string parameter");
     win_draw_text(bg, 16, 160, test_txt, COL_YELLOW);
@@ -59,6 +64,32 @@ void init_background(WINDOW* bg)
     hsprintf(test_txt, "text:%X - %X rodata:%X - %X data:%X - %X bss:%X - %X",
             _TEXT_START, _TEXT_END, _RODATA_START, _RODATA_END, _DATA_START, _DATA_END, _BSS_START, _BSS_END);
     win_draw_text(bg, 16, 480, test_txt, COL_CYAN);
+
+#else
+
+    // カラーテスト
+    int dx = param_screen_x / 16;
+    int dy = param_screen_y / 16;
+
+    for (int y = 0; y < 16; y++) {
+        for (int x = 0; x < 16; x++) {
+            byte color = y * 16 + x;
+            win_draw_rect(bg, dx * x, dy * y, dx, dy, color);
+            char str[5];
+            hsprintf(str, "0x%X%X", y, x);
+            byte text_color;
+            if ((x < 10 && y < 3) ||
+                (color >= 0x36 && color <= 0x39) ||
+                color > 0x67) {
+                text_color = COL_FCFCFC;
+            } else {
+                text_color = COL_000000;
+            }
+            win_draw_text(bg, dx * x + (dx / 2 - 16), dy * y + (dy / 2 - 8), str, text_color);
+        }
+    }
+
+#endif
 }
 
 // 指定したウィンドウを描画する

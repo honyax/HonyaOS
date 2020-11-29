@@ -186,7 +186,6 @@ void draw_line(int x1, int y1, int x2, int y2, byte color);
 void draw_rect(int x, int y, int w, int h, byte color);
 void draw_char(int x, int y, char c, byte color);
 void draw_text(int x, int y, byte* text, byte color);
-void draw_color_test();
 
 // memory.c
 void write_mem8(uint addr, byte data);

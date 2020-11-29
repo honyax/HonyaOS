@@ -27,10 +27,6 @@ int kernel_main() {
 
     _sti();
 
-#if 0
-    draw_color_test();
-#endif
-
     for (;;) {
         update_interrupt();
         update_timer();
