@@ -22,13 +22,13 @@ byte get_pixel(int x, int y)
 
 void draw_line(int x1, int y1, int x2, int y2, byte color)
 {
-    int deltaX = x1 > x2 ? x1 - x2 : x2 - x1;
-    int deltaY = y1 > y2 ? y1 - y2 : y2 - y1;
-    int delta = deltaX > deltaY ? deltaX : deltaY;
-    int diffX = x2 - x1;
-    int diffY = y2 - y1;
+    int delta_x = x1 > x2 ? x1 - x2 : x2 - x1;
+    int delta_y = y1 > y2 ? y1 - y2 : y2 - y1;
+    int delta = delta_x > delta_y ? delta_x : delta_y;
+    int diff_x = x2 - x1;
+    int diff_y = y2 - y1;
     for (int i = 0; i <= delta; i++) {
-        draw_pixel(x1 + diffX * i / delta, y1 + diffY * i / delta, color);
+        draw_pixel(x1 + diff_x * i / delta, y1 + diff_y * i / delta, color);
     }
 }
 

@@ -139,6 +139,14 @@ extern byte* param_font_adr;
 extern ushort param_screen_x;
 extern ushort param_screen_y;
 extern uint param_vram;
+extern uint _text_start;
+extern uint _text_end;
+extern uint _rodata_start;
+extern uint _rodata_end;
+extern uint _data_start;
+extern uint _data_end;
+extern uint _bss_start;
+extern uint _bss_end;
 
 // asm.s
 void _load_idt();
@@ -230,4 +238,8 @@ void task_switch();
 void init_window();
 void update_window();
 void win_draw_pixel(WINDOW* win, int x, int y, byte color);
+byte win_get_pixel(WINDOW* win, int x, int y);
+void win_draw_line(WINDOW* win, int x1, int y1, int x2, int y2, byte color);
 void win_draw_rect(WINDOW* win, int x, int y, int w, int h, byte color);
+void win_draw_char(WINDOW* win, int x, int y, char c, byte color);
+void win_draw_text(WINDOW* win, int x, int y, byte* text, byte color);
