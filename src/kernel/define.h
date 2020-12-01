@@ -236,6 +236,7 @@ void task_switch();
 // window.c
 void init_window();
 void update_window();
+WINDOW* win_create(int x, int y, int w, int h);
 void win_draw_pixel(WINDOW* win, int x, int y, byte color);
 byte win_get_pixel(WINDOW* win, int x, int y);
 void win_draw_line(WINDOW* win, int x1, int y1, int x2, int y2, byte color);

@@ -9,21 +9,14 @@ void init_background(WINDOW* bg);
 void screen_draw_window(WINDOW* win);
 void screen_draw_rect(int x, int y, int w, int h);
 void screen_draw_pixel(int x, int y);
+WINDOW* win_create_internal(int x, int y, int w, int h);
 
 void init_window()
 {
-    // 背景を作成
-    WINDOW *bg = (WINDOW *)hmalloc(sizeof(WINDOW));
-    WINDOW *fg = (WINDOW *)hmalloc(sizeof(WINDOW));
-    bg->x = 0;
-    bg->y = 0;
-    bg->w = param_screen_x;
-    bg->h = param_screen_y;
-    bg->pixels = (byte *)hmalloc(param_screen_x * param_screen_y);
-    fg->x = 0;
-    fg->y = 0;
-    fg->w = 0;
-    fg->h = 0;
+    // 背景、前景（ダミー）を作成
+    WINDOW *bg = win_create_internal(0, 0, param_screen_x, param_screen_y);
+    WINDOW *fg = win_create_internal(0, 0, 0, 0);
+
     bg->prev = NULL;
     bg->next = fg;
     fg->prev = bg;
@@ -129,6 +122,31 @@ void update_window()
 {
     // TODO: 動いたウィンドウに関してのみ描画する
     return;
+}
+
+WINDOW* win_create_internal(int x, int y, int w, int h)
+{
+    WINDOW *win = (WINDOW *)hmalloc(sizeof(WINDOW));
+    win->x = x;
+    win->y = y;
+    win->w = w;
+    win->h = h;
+    win->pixels = (byte *)hmalloc(w * h);
+    return win;
+}
+
+WINDOW* win_create(int x, int y, int w, int h)
+{
+    WINDOW* win = win_create_internal(x, y, w, h);
+
+    // 最前面（foregroundのprev）に配置する
+    WINDOW* fg = window_manager.foreground;
+    WINDOW* prev = fg->prev;
+    prev->next = win;
+    win->prev = prev;
+    win->next = fg;
+    fg->prev = win;
+    return win;
 }
 
 void win_draw_pixel(WINDOW* win, int x, int y, byte color)
