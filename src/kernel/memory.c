@@ -59,6 +59,16 @@ void init_memory()
 // メモリ確保
 void *hmalloc(uint size)
 {
+    if (size <= 0) {
+        return (void*) NULL;
+    }
+
+    // 確保可能なメモリ数を越えていたら確保失敗
+    if (used_memories[USED_MEMORY_MAX - 1].size != 0) {
+        alloc_error_count++;
+        return (void*) NULL;
+    }
+
     // スタート地点から探索して指定したsize分の空きがある箇所を探す
     uint alloc_addr = allocatable_start_addr;
     for (int i = 0; i < USED_MEMORY_MAX; i++) {
@@ -76,12 +86,12 @@ void *hmalloc(uint size)
             }
         } else if (used_memories[i].start_addr - alloc_addr >= size) {
             // 次のメモリの開始アドレスまでの間にメモリを確保できるなら、以降の確保領域のインデックスを全て +1 してここに確保
-            for (int j = i; j < USED_MEMORY_MAX - 1; j++) {
-                if (used_memories[j].size == 0) {
-                    break;
+            for (int j = USED_MEMORY_MAX - 1; j > i; j--) {
+                if (used_memories[j - 1].size == 0) {
+                    continue;
                 }
-                used_memories[j + 1].start_addr = used_memories[j].start_addr;
-                used_memories[j + 1].size = used_memories[j].size;
+                used_memories[j].start_addr = used_memories[j - 1].start_addr;
+                used_memories[j].size = used_memories[j - 1].size;
             }
             used_memories[i].start_addr = alloc_addr;
             used_memories[i].size = size;
@@ -89,7 +99,7 @@ void *hmalloc(uint size)
         }
 
         // 確保されている領域の最後にアドレスを移して次の領域を再探索
-        alloc_addr = used_memories[i].start_addr + size;
+        alloc_addr = used_memories[i].start_addr + used_memories[i].size;
     }
 
     // メモリが最大数まで確保されている
