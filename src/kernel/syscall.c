@@ -11,7 +11,7 @@ void syscall(int sc_id, int param1, int param2, int param3, int param4, int para
     switch (sc_id) {
         case 0xffff:
             hsprintf(str, "%X %X %X %X %X %X", sc_id, param1, param2, param3, param4, param5);
-            draw_text(20, 520, str, COL_WHITE);
+            bg_draw_text(20, 520, str, COL_WHITE);
             result = 0x1234abcd;
             break;
             

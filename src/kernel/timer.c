@@ -25,8 +25,8 @@ void update_timer()
 
     display_timer_count = timer_count;
     hsprintf(disp_timer, "%d", timer_count);
-    draw_rect(16, 500, 80, 16, COL_BLACK);
-    draw_text(16, 500, disp_timer, COL_WHITE);
+    bg_draw_rect(16, 500, 80, 16, COL_DARKBLUE);
+    bg_draw_text(16, 500, disp_timer, COL_WHITE);
 }
 
 // TODO: 各タスクの動作中状態を表示するため、タイマカウンタを表示してみる
@@ -38,6 +38,6 @@ void update_timer_task(int task_index, int y)
 
     display_timer_task_count[task_index] = timer_count;
     hsprintf(disp_timer, "%d", timer_count);
-    draw_rect(80, y, 80, 16, COL_BLACK);
-    draw_text(80, y, disp_timer, COL_CYAN);
+    bg_draw_rect(80, y, 80, 16, COL_DARKBLUE);
+    bg_draw_text(80, y, disp_timer, COL_CYAN);
 }

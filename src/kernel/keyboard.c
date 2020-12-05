@@ -39,8 +39,8 @@ int update_keyboard()
                 key_input_pos = 0;
             }
             hsprintf(key_code, "%c", keytable[data]);
-            draw_rect(pos_x, 440, 8, 16, COL_BLACK);
-            draw_text(pos_x, 440, key_code, COL_WHITE);
+            bg_draw_rect(pos_x, 440, 8, 16, COL_DARKBLUE);
+            bg_draw_text(pos_x, 440, key_code, COL_WHITE);
         }
     }
     return length;

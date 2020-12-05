@@ -3,7 +3,7 @@
 // カラーテストを行う場合は以下をTRUEにする
 #define DRAW_COLOR_TEST FALSE
 
-WINDOW_MANAGER window_manager;
+static WINDOW_MANAGER window_manager;
 
 void init_background(WINDOW* bg);
 void screen_draw_window(WINDOW* win);
@@ -25,7 +25,6 @@ void init_window()
     window_manager.foreground = fg;
 
     init_background(bg);
-    screen_draw_window(bg);
 }
 
 void init_background(WINDOW* bg)
@@ -120,8 +119,6 @@ void screen_draw_pixel(int x, int y)
 
 void update_window()
 {
-    // TODO: 動いたウィンドウに関してのみ描画する
-    return;
 }
 
 WINDOW* win_create_internal(int x, int y, int w, int h)
@@ -146,12 +143,8 @@ WINDOW* win_create(int x, int y, int w, int h)
     win->prev = prev;
     win->next = fg;
     fg->prev = win;
+    screen_draw_window(win);
     return win;
-}
-
-void win_draw_pixel(WINDOW* win, int x, int y, byte color)
-{
-    win->pixels[win->w * y + x] = color;
 }
 
 byte win_get_pixel(WINDOW* win, int x, int y)
@@ -170,6 +163,12 @@ byte win_get_pixel(WINDOW* win, int x, int y)
     short x_pos = x - x_min;
     short y_pos = y - y_min;
     return win->pixels[win->w * y_pos + x_pos];
+}
+
+void win_draw_pixel(WINDOW* win, int x, int y, byte color)
+{
+    win->pixels[win->w * y + x] = color;
+    screen_draw_pixel(win->x + x, win->y + y);
 }
 
 void win_draw_line(WINDOW* win, int x1, int y1, int x2, int y2, byte color)
@@ -218,4 +217,25 @@ void win_draw_text(WINDOW* win, int x, int y, byte* text, byte color)
     for (int i = 0; *(text + i) != 0x00; i++) {
         win_draw_char(win, x + 8 * i, y, text[i], color);
     }
+}
+
+void bg_draw_pixel(int x, int y, byte color)
+{
+    win_draw_pixel(window_manager.background, x, y, color);
+}
+void bg_draw_line(int x1, int y1, int x2, int y2, byte color)
+{
+    win_draw_line(window_manager.background, x1, y1, x2, y2, color);
+}
+void bg_draw_rect(int x, int y, int w, int h, byte color)
+{
+    win_draw_rect(window_manager.background, x, y, w, h, color);
+}
+void bg_draw_char(int x, int y, char c, byte color)
+{
+    win_draw_char(window_manager.background, x, y, c, color);
+}
+void bg_draw_text(int x, int y, byte* text, byte color)
+{
+    win_draw_text(window_manager.background, x, y, text, color);
 }

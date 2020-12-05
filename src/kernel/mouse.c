@@ -57,8 +57,8 @@ void show_mouse_state()
     if ((mouse_data.button & 0x04) != 0) {
         mouse_code[2] = 'C';
     }
-    draw_rect(16, 460, 96, 16, COL_BLACK);
-    draw_text(16, 460, mouse_code, COL_WHITE);
+    bg_draw_rect(16, 460, 96, 16, COL_DARKBLUE);
+    bg_draw_text(16, 460, mouse_code, COL_WHITE);
 }
 
 void show_mouse()
