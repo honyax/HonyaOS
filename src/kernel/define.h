@@ -221,6 +221,8 @@ int update_keyboard();
 // mouse.c
 void init_mouse();
 int update_mouse();
+bool isLeftButtonPushed();
+void getMousePos(int *x, int *y);
 
 // timer.c
 void init_timer();
@@ -235,8 +237,8 @@ void task_switch();
 
 // window.c
 void init_window();
-void update_window();
 WINDOW* win_create(int x, int y, int w, int h);
+void win_move(WINDOW* win, int x, int y);
 byte win_get_pixel(WINDOW* win, int x, int y);
 void win_draw_pixel(WINDOW* win, int x, int y, byte color);
 void win_draw_line(WINDOW* win, int x1, int y1, int x2, int y2, byte color);
@@ -248,3 +250,7 @@ void bg_draw_line(int x1, int y1, int x2, int y2, byte color);
 void bg_draw_rect(int x, int y, int w, int h, byte color);
 void bg_draw_char(int x, int y, char c, byte color);
 void bg_draw_text(int x, int y, byte* text, byte color);
+
+// console.c
+void init_console();
+void update_console();

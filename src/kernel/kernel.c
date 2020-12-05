@@ -24,13 +24,14 @@ int kernel_main() {
     init_paging();
     init_task();
     init_window();
+    init_console();
 
     _sti();
 
     for (;;) {
         update_interrupt();
         update_timer();
-        update_window();
+        update_console();
     }
 
     return 0;

@@ -44,6 +44,17 @@ void init_mouse()
     }
 }
 
+bool isLeftButtonPushed()
+{
+    return (mouse_data.button & 0x01) != 0 ? TRUE : FALSE;
+}
+
+void getMousePos(int *x, int *y)
+{
+    *x = mouse_data.x;
+    *y = mouse_data.y;
+}
+
 void show_mouse_state()
 {
     char mouse_code[20];

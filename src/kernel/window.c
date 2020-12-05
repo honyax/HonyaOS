@@ -92,8 +92,8 @@ void screen_draw_window(WINDOW* win)
 
 void screen_draw_rect(int x, int y, int w, int h)
 {
-    for (int i = x; i < x + w; i++) {
-        for (int j = y; j < y + h; j++) {
+    for (int i = x; i <= x + w; i++) {
+        for (int j = y; j <= y + h; j++) {
             screen_draw_pixel(i, j);
         }
     }
@@ -115,10 +115,6 @@ void screen_draw_pixel(int x, int y)
     }
 
     draw_pixel(x, y, color);
-}
-
-void update_window()
-{
 }
 
 WINDOW* win_create_internal(int x, int y, int w, int h)
@@ -145,6 +141,19 @@ WINDOW* win_create(int x, int y, int w, int h)
     fg->prev = win;
     screen_draw_window(win);
     return win;
+}
+
+void win_move(WINDOW* win, int x, int y)
+{
+    int old_x = win->x;
+    int old_y = win->y;
+    win->x = x;
+    win->y = y;
+
+    // ウィンドウの移動前後の位置を再描画
+    screen_draw_window(win);
+    // TODO: 最適化が必要
+    screen_draw_rect(old_x, old_y, win->w, win->h);
 }
 
 byte win_get_pixel(WINDOW* win, int x, int y)
