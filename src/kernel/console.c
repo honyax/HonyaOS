@@ -12,8 +12,8 @@ static CONSOLE cons_data;
 
 void init_console()
 {
-    int w = param_screen_x / 2;
-    int h = param_screen_y / 2;
+    int w = param_screen_x / 4;
+    int h = param_screen_y / 8;
     int x = param_screen_x / 2 - (w / 2);
     int y = param_screen_y / 2 - (h  / 2);
     console_win = win_create(x, y, w, h);
