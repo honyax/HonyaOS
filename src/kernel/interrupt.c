@@ -115,14 +115,15 @@ void update_interrupt()
     }
 }
 
-void inthandler00(int *esp)
-{
-    // ゼロ除算例外処理
-    interrupt_stop(" < ZERO Div!! > ", esp);
-}
-
-void inthandler0e(int *esp)
-{
-    // Page Fault例外処理
-    interrupt_stop(" <Page Fault!!> ", esp);
-}
+void inthandler00(int *esp) { interrupt_stop(" < ZERO Div!! > ", esp); } // ゼロ除算例外処理
+void inthandler01(int *esp) { interrupt_stop(" <Debugger Int> ", esp); } // デバッガ割り込み
+void inthandler05(int *esp) { interrupt_stop("<Ary OutOfRange>", esp); } // バウンドチェック配列範囲外
+void inthandler06(int *esp) { interrupt_stop("<Invalid OpCode>", esp); } // 無効命令
+void inthandler07(int *esp) { interrupt_stop("<CoProc NoExist>", esp); } // コプロセッサ不在
+void inthandler0a(int *esp) { interrupt_stop(" <Invalid TSS!> ", esp); } // 無効 Task State Segment
+void inthandler0b(int *esp) { interrupt_stop(" <Seg Fault!!!> ", esp); } // Segmentation Fault例外処理
+void inthandler0c(int *esp) { interrupt_stop("<Stack Except!!>", esp); } // Stack例外処理
+void inthandler0d(int *esp) { interrupt_stop(" <Gen Protect!> ", esp); } // 一般保護例外処理
+void inthandler0e(int *esp) { interrupt_stop(" <Page Fault!!> ", esp); } // Page Fault例外処理
+void inthandler10(int *esp) { interrupt_stop(" <CoProc Error> ", esp); } // コプロセッサエラー
+void inthandler11(int *esp) { interrupt_stop("<Alignment Chek>", esp); } // アライメントチェック

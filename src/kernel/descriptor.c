@@ -160,7 +160,17 @@ void init_descriptor()
     _load_idt();
 
     setup_interrupt_gate(0x00, _asm_inthandler00);      // 0除算
+    setup_interrupt_gate(0x01, _asm_inthandler01);      // 
+    setup_interrupt_gate(0x05, _asm_inthandler05);      // 
+    setup_interrupt_gate(0x06, _asm_inthandler06);      // 
+    setup_interrupt_gate(0x07, _asm_inthandler07);      // 
+    setup_interrupt_gate(0x0a, _asm_inthandler0a);      // 
+    setup_interrupt_gate(0x0b, _asm_inthandler0b);      // セグメンテーションフォールト
+    setup_interrupt_gate(0x0c, _asm_inthandler0c);      // スタック例外
+    setup_interrupt_gate(0x0d, _asm_inthandler0d);      // 一般保護例外
     setup_interrupt_gate(0x0e, _asm_inthandler0e);      // ページフォールト
+    setup_interrupt_gate(0x20, _asm_inthandler10);      // 
+    setup_interrupt_gate(0x21, _asm_inthandler11);      // 
     setup_interrupt_gate(0x20, _asm_inthandler20);      // タイマ割り込み
     setup_interrupt_gate(0x21, _asm_inthandler21);      // キーボード割り込み
     setup_interrupt_gate(0x2c, _asm_inthandler2c);      // マウス割り込み

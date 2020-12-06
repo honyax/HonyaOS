@@ -141,13 +141,33 @@ _out32:
 // 割り込みハンドラ
 .global _asm_inthandler_default
 .global _asm_inthandler00
+.global _asm_inthandler01
+.global _asm_inthandler05
+.global _asm_inthandler06
+.global _asm_inthandler07
+.global _asm_inthandler0a
+.global _asm_inthandler0b
+.global _asm_inthandler0c
+.global _asm_inthandler0d
 .global _asm_inthandler0e
+.global _asm_inthandler10
+.global _asm_inthandler11
 .global _asm_inthandler20
 .global _asm_inthandler21
 .global _asm_inthandler2c
 .extern inthandler_default
 .extern inthandler00
+.extern inthandler01
+.extern inthandler05
+.extern inthandler06
+.extern inthandler07
+.extern inthandler0a
+.extern inthandler0b
+.extern inthandler0c
+.extern inthandler0d
 .extern inthandler0e
+.extern inthandler10
+.extern inthandler11
 .extern inthandler20
 .extern inthandler21
 .extern inthandler2c
@@ -178,9 +198,49 @@ _asm_inthandler_default:
 _asm_inthandler00:
     _asm_inthandler inthandler00
 
+// void _asm_inthandler01
+_asm_inthandler01:
+    _asm_inthandler inthandler01
+
+// void _asm_inthandler05
+_asm_inthandler05:
+    _asm_inthandler inthandler05
+
+// void _asm_inthandler06
+_asm_inthandler06:
+    _asm_inthandler inthandler06
+
+// void _asm_inthandler07
+_asm_inthandler07:
+    _asm_inthandler inthandler07
+
+// void _asm_inthandler0a
+_asm_inthandler0a:
+    _asm_inthandler inthandler0a
+
+// void _asm_inthandler0b
+_asm_inthandler0b:
+    _asm_inthandler inthandler0b
+
+// void _asm_inthandler0c
+_asm_inthandler0c:
+    _asm_inthandler inthandler0c
+
+// void _asm_inthandler0d
+_asm_inthandler0d:
+    _asm_inthandler inthandler0d
+
 // void _asm_inthandler0e
 _asm_inthandler0e:
     _asm_inthandler inthandler0e
+
+// void _asm_inthandler10
+_asm_inthandler10:
+    _asm_inthandler inthandler10
+
+// void _asm_inthandler11
+_asm_inthandler11:
+    _asm_inthandler inthandler11
 
 // void _asm_inthandler20
 _asm_inthandler20:
