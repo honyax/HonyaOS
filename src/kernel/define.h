@@ -226,7 +226,7 @@ int fifo32_get(FIFO32 *fifo);
 
 // keyboard.c
 void init_keyboard();
-int update_keyboard();
+bool try_get_key_input(char *c);
 
 // mouse.c
 void init_mouse();

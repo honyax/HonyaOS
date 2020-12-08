@@ -25,30 +25,22 @@ void init_keyboard()
     key_input_pos = 0;
 }
 
-int update_keyboard()
-{
-    int length = key_input_data.len;
-    for (int i = 0; i < length; i++) {
-        int data = fifo32_get(&key_input_data);
-        if (data < 0x80) {
-            char key_code[4];
-            int pos_x = 16 + 8 * key_input_pos;
-            key_input_pos++;
-            // 画面の右はじの方に行ったら位置を初期化
-            if (pos_x > param_screen_x - 40) {
-                key_input_pos = 0;
-            }
-            hsprintf(key_code, "%c", keytable[data]);
-            bg_draw_rect(pos_x, 440, 8, 16, COL_DARKBLUE);
-            bg_draw_text(pos_x, 440, key_code, COL_WHITE);
-        }
-    }
-    return length;
-}
-
 void inthandler21(int *esp)
 {
     _out8(PIC0_OCW2, 0x61);
     int data = _in8(PORT_KEYDAT);
     fifo32_put(&key_input_data, data);
+}
+
+bool try_get_key_input(char *c)
+{
+    if (key_input_data.len > 0) {
+        int data = fifo32_get(&key_input_data);
+        if (data < 0x80) {
+            *c = keytable[data];
+            return TRUE;
+        }
+    }
+
+    return FALSE;
 }

@@ -106,9 +106,8 @@ void inthandler_default(int *esp)
 void update_interrupt()
 {
     _cli();
-    int result_keyboard = update_keyboard();
     int result_mouse = update_mouse();
-    if (result_keyboard > 0 || result_mouse > 0) {
+    if (result_mouse > 0) {
         _sti();
     } else {
         _stihlt();
