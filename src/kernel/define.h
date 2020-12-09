@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../lib/define.h"
+
 // define.sとの共通化
 #define     BOOT_SIZE               (1024 * 8)      // ブートサイズ
 #define     KERNEL_SIZE             (1024 * 8)      // カーネルサイズ
