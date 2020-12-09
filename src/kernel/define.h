@@ -207,9 +207,6 @@ void init_memory();
 void *hmalloc(uint size);
 void hfree(void *ptr);
 
-// sprintf.c
-int hsprintf (char *str, const char *fmt, ...);
-
 // descriptor.c
 void init_descriptor();
 void create_root_task(TSS *task);

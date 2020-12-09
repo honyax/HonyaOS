@@ -1,4 +1,3 @@
-#include "define.h"
 #include <stdarg.h>
 
 //10進数からASCIIコードに変換
