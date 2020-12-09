@@ -15,6 +15,37 @@ typedef struct
 static CONSOLE cons_data;
 
 void refresh_console();
+void exec_command(char *line);
+
+void print(const char *str)
+{
+    int len = hstrlen(str);
+    for (int i = 0; i < len; i++) {
+        cons_data.text[cons_data.current_line][cons_data.current_pos + i] = str[i];
+    }
+    win_draw_text(console_win,
+        8 * cons_data.current_pos, 16 * cons_data.current_line,
+        &cons_data.text[cons_data.current_line][cons_data.current_pos], COL_WHITE);
+}
+
+// 改行処理を実行
+void add_newline()
+{
+    // まだ最終行に到達していない場合は行を一つ加算するのみ
+    if (cons_data.current_line + 1 < LINE_COUNT) {
+        cons_data.current_line++;
+    } else {
+        // 既に最下段に達しているので、全ての行を一つずつ上げる。最終行だけは0クリアする
+        for (int line = 0; line < LINE_COUNT; line++) {
+            for (int i = 0; i < TEXT_LENGTH; i++) {
+                cons_data.text[line][i] = (line == LINE_COUNT - 1) ? 0 : cons_data.text[line + 1][i];
+            }
+        }
+        refresh_console();
+    }
+    cons_data.current_pos = 0;
+    cons_data.display_pos = 0;
+}
 
 void add_key(char c)
 {
@@ -27,21 +58,14 @@ void add_key(char c)
                 cons_data.text[cons_data.current_line][cons_data.current_pos] = 0;
             }
             break;
-        case 0x0a:  // Enter
-            if (cons_data.current_line + 1 < LINE_COUNT) {
-                cons_data.current_line++;
-            } else {
-                // 既に最下段に達しているので、全ての行を一つずつ上げる。最終行だけは0クリアする
-                for (int line = 0; line < LINE_COUNT; line++) {
-                    for (int i = 0; i < TEXT_LENGTH; i++) {
-                        cons_data.text[line][i] = (line == LINE_COUNT - 1) ? 0 : cons_data.text[line + 1][i];
-                    }
-                }
-                refresh_console();
-            }
+        case '\n':  // Enter
+            add_newline();
+
+            // 入力されたコマンドを解析、実行
+            exec_command(&cons_data.text[cons_data.current_line - 1][1]);
+
             cons_data.text[cons_data.current_line][0] = '>';
             cons_data.current_pos = 1;
-            cons_data.display_pos = 0;
             break;
         default:
             if (cons_data.current_pos < TEXT_LENGTH) {
@@ -102,5 +126,38 @@ void refresh_console()
     win_draw_rect(console_win, 0, 0, w, h, COL_BLACK);
     for (int i = 0; i <= cons_data.current_line; i++) {
         win_draw_text(console_win, 0, 16 * i, &cons_data.text[i][0], COL_WHITE);
+    }
+}
+
+bool cmd_equals(char *input, const char *cmd)
+{
+    int len = hstrlen(cmd);
+    if (len < 0)
+        return FALSE;
+    
+    for (int i = 0; i < len; i++) {
+        if (input[i] != cmd[i])
+            return FALSE;
+    }
+
+    return input[len] == '\n' || input[len] == ' ' || input[len] == 0;
+}
+
+void exec_command(char *input)
+{
+    if (cmd_equals(input, "")) {
+        // 改行のみの場合は無処理
+    } else if (cmd_equals(input, "clear")) {
+        // 画面をクリアする
+        for (int line = 0; line < LINE_COUNT; line++) {
+            for (int i = 0; i < TEXT_LENGTH; i++) {
+                cons_data.text[line][i] = 0;
+            }
+        }
+        cons_data.current_line = 0;
+        refresh_console();
+    } else {
+        print("Bad Command");
+        add_newline();
     }
 }
