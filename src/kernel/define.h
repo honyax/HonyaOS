@@ -206,6 +206,7 @@ void hmemset(void *addr, byte c, int size);
 void init_memory();
 void *hmalloc(uint size);
 void hfree(void *ptr);
+void get_memory_status(int *total, int *used, int *free, int *count);
 
 // descriptor.c
 void init_descriptor();

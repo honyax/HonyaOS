@@ -162,6 +162,14 @@ void exec_command(char *input)
         }
         cons_data.current_line = 0;
         refresh_console();
+    } else if (cmd_equals(input, "mem")) {
+        // メモリ使用状況を獲得
+        int total, used, free, count;
+        char str[64];
+        get_memory_status(&total, &used, &free, &count);
+        hsprintf(str, "%d, %d, %d, %d", total, used, free, count);
+        println("total, used, free, count");
+        println(str);
     } else {
         println("Bad Command");
     }

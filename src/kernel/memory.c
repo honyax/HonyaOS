@@ -127,3 +127,21 @@ void hfree(void *ptr)
     free_error_count++;
     return;
 }
+
+void get_memory_status(int *total, int *used, int *free, int *count)
+{
+    int used_size = 0;
+    int used_count = 0;
+    for (int i = 0; i < USED_MEMORY_MAX; i++) {
+        if (used_memories[i].size == 0) {
+            used_count = i;
+            break;
+        }
+        used_size += (int) used_memories[i].size;
+    }
+
+    *total = (int) total_size;
+    *used = used_size;
+    *free = (int) (total_size - used_size);
+    *count = used_count;
+}
