@@ -76,6 +76,12 @@ void add_key(char c)
     }
 }
 
+void println(const char *str)
+{
+    print(str);
+    add_newline();
+}
+
 void init_console()
 {
     int w = param_screen_x / 4;
@@ -157,7 +163,6 @@ void exec_command(char *input)
         cons_data.current_line = 0;
         refresh_console();
     } else {
-        print("Bad Command");
-        add_newline();
+        println("Bad Command");
     }
 }
