@@ -42,8 +42,8 @@ static USED_MEMORY* used_memories;
 // メモリ初期化
 void init_memory()
 {
-    // ヒープメモリとして 0x0020 0000 - 0x07FF 0000 の領域が与えられている
-    // まずは管理領域として 0x0020 0000 から USED_MEMORY * USED_MEMORY_MAX 分の領域を確保
+    // ヒープメモリとして 0x0070 0000 - 0x07FF 0000 の領域が与えられている
+    // まずは管理領域として 0x0070 0000 から USED_MEMORY * USED_MEMORY_MAX 分の領域を確保
     used_memories = (USED_MEMORY*) HEAP_MEMORY_START;
     uint manage_memory_size = sizeof(USED_MEMORY) * USED_MEMORY_MAX;
     allocatable_start_addr = HEAP_MEMORY_START + manage_memory_size;
