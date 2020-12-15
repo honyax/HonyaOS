@@ -1,7 +1,7 @@
 BOOT_IMG	= boot.img
 BOOT_BIN	= boot/boot.bin
 KERNEL_BIN	= kernel/kernel.bin
-FS_BIN		= filesystem/filesystem.bin
+FS_IMG		= filesystem/fat12.img
 
 BOCHS		= "bochsdbg.exe"
 QEMU		= "qemu-system-i386.exe"
@@ -9,8 +9,8 @@ QEMU		= "qemu-system-i386.exe"
 .PHONY: all
 all: $(BOOT_IMG)
 
-$(BOOT_IMG): $(BOOT_BIN) $(KERNEL_BIN) $(FS_BIN)
-	cat $(BOOT_BIN) $(KERNEL_BIN) $(FS_BIN) > $(BOOT_IMG)
+$(BOOT_IMG): $(BOOT_BIN) $(KERNEL_BIN) $(FS_IMG)
+	cat $(BOOT_BIN) $(KERNEL_BIN) $(FS_IMG) > $(BOOT_IMG)
 
 $(BOOT_BIN): boot/*.asm boot/*.s
 	cd boot; make
@@ -18,7 +18,7 @@ $(BOOT_BIN): boot/*.asm boot/*.s
 $(KERNEL_BIN): kernel/*.c kernel/*.s
 	cd kernel; make
 
-$(FS_BIN): filesystem/*.asm
+$(FS_IMG): filesystem/*.asm
 	cd filesystem; make
 
 .PHONY: run
