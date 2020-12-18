@@ -67,7 +67,7 @@ ipl:
         mov     bx, BOOT_SECT - 1           ; BX = 残りのブートセクタ数
         mov     cx, BOOT_LOAD + SECT_SIZE   ; CX = 次のロードアドレス
 
-        cdecl   read_chs, boot, bx, cx      ; AX = read_chs(.chs, bx, cx);
+        cdecl   read_chs, boot, bx, cx, 0   ; AX = read_chs(.chs, bx, cx, 0);
 
         cmp     ax, bx
         jz      .success                    ; if (AX == BX) goto .success
@@ -288,7 +288,7 @@ stage_5:
         ;--------------------------------
         ; カーネルを 0x9C00 にロード
         ;--------------------------------
-        cdecl   read_lba, boot, BOOT_SECT, KERNEL_SECT, BOOT_END
+        cdecl   read_lba, boot, BOOT_SECT, KERNEL_SECT, BOOT_END, 0
 
         cmp     ax, KERNEL_SECT
         jz      .success                        ; if (ax == KERNEL_SECT) goto .success;
