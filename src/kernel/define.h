@@ -9,7 +9,7 @@
 
 #define     BOOT_LOAD               0x7C00          // ブートプログラムのロード位置
 #define     BOOT_END				(BOOT_LOAD + BOOT_SIZE)
-#define     FILESYSTEM_TEMP_SEG     0x00001000      // ファイルシステムのロード位置（一時領域）のセグメントアドレス
+#define     FILESYSTEM_LOAD_TEMP    0x00010000      // ファイルシステムのロード位置（一時領域）
 
 #define     PARAM_BASE_TEMP         0x00001000      // パラメータ領域（一時展開）の開始位置
 #define     PARAM_BASE              0x00101000      // パラメータ領域の開始位置

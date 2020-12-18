@@ -301,8 +301,8 @@ stage_5:
         ;--------------------------------
         ; ファイルシステムを 0x10000 にロード
         ;--------------------------------
-        mov     cx, FILESYSTEM_TEMP_SEG
-        mov     bx, BOOT_SECT + KERNEL_SECT
+        mov     cx, FILESYSTEM_LOAD_TEMP / 0x10 ; cx = 0x0000_1000; // セグメントのアドレス
+        mov     bx, BOOT_SECT + KERNEL_SECT     ; bx = 48;          // ファイルシステムのセクタ開始位置
 
         ;--------------------------------
         ; 一度にロードできるサイズは64KBまでなので、複数回に分けてロードする。
@@ -539,6 +539,15 @@ code_32:
         mov     edi, PARAM_BASE                 ; EDI = 0x0010_1000; // パラメータ領域の開始位置
         cld                                     ; // DFクリア（+方向）
         rep movsd                               ; while (--ECX) *EDI++ = *ESI++;
+
+		;---------------------------------------
+		; ファイルシステムをコピー
+		;---------------------------------------
+		mov		ecx, (FILESYSTEM_SIZE) / 4		; ECX = 4バイト単位でコピー;
+		mov		esi, FILESYSTEM_LOAD_TEMP		; ESI = 0x0001_0000; // 一時領域
+		mov		edi, FILESYSTEM_LOAD			; EDI = 0x0012_0000; // 上位メモリ
+		cld										; // DFクリア（+方向）
+		rep movsd								; while (--ECX) *EDI++ = *ESI++;
 
 		;---------------------------------------
 		; カーネル処理に移行

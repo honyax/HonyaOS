@@ -74,7 +74,7 @@
 
         BOOT_LOAD           equ     0x7C00          ; ブートプログラムのロード位置
 		BOOT_END			equ		(BOOT_LOAD + BOOT_SIZE)
-        FILESYSTEM_TEMP_SEG equ     0x0000_1000     ; ファイルシステムのロード位置（一時領域）の、セグメントアドレス
+        FILESYSTEM_LOAD_TEMP    equ 0x0001_0000     ; ファイルシステムのロード位置（一時領域）
 
         PARAM_BASE_TEMP     equ     0x0000_1000     ; パラメータ領域（一時展開）の開始位置
         PARAM_BASE          equ     0x0010_1000     ; パラメータ領域の開始位置
