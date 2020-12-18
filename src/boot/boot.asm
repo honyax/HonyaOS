@@ -298,7 +298,31 @@ stage_5:
         jmp     $
 
 .success:
+        ;--------------------------------
+        ; ファイルシステムを 0x10000 にロード
+        ;--------------------------------
+        mov     cx, FILESYSTEM_TEMP_SEG
+        mov     bx, BOOT_SECT + KERNEL_SECT
 
+        ;--------------------------------
+        ; 一度にロードできるサイズは64KBまでなので、複数回に分けてロードする。
+        ; ファイルシステムのサイズが64KB単位であることを前提にしている。
+        ;--------------------------------
+.fs_load_loop:
+        cdecl   read_lba, boot, bx, 128, 0, cx
+        cmp     ax, 0x80
+        jnz     .error2
+        add     cx, 0x1000
+        add     bx, 128
+        cmp     bx, BOOT_SECT + KERNEL_SECT + FILESYSTEM_SECT
+        jl      .fs_load_loop
+        jmp     .success2
+
+.error2:
+        cdecl   puts, .e1
+        jmp     $
+
+.success2:
         ;--------------------------------
         ; 次のステージへ移行
         ;--------------------------------
@@ -309,6 +333,7 @@ stage_5:
         ;--------------------------------
 .s0:    db  "5th stage...", 0x0A, 0x0D, 0
 .e0:    db  "Failure load kernel...", 0x0A, 0x0D, 0
+.e1:    db  "Failure load filesystem...", 0x0A, 0x0D, 0
 
 ;************************************************************************
 ;	ブート処理の第6ステージ

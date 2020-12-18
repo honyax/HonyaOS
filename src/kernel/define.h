@@ -5,12 +5,17 @@
 // define.sとの共通化
 #define     BOOT_SIZE               (1024 * 8)      // ブートサイズ
 #define     KERNEL_SIZE             (1024 * 8)      // カーネルサイズ
+#define     FILESYSTEM_SIZE         (1024 * 320)    // ファイルシステムサイズ
 
 #define     BOOT_LOAD               0x7C00          // ブートプログラムのロード位置
 #define     BOOT_END				(BOOT_LOAD + BOOT_SIZE)
+#define     FILESYSTEM_TEMP_SEG     0x00001000      // ファイルシステムのロード位置（一時領域）のセグメントアドレス
 
+#define     PARAM_BASE_TEMP         0x00001000      // パラメータ領域（一時展開）の開始位置
 #define     PARAM_BASE              0x00101000      // パラメータ領域の開始位置
+
 #define     KERNEL_LOAD             0x00112000      // カーネルのロード位置（プロテクトモード）
+#define     FILESYSTEM_LOAD         0x00120000      // ファイルシステムのロード位置（プロテクトモード）
 #define     KERNEL_PAGE_DIR         0x00200000      // カーネルのページディレクトリ
 #define     KERNEL_PAGE_TABLE       0x00201000      // カーネルのページテーブル
 #define     HEAP_MEMORY_START       0x00700000      // ヒープメモリの開始位置
@@ -18,8 +23,9 @@
 
 #define     SECT_SIZE               (512)           // セクタサイズ
 
-#define     BOOT_SECT               (BOOT_SIZE   / SECT_SIZE)   // ブートプログラムのセクタ数
-#define     KERNEL_SECT				(KERNEL_SIZE / SECT_SIZE)	// カーネルのセクタ数
+#define     BOOT_SECT               (BOOT_SIZE       / SECT_SIZE)   // ブートプログラムのセクタ数
+#define     KERNEL_SECT				(KERNEL_SIZE     / SECT_SIZE)	// カーネルのセクタ数
+#define     FILESYSTEM_SECT         (FILESYSTEM_SIZE / SECT_SIZE)   // ファイルシステムのセクタ数
 
 #define     E820_RECORD_SIZE		20
 
@@ -27,6 +33,8 @@
 #define     PARAM_SCREEN_X          (PARAM_BASE + 0x0004)       // 画面サイズ（横）の位置
 #define     PARAM_SCREEN_Y          (PARAM_BASE + 0x0006)       // 画面サイズ（縦）の位置
 #define     PARAM_VRAM              (PARAM_BASE + 0x00000008)   // VRAMの位置
+
+#define     VBE_MODE                0x107           // 画面モード（1280 x 1024 x 8bitカラー）
 
 // 共通
 #define     NULL            0
