@@ -1,7 +1,9 @@
 #include "define.h"
 
-#define TEXT_LENGTH 40  // 1280 / 4 / 8  = 40
-#define LINE_COUNT 8    // 1024 / 8 / 16 = 8
+#define CONSOLE_WIDTH 480
+#define CONSOLE_HEIGHT 320
+#define TEXT_LENGTH 60  // 480 / 8  = 60
+#define LINE_COUNT 20    // 320 / 16 = 20
 
 static WINDOW *console_win;
 
@@ -19,10 +21,15 @@ typedef struct
     byte name[8];
     byte ext[3];
     byte type;
-    char reserve[10];
-    ushort time;
-    ushort date;
-    ushort clustno;
+    byte reserve;
+    byte create_msec;
+    ushort create_time;
+    ushort create_date;
+    ushort access_date;
+    ushort clustno_hi;
+    ushort update_time;
+    ushort update_date;
+    ushort clustno_lo;
     uint size;
 } FILEINFO;
 static FILEINFO *file_info;
@@ -98,8 +105,8 @@ void println(const char *str)
 
 void init_console()
 {
-    int w = param_screen_x / 4;
-    int h = param_screen_y / 4;
+    int w = CONSOLE_WIDTH;
+    int h = CONSOLE_HEIGHT;
     int x = param_screen_x / 2 - (w / 2);
     int y = param_screen_y / 2 - (h  / 2);
     console_win = win_create(x, y, w, h);
@@ -158,8 +165,8 @@ void update_console()
 
 void refresh_console()
 {
-    int w = param_screen_x / 4;
-    int h = param_screen_y / 8;
+    int w = CONSOLE_WIDTH;
+    int h = CONSOLE_HEIGHT;
     win_draw_rect(console_win, 0, 0, w, h, COL_BLACK);
     for (int i = 0; i <= cons_data.current_line; i++) {
         win_draw_text(console_win, 0, 16 * i, &cons_data.text[i][0], COL_WHITE);
@@ -204,7 +211,12 @@ void exec_command(char *input)
     } else if (cmd_equals(input, "ls")) {
         // ファイルリストを表示
         
-        char fname[16];
+        // 表示フォーマット
+        // ファイル名    時刻             サイズ     クラスタ番号
+        // FILENAME.EXT 2020/12/31 23:59 9999999999 99999
+        println("FileName     DateTime(UTC)    Size       ClustNo");
+
+        char fname[64];
         int fname_index = 0;
         for (int i = 0; i < max_file_count; i++) {
             // nameの先頭が 0x00 の場合はそこで終了
@@ -214,6 +226,10 @@ void exec_command(char *input)
             if (file_info[i].type != 0x20)
                 continue;
             
+            for (int j = 0; j < 45; j++) {
+                fname[j] = ' ';
+            }
+
             // ファイル名を出力
             fname_index = 0;
             for (int j = 0; j < 8; j++) {
@@ -227,7 +243,23 @@ void exec_command(char *input)
                     fname[fname_index++] = file_info[i].ext[j];
                 }
             }
-            fname[fname_index] = 0;
+
+            // yearに加算するのはネットの情報によると1980らしいが、手元では2010にしないとダメっぽい。謎。
+            int year = ((file_info[i].update_date & 0xf800) >> 11) + 2010;
+            int mon  = (file_info[i].update_date & 0x07e0) >>  5;
+            int day  = (file_info[i].update_date & 0x001f) >>  0;
+            int hour = (file_info[i].update_time & 0xf800) >> 11;
+            int min  = (file_info[i].update_time & 0x07e0) >>  5;
+            int count;
+            // hsprintfで最後にnullを追加されるので、それを無理やり半角空白で上書きするという苦肉の策。%2dみたいに長さ指定できるようにしたい。。。
+            count = hsprintf(&fname[13], "%d/%d/%d", year, mon, day);
+            fname[13 + count] = ' ';
+            count = hsprintf(&fname[24], "%d:%d", hour, min);
+            fname[24 + count] = ' ';
+            count = hsprintf(&fname[30], "%d", file_info[i].size);
+            fname[30 + count] = ' ';
+            // ファイルシステムが320KBなので、クラスタ番号の上位2バイトを考慮する必要ない
+            hsprintf(&fname[41], "%d", file_info[i].clustno_lo);
             println(fname);
         }
     } else {
