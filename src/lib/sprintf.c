@@ -57,7 +57,8 @@ int str2asc (char *str, const char *arg)
 int hsprintf (char *str, const char *fmt, ...)
 {
     va_list list;
-    int count, len;
+    int count = 0;
+    int len;
     va_start (list, fmt);
  
     while (*fmt) {

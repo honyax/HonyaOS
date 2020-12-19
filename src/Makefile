@@ -15,7 +15,7 @@ $(BOOT_IMG): $(BOOT_BIN) $(KERNEL_BIN) $(FS_IMG)
 $(BOOT_BIN): boot/*.asm boot/*.s boot/modules/*.s
 	cd boot; make
 
-$(KERNEL_BIN): kernel/*.c kernel/*.s
+$(KERNEL_BIN): kernel/*.c kernel/*.s lib/*.c
 	cd kernel; make
 
 $(FS_IMG): filesystem/*.asm
