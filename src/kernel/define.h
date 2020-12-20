@@ -144,6 +144,24 @@ typedef struct
     WINDOW *foreground;      // 前景（ダミーのシート。番兵）
 } WINDOW_MANAGER;
 
+// file
+typedef struct
+{
+    byte name[8];
+    byte ext[3];
+    byte type;
+    byte reserve;
+    byte create_msec;
+    ushort create_time;
+    ushort create_date;
+    ushort access_date;
+    ushort clustno_hi;
+    ushort update_time;
+    ushort update_date;
+    ushort clustno_lo;
+    uint size;
+} FILEINFO;
+
 // kernel.c
 extern byte* param_font_adr;
 extern ushort param_screen_x;
@@ -272,3 +290,8 @@ void bg_draw_text(int x, int y, byte* text, byte color);
 // console.c
 void init_console();
 void update_console();
+
+// file.c
+void init_file();
+FILEINFO *get_file_info();
+int get_file_count();

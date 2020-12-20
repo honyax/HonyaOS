@@ -25,6 +25,7 @@ int kernel_main() {
     init_task();
     init_window();
     init_console();
+    init_file();
 
     _sti();
 
