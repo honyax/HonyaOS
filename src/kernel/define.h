@@ -295,3 +295,4 @@ void update_console();
 void init_file();
 FILEINFO *get_file_info();
 int get_file_count();
+FILEINFO *search_file(const char *filename);

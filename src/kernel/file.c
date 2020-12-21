@@ -40,3 +40,44 @@ int get_file_count()
 {
     return file_count;
 }
+
+FILEINFO *search_file(const char *filename)
+{
+    char basename[8];
+    char extname[3];
+    for (int i = 0; i < 8; i++) {
+        basename[i] = ' ';
+    }
+    for (int i = 0; i < 3; i++) {
+        extname[i] = ' ';
+    }
+
+    // filenameをbasename[8], extname[3]に分割する。
+    // 不足する部分はすでに半角空白で埋められているので文字が存在している部分のみでOK.
+    // 例）hoge.csの場合
+    // "hoge    ", "cs "でそれぞれFILEINFOのname, extと比較する
+    // dotindex:4, len:7, namelen:4, extlen:2
+    // makefileの場合
+    // "makefile", "   "で比較する
+    // dotindex:-1, len:8, namelen:8, extlen:0
+    int dotindex = hstrindexof(filename, '.');
+    int len = hstrlen(filename);
+    int namelen = dotindex < 0 ? len : dotindex;
+    int extlen = dotindex < 0 ? 0 : len - dotindex - 1;
+    for (int i = 0; i < namelen; i++) {
+        basename[i] = filename[i];
+    }
+    for (int i = 0; i < extlen; i++) {
+        extname[i] = filename[dotindex + 1 + i];
+    }
+
+    for (int i = 0; i < file_count; i++) {
+        // ファイル名、拡張子名の両方を比較。
+        if (hstrncmp(file_info[i].name, basename, 8) == 0 &&
+            hstrncmp(file_info[i].ext, extname, 3) == 0) {
+            return &file_info[i];
+        }
+    }
+
+    return NULL;
+}

@@ -9,6 +9,7 @@ static WINDOW *console_win;
 
 typedef struct
 {
+    char command[TEXT_LENGTH];
     char text[LINE_COUNT][TEXT_LENGTH];
     int current_line;
     int current_pos;
@@ -26,12 +27,17 @@ void exec_cat(char *filename);
 void print(const char *str)
 {
     int len = hstrlen(str);
+    if (cons_data.current_pos + len >= TEXT_LENGTH) {
+        len = TEXT_LENGTH - cons_data.current_pos;
+    }
+
     for (int i = 0; i < len; i++) {
         cons_data.text[cons_data.current_line][cons_data.current_pos + i] = str[i];
     }
     win_draw_text(console_win,
         8 * cons_data.current_pos, 16 * cons_data.current_line,
         &cons_data.text[cons_data.current_line][cons_data.current_pos], COL_WHITE);
+    cons_data.current_pos += len;
 }
 
 // 改行処理を実行
@@ -62,20 +68,25 @@ void add_key(char c)
             if (cons_data.current_pos > 1) {
                 cons_data.current_pos--;
                 cons_data.text[cons_data.current_line][cons_data.current_pos] = 0;
+                cons_data.command[cons_data.current_pos - 1] = 0;
             }
             break;
         case '\n':  // Enter
             add_newline();
 
             // 入力されたコマンドを解析、実行
-            exec_command(&cons_data.text[cons_data.current_line - 1][1]);
+            exec_command(cons_data.command);
 
             cons_data.text[cons_data.current_line][0] = '>';
+            for (int i = 0; i < TEXT_LENGTH; i++) {
+                cons_data.command[i] = 0;
+            }
             cons_data.current_pos = 1;
             break;
         default:
             if (cons_data.current_pos < TEXT_LENGTH) {
                 cons_data.text[cons_data.current_line][cons_data.current_pos] = c;
+                cons_data.command[cons_data.current_pos - 1] = c;
                 cons_data.current_pos++;
             }
             break;
@@ -271,7 +282,10 @@ void exec_cat(char *filename)
         println("Invalid filename");
         return;
     }
-    char str[32];
-    hsprintf(str, "len:%d %s", hstrlen(filename), filename);
-    println(str);
+    FILEINFO *file_info = search_file(filename);
+    if (file_info == NULL) {
+        println("File Not Found.");
+    } else {
+        println("Found.");
+    }
 }
