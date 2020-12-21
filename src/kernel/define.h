@@ -109,6 +109,9 @@ typedef     unsigned int    uint;
 // keyboard
 #define PORT_KEYDAT             0x60
 
+// file
+#define FILE_TYPE_FILE          0x20
+
 // fifo
 typedef struct
 {
@@ -150,12 +153,7 @@ typedef struct
     byte name[8];
     byte ext[3];
     byte type;
-    byte reserve;
-    byte create_msec;
-    ushort create_time;
-    ushort create_date;
-    ushort access_date;
-    ushort clustno_hi;
+    byte reserve[10];
     ushort update_time;
     ushort update_date;
     ushort clustno_lo;
@@ -233,6 +231,7 @@ void init_memory();
 void *hmalloc(uint size);
 void hfree(void *ptr);
 void get_memory_status(int *total, int *used, int *free, int *count);
+void *hmemcpy(void *dst, const void *src, int n);
 
 // descriptor.c
 void init_descriptor();

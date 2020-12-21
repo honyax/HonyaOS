@@ -145,3 +145,13 @@ void get_memory_status(int *total, int *used, int *free, int *count)
     *free = (int) (total_size - used_size);
     *count = used_count;
 }
+
+void *hmemcpy(void *dst, const void *src, int n)
+{
+    const byte *x = (const byte *) src;
+    byte *y = (byte *) dst;
+    while (n--) {
+        *(y++) = *(x++);
+    }
+    return dst;
+}

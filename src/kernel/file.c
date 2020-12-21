@@ -1,8 +1,11 @@
 #include "define.h"
 
+#define CLUSTER_NUM_TABLE_COUNT     160     // 320KB / 2KB
+
 static FILEINFO *file_info;
 static byte sectors_per_cluster;
 static int file_count;
+static ushort cluster_num_table[CLUSTER_NUM_TABLE_COUNT];
 
 void init_file()
 {
@@ -28,6 +31,22 @@ void init_file()
         if (file_info[i].name[0] != 0x00) {
             file_count++;
         }
+    }
+
+    // クラスタ番号のリストを作成する
+    // ab cd ef => dab efc
+    byte *cluster_header = (byte *) (FILESYSTEM_LOAD + 0x200);
+    for (int i = 0; i < CLUSTER_NUM_TABLE_COUNT; i++) {
+        int index = (i / 2) * 3;
+        ushort hi, lo;
+        if (i % 2 == 0) {
+            lo = cluster_header[index + 0];
+            hi = (cluster_header[index + 1] & 0x0F) << 8;
+        } else {
+            lo = (cluster_header[index + 1] & 0xF0) >> 4;
+            hi = (cluster_header[index + 2]) << 4;
+        }
+        cluster_num_table[i] = hi | lo;
     }
 }
 
@@ -72,6 +91,9 @@ FILEINFO *search_file(const char *filename)
     }
 
     for (int i = 0; i < file_count; i++) {
+        if (file_info[i].type != FILE_TYPE_FILE)
+            continue;
+
         // ファイル名、拡張子名の両方を比較。
         if (hstrncmp(file_info[i].name, basename, 8) == 0 &&
             hstrncmp(file_info[i].ext, extname, 3) == 0) {

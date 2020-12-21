@@ -23,6 +23,7 @@ void exec_clear();
 void exec_mem();
 void exec_ls();
 void exec_cat(char *filename);
+void exec_test();
 
 void print(const char *str)
 {
@@ -192,6 +193,8 @@ void exec_command(char *input)
         exec_ls();
     } else if (cmd_equals(input, "cat")) {
         exec_cat(get_cmd_arg(input, "cat"));
+    } else if (cmd_equals(input, "test")) {
+        exec_test();
     } else {
         println("Bad Command");
     }
@@ -234,8 +237,8 @@ void exec_ls()
     char fname[64];
     int fname_index = 0;
     for (int i = 0; i < file_count; i++) {
-        // ファイルの場合はタイプが 0x20
-        if (file_info[i].type != 0x20)
+        // ファイルタイプ
+        if (file_info[i].type != FILE_TYPE_FILE)
             continue;
         
         for (int j = 0; j < 45; j++) {
@@ -286,6 +289,13 @@ void exec_cat(char *filename)
     if (file_info == NULL) {
         println("File Not Found.");
     } else {
-        println("Found.");
+        char s[64];
+        hsprintf(s, "Found:%d %d", file_info->clustno_lo, file_info->size);
+        println(s);
     }
+}
+
+// コンソールで何かテストする時用の関数
+void exec_test()
+{
 }
