@@ -4,7 +4,7 @@
 
 // define.sとの共通化
 #define     BOOT_SIZE               (1024 * 8)      // ブートサイズ
-#define     KERNEL_SIZE             (1024 * 8)      // カーネルサイズ
+#define     KERNEL_SIZE             (1024 * 24)     // カーネルサイズ
 #define     FILESYSTEM_SIZE         (1024 * 320)    // ファイルシステムサイズ
 
 #define     BOOT_LOAD               0x7C00          // ブートプログラムのロード位置
