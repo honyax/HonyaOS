@@ -1,6 +1,7 @@
 FS_IMG	= filesystem.img
 FS_DIR	= filesystem_dir
 
+# sudoersにて、mount, umount, cpコマンドをNOPASSWDで登録しておく必要がある。
 .PHONY: all
 all:
 	dd if=/dev/zero of=$(FS_IMG) bs=1024 count=320
