@@ -1,10 +1,18 @@
-FS_BIN	= filesystem.bin
+FS_IMG	= filesystem.img
+FS_DIR	= filesystem_dir
 
 .PHONY: all
 all:
-	nasm.exe filesystem.asm -o $(FS_BIN) -l filesystem.lst
+	dd if=/dev/zero of=$(FS_IMG) bs=1024 count=320
+	mkfs.vfat -F12 $(FS_IMG)
+	mkdir $(FS_DIR)
+	sudo mount $(FS_IMG) $(FS_DIR)
+	sudo cp Makefile $(FS_DIR)
+	sudo cp ../boot/macro.s $(FS_DIR)
+	sudo cp ../kernel/syscall.c $(FS_DIR)
+	sudo umount $(FS_DIR)
+	rmdir $(FS_DIR)
 
 .PHONY: clean
 clean:
-	rm -f $(FS_BIN)
-	rm -f *.lst
+	rm -f $(FS_IMG)
