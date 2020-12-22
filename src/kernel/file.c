@@ -3,7 +3,7 @@
 #define CLUSTER_NUM_TABLE_COUNT     160     // 320KB / 2KB
 
 static FILEINFO *file_info;
-static byte sectors_per_cluster;
+static int cluster_size;
 static int file_count;
 static ushort cluster_num_table[CLUSTER_NUM_TABLE_COUNT];
 
@@ -12,7 +12,8 @@ void init_file()
     // ファイルシステムヘッダの解析
     byte* fs_pos = (byte*) FILESYSTEM_LOAD;
 
-    sectors_per_cluster = fs_pos[0x0d];
+    byte sectors_per_cluster = fs_pos[0x0d];
+    cluster_size = 512 * sectors_per_cluster;
     ushort fat_tbl_head_sector = fs_pos[0x0f] << 8 | fs_pos[0x0e];
     byte fat_tbl_num = fs_pos[0x10];
     ushort sector_per_fat_tbl = fs_pos[0x17] << 8 | fs_pos[0x16];
@@ -102,4 +103,25 @@ FILEINFO *search_file(const char *filename)
     }
 
     return NULL;
+}
+
+void load_file(FILEINFO *file_info, byte *buf)
+{
+    ushort cluster_no = file_info->clustno_lo;
+    byte *file_pos = (byte *) (FILESYSTEM_LOAD + 0x3600 + (cluster_size) * cluster_no);
+
+    // クラスタ毎にbufにコピー
+    int size_left = (int) file_info->size;
+    while (size_left > 0) {
+        if (size_left > cluster_size) {
+            // 残りサイズがクラスタのサイズに満たない場合は、クラスタサイズ分読み込んで次の読み込み先クラスタを設定する
+            hmemcpy(buf, file_pos, cluster_size);
+            size_left -= cluster_size;
+            buf += cluster_size;
+            cluster_no = cluster_num_table[cluster_no];
+        } else {
+            hmemcpy(buf, file_pos, size_left);
+            size_left = 0;
+        }
+    }
 }

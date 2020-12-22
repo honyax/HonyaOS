@@ -289,9 +289,37 @@ void exec_cat(char *filename)
     if (file_info == NULL) {
         println("File Not Found.");
     } else {
-        char s[64];
-        hsprintf(s, "Found:%d %d", file_info->clustno_lo, file_info->size);
-        println(s);
+        byte *file_buf = hmalloc(file_info->size);
+        load_file(file_info, file_buf);
+        char s[TEXT_LENGTH + 1];
+
+        // ファイルの中身を表示
+        for (int buf_index = 0; buf_index < file_info->size; buf_index++) {
+            for (int i = 0; i < TEXT_LENGTH + 1; i++) {
+                s[i] = 0;
+            }
+            for (int i = 0; ; i++) {
+                int index = buf_index + i;
+                if (file_buf[index] == '\r') {
+                    // CRは無視
+                    continue;
+                } else if (file_buf[index] == '\n' || file_buf[index] == 0) {
+                    // NULL, LFが来たら改行として1行分のループを終了する
+                    buf_index += i;
+                    break;
+                } else if (file_buf[index] == 0x09) {
+                    // Tabは面倒なので半角空白にする
+                    s[i] = ' ';
+                } else if (i < TEXT_LENGTH) {
+                    // それ以外は文字列をコピー。ただし1行の範囲内のみ
+                    s[i] = file_buf[index];
+                }
+            }
+            println(s);
+        }
+
+        // バッファを解放
+        hfree(file_buf);
     }
 }
 
