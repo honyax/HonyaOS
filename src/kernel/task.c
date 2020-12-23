@@ -1,7 +1,7 @@
 #include "define.h"
 
 #define TASK_IOMAP      0x40000000
-#define TAKS_EFLAGS     0x00000202      // IF = 1;
+#define TASK_EFLAGS     0x00000202      // IF = 1;
 
 // root task
 static TSS task_root;
@@ -43,7 +43,7 @@ void init_task()
     task_b.ss0 = GDT_IDX_DATA * 8;
     task_b.esp0 = task_b_esp - 32 * 1024;
     task_b.eip = (int) &task_b_main;
-    task_b.eflags = TAKS_EFLAGS;
+    task_b.eflags = TASK_EFLAGS;
     task_b.eax = 0;
     task_b.ecx = 0;
     task_b.edx = 0;
@@ -65,7 +65,7 @@ void init_task()
     task_c.ss0 = GDT_IDX_DATA * 8;
     task_c.esp0 = task_c_esp - 32 * 1024;
     task_c.eip = (int) &task_c_main;
-    task_c.eflags = TAKS_EFLAGS;
+    task_c.eflags = TASK_EFLAGS;
     task_c.eax = 0;
     task_c.ecx = 0;
     task_c.edx = 0;
