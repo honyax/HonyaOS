@@ -22,8 +22,9 @@ void exec_command(char *line);
 void exec_clear();
 void exec_mem();
 void exec_ls();
-void exec_cat(char *filename);
+void exec_cat(const char *filename);
 void exec_test();
+void exec_file(const char *input);
 
 void print(const char *str)
 {
@@ -196,7 +197,8 @@ void exec_command(char *input)
     } else if (cmd_equals(input, "test")) {
         exec_test();
     } else {
-        println("Bad Command");
+        // コマンドが存在しない場合はファイル名を検索
+        exec_file(input);
     }
 }
 
@@ -279,7 +281,7 @@ void exec_ls()
     }
 }
 
-void exec_cat(char *filename)
+void exec_cat(const char *filename)
 {
     if (filename == NULL) {
         println("Invalid filename");
@@ -321,6 +323,27 @@ void exec_cat(char *filename)
         // バッファを解放
         hfree(file_buf);
     }
+}
+
+// 入力されたものが実行ファイルであれば新たなタスクを生成して実行する
+void exec_file(const char *input)
+{
+    FILEINFO *file_info = search_file(input);
+
+    if (file_info == NULL) {
+        println("Bad Command");
+        return;
+    }
+
+    byte *file_buf = hmalloc(file_info->size);
+    load_file(file_info, file_buf);
+
+    char s[32];
+    hsprintf(s, "size:%d, address:%X", file_info->size, (int)file_buf);
+    println(s);
+
+    add_task(file_buf);
+    //add_task(&task_d_main);
 }
 
 // コンソールで何かテストする時用の関数
