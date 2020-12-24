@@ -43,3 +43,21 @@ int hstrindexof(const char *s, char c)
 
     return -1;
 }
+
+char htouppercase(const char c)
+{
+    if ('a' <= c && c <= 'z') {
+        return c - 'a' + 'A';
+    } else {
+        return c;
+    }
+}
+
+char htolowercase(const char c)
+{
+    if ('A' <= c && c <= 'Z') {
+        return c - 'A' + 'a';
+    } else {
+        return c;
+    }
+}

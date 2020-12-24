@@ -85,10 +85,12 @@ FILEINFO *search_file(const char *filename)
     int namelen = dotindex < 0 ? len : dotindex;
     int extlen = dotindex < 0 ? 0 : len - dotindex - 1;
     for (int i = 0; i < namelen; i++) {
-        basename[i] = filename[i];
+        // 小文字は大文字に変換
+        basename[i] = htouppercase(filename[i]);
     }
     for (int i = 0; i < extlen; i++) {
-        extname[i] = filename[dotindex + 1 + i];
+        // 小文字は大文字に変換
+        extname[i] = htouppercase(filename[dotindex + 1 + i]);
     }
 
     for (int i = 0; i < file_count; i++) {
