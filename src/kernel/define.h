@@ -235,8 +235,8 @@ void *hmemcpy(void *dst, const void *src, int n);
 
 // descriptor.c
 void init_descriptor();
-void create_root_task(TSS *task);
-void create_task(TSS *task, int task_index);
+void create_root_task_descriptor(TSS *task);
+void create_task_descriptor(TSS *task, int task_index);
 
 // interrupt.c
 void init_pic();

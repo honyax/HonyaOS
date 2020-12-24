@@ -177,16 +177,15 @@ void init_descriptor()
     setup_syscall(0x40, _asm_syscall);
 }
 
-void create_root_task(TSS *task_root)
+void create_root_task_descriptor(TSS *task_root)
 {
     // 初期のタスク（rootプロセスに相当）に関するGDT, LDTの設定
     setup_local_segment_descriptor(LDT_IDX_ROOT_CS, LDT_TASK_CODE_LIMIT, LDT_TASK_CODE_BASE, LDT_ROOT_CODE_FLAGS);
     setup_local_segment_descriptor(LDT_IDX_ROOT_DS, LDT_TASK_DATA_LIMIT, LDT_TASK_DATA_BASE, LDT_ROOT_DATA_FLAGS);
     setup_segment_descriptor(GDT_IDX_ROOT_TSS, GDT_TSS_LIMIT, (uint) task_root, GDT_FLAGS_TYPE_TSS);
-    _load_tr(4 * 8);
 }
 
-void create_task(TSS *task, int task_index)
+void create_task_descriptor(TSS *task, int task_index)
 {
     // タスクごとにCS, DSをLDTに登録
     setup_local_segment_descriptor(LDT_IDX_ROOT_CS + task_index * 2, LDT_TASK_CODE_LIMIT, LDT_TASK_CODE_BASE, LDT_TASK_CODE_FLAGS);

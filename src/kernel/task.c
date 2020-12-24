@@ -22,7 +22,8 @@ void init_task()
     task[TASK_INDEX_ROOT].cr3 = KERNEL_PAGE_DIR;
     task[TASK_INDEX_ROOT].ldtr = GDT_IDX_LDT * 8;
     task[TASK_INDEX_ROOT].iomap = TASK_IOMAP;
-    create_root_task(&task[TASK_INDEX_ROOT]);
+    create_root_task_descriptor(&task[TASK_INDEX_ROOT]);
+    _load_tr(4 * 8);
     current_task_num = 1;
 
     add_task(&task_b_main);
@@ -38,7 +39,7 @@ void add_task(void *addr)
     task[index].cr3 = KERNEL_PAGE_DIR;
     task[index].ldtr = GDT_IDX_LDT * 8;
     task[index].iomap = TASK_IOMAP;
-    create_task(&task[index], index);
+    create_task_descriptor(&task[index], index);
 
     // スタック領域の確保（前半32KBは権限0、後半32KBは権限3の時に使用する）
     int task_esp = ((int)hmalloc(64 * 1024)) + 64 * 1024;
