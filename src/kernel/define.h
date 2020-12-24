@@ -269,6 +269,7 @@ void init_paging();
 // task.c
 void init_task();
 void task_switch();
+void add_task(void *addr);
 
 // window.c
 void init_window();
