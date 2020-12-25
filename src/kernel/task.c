@@ -88,10 +88,7 @@ void task_b_main()
 
 void task_c_main()
 {
-    int result = _sc_example(0x11111111, 0x22222222, 0x33333333, 0x44444444, 0x55555555);
-    char str[32];
-    hsprintf(str, "This is task_c_main! %X", result);
-    bg_draw_text(80, 600, str, COL_CYAN);
+    bg_draw_text(80, 600, "This is task_c_main!", COL_CYAN);
 
     for (;;) {
         update_timer_task(2, 620);
@@ -100,9 +97,7 @@ void task_c_main()
 
 void task_d_main()
 {
-    char str[32];
-    hsprintf(str, "This is task_d_main!");
-    bg_draw_text(80, 660, str, COL_CYAN);
+    bg_draw_text(80, 660, "This is task_d_main!", COL_CYAN);
 
     for (;;) {}
 }
