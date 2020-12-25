@@ -55,3 +55,4 @@ tools/nasm-2.14.02/
 *.lst
 *.bin
 src/boot.img.lock
+*.hny

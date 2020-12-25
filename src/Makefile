@@ -15,10 +15,11 @@ $(BOOT_IMG): $(BOOT_BIN) $(KERNEL_BIN) $(FS_IMG)
 $(BOOT_BIN): boot/*.asm boot/*.s boot/modules/*.s
 	cd boot; make
 
-$(KERNEL_BIN): kernel/*.c kernel/*.s lib/*.c
+$(KERNEL_BIN): kernel/*.c kernel/*.s lib/*.c syscall/*.s syscall/*.h
 	cd kernel; make
 
-$(FS_IMG):
+$(FS_IMG): tasks/*.c lib/*.c syscall/*.s syscall/*.h
+	cd tasks; make;
 	cd filesystem; make
 
 .PHONY: run
@@ -38,4 +39,5 @@ clean:
 	rm -f $(BOOT_IMG)
 	cd boot; make clean
 	cd kernel; make clean
+	cd tasks; make clean
 	cd filesystem; make clean

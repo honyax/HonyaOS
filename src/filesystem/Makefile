@@ -9,8 +9,7 @@ all:
 	mkdir $(FS_DIR)
 	sudo mount $(FS_IMG) $(FS_DIR)
 	sudo cp Makefile $(FS_DIR)
-	sudo cp ../boot/macro.s $(FS_DIR)
-	sudo cp ../kernel/syscall.c $(FS_DIR)
+	sudo cp ../tasks/*.hny $(FS_DIR)
 	sudo umount $(FS_DIR)
 	rmdir $(FS_DIR)
 
