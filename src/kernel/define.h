@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../lib/define.h"
+#include "../syscall/define.h"
 
 // define.sとの共通化
 #define     BOOT_SIZE               (1024 * 8)      // ブートサイズ
@@ -210,10 +211,6 @@ void _asm_inthandler21();
 void _asm_inthandler2c();
 void _asm_syscall();
 void _magic_break();
-
-// asm_syscall.s
-int _sc_example(int param1, int param2, int param3, int param4, int param5);
-void _sc_putchar(int c);
 
 // graphic.c
 void draw_pixel(int x, int y, byte color);
