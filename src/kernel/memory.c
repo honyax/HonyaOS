@@ -61,6 +61,14 @@ void *hmalloc(uint size)
 {
     if (size <= 0) {
         return (void*) NULL;
+    } else if (size > total_size) {
+        alloc_error_count++;
+        return (void*) NULL;
+    }
+
+    // 4KB単位にする。
+    if (size & 0xfff) {
+        size = (size + 0x1000) & 0xfffff000;
     }
 
     // 確保可能なメモリ数を越えていたら確保失敗
