@@ -220,8 +220,10 @@ void exec_mem()
     int total, used, free, count;
     char str[64];
     get_memory_status(&total, &used, &free, &count);
-    hsprintf(str, "%d, %d, %d, %d", total, used, free, count);
     println("total, used, free, count");
+    hsprintf(str, "%d, %d, %d, %d", total, used, free, count);
+    println(str);
+    hsprintf(str, "0x%X, 0x%X, 0x%X, %d", total, used, free, count);
     println(str);
 }
 
