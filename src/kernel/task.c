@@ -34,9 +34,13 @@ void init_task()
 
 void add_task(void *addr)
 {
+    // ページング領域（ページディレクトリ 4KB、ページテーブル 4KB）
+    int page_addr = (int) hmalloc(8 * 1024);
+    init_task_paging((uint *)page_addr, (uint)addr);
+
     int index = current_task_num;
     task[index];
-    task[index].cr3 = KERNEL_PAGE_DIR;
+    task[index].cr3 = page_addr;
     task[index].ldtr = GDT_IDX_LDT * 8;
     task[index].iomap = TASK_IOMAP;
     create_task_descriptor(&task[index], index);

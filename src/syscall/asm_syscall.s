@@ -42,3 +42,31 @@ _sc_putchar:
     mov     al, [esp + 4]
     int     0x40
     ret
+
+.global _sc_bg_draw_text
+_sc_bg_draw_text:
+    push    ebp
+    mov     ebp, esp
+    push    edi
+    push    esi
+    push    ebx
+    push    edx
+    push    ecx
+
+    // 各種レジスタにパラメータ設定（edi はシステムコール番号）
+    // int edi, int esi, int ebx, int edx, int ecx
+    // システムコール番号:0xffff
+    mov     edi, 2
+    mov     esi, [ebp+ 8]
+    mov     ebx, [ebp+12]
+    mov     edx, [ebp+16]
+    mov     ecx, [ebp+20]
+    int     0x40
+
+    pop     ecx
+    pop     edx
+    pop     ebx
+    pop     esi
+    pop     edi
+    pop     ebp
+    ret

@@ -218,6 +218,7 @@ void update_timer();
 
 // paging.c
 void init_paging();
+void init_task_paging(uint *page_addr, uint real_addr);
 
 // task.c
 void init_task();

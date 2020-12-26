@@ -85,3 +85,28 @@ void init_paging()
     cr0 |= CR0_PAGING_FLAG;
     _set_cr0(cr0);
 }
+
+// タスクのページング設定を初期化
+void init_task_paging(uint *page_addr, uint real_addr)
+{
+    // タスクのページングは、カーネルのページング領域に加えて 0x10000000 ～ 0x10400000 (4MB) をマッピングする
+    // page_addr の 0KB ～ 4KB はページディレクトリ、4KB ～ 8KB はページテーブル領域とする
+    uint *page_dir = page_addr;
+    uint *page_table = (uint *) ((uint)page_addr + 4096);
+    for (int i = 0; i < 1024; i++) {
+        page_dir[i] = 0;
+    }
+
+    // カーネルと同じ領域を参照（0 ～ 128MB、VRAM領域）
+    for (int i = 0; i < 32; i++) {
+        page_dir[i] = KERNEL_PAGE_TABLE + 0x1000 * i | PDE_FLAGS_P | PDE_FLAGS_RW | PDE_FLAGS_US;
+    }
+    uint vram_index = param_vram >> 22;
+    page_dir[vram_index] = KERNEL_PAGE_TABLE + 0x1000 * 32 | PDE_FLAGS_P | PDE_FLAGS_RW | PDE_FLAGS_US;
+
+    // タスク用に、確保した領域を 0x10000000 ～ 0x10400000 にマッピング
+    page_dir[0x10000000 >> 22] = (int)page_table | PDE_FLAGS_P | PDE_FLAGS_RW | PDE_FLAGS_US;
+    for (int i = 0; i < 1024; i++) {
+        page_table[i] = real_addr + 4096 * i | PTE_FLAGS_P | PTE_FLAGS_RW | PTE_FLAGS_US;
+    }
+}
