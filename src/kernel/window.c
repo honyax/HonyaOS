@@ -5,6 +5,9 @@
 
 static WINDOW_MANAGER window_manager;
 
+void on_mouse_pressed();
+void on_mouse_dragged();
+void on_mouse_released();
 void init_background(WINDOW* bg);
 void screen_draw_window(WINDOW* win);
 void screen_draw_rect(int x, int y, int w, int h);
@@ -28,10 +31,91 @@ void init_window()
 }
 
 bool last_left_button_pressed = FALSE;
+WINDOW* selected_win = NULL;
+int last_mouse_x;
+int last_mouse_y;
+
 void update_window()
 {
     // マウスの左ボタン状態を確認
+    bool left_button_pressed = is_left_button_pressed();
 
+    // 直前:false, 現在:false の場合は処理終了
+    if (!last_left_button_pressed && !left_button_pressed)
+        return;
+
+    // 直前:false, 現在:true の場合はマウスプレスイベント
+    if (!last_left_button_pressed && left_button_pressed) {
+        on_mouse_pressed();
+    }
+
+    // 直前:true, 現在:true の場合はマウスドラッグイベント
+    if (last_left_button_pressed && left_button_pressed) {
+        on_mouse_dragged();
+    }
+
+    // 直前:true, 現在:false の場合はマウスリリースイベント
+    if (last_left_button_pressed && !left_button_pressed) {
+        on_mouse_released();
+    }
+
+    last_left_button_pressed = left_button_pressed;
+}
+
+void on_mouse_pressed()
+{
+    // マウスを押した位置のウィンドウを取得
+    int x, y;
+    get_mouse_pos(&x, &y);
+
+    // 最前面から調査を開始し、COL_NONE（透明）以外のcolorが見つかった時点でそれを最前面（foregroundのprev）にし、クリック状態とする
+    WINDOW *win = window_manager.foreground;
+    while (win->prev != NULL) {
+        win = win->prev;
+        if (win_get_pixel(win, x, y) != COL_NONE) {
+            if (win != window_manager.background) {
+                // winの前後をくっつける
+                win->prev->next = win->next;
+                win->next->prev = win->prev;
+                // winをforegroundの直前にする
+                win->prev = window_manager.foreground->prev;
+                win->next = window_manager.foreground;
+                window_manager.foreground->prev->next = win;
+                window_manager.foreground->prev = win;
+                screen_draw_window(win);
+
+                // 選択状態のウィンドウにする
+                selected_win = win;
+                last_mouse_x = x;
+                last_mouse_y = y;
+            }
+            break;
+        }
+    }
+}
+
+void on_mouse_dragged()
+{
+    // 選択状態のウィンドウが無い場合は無処理
+    if (selected_win == NULL)
+        return;
+
+    // 選択状態のウィンドウを移動させる
+    int x, y;
+    get_mouse_pos(&x, &y);
+    int dx = x - last_mouse_x;
+    int dy = y - last_mouse_y;
+    win_move(selected_win, selected_win->x + dx, selected_win->y + dy);
+    last_mouse_x = x;
+    last_mouse_y = y;
+}
+
+void on_mouse_released()
+{
+    // 選択状態のウィンドウを解除
+    selected_win = NULL;
+    last_mouse_x = 0;
+    last_mouse_y = 0;
 }
 
 void init_background(WINDOW* bg)

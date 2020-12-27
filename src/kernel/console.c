@@ -118,11 +118,6 @@ void init_console()
 
 void update_console()
 {
-    if (is_left_button_pressed()) {
-        int x, y;
-        get_mouse_pos(&x, &y);
-        win_move(console_win, x, y);
-    }
     // 同時に複数キー入力される可能性を考慮して、最大8ループさせる
     char c;
     for (int i = 0; i < 8; i++) {
