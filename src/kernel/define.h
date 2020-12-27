@@ -214,7 +214,7 @@ void getMousePos(int *x, int *y);
 
 // timer.c
 void init_timer();
-void update_timer();
+bool update_timer();
 
 // paging.c
 void init_paging();

@@ -18,15 +18,18 @@ void inthandler20(int *esp)
     task_switch();
 }
 
-void update_timer()
+bool update_timer()
 {
-    if (display_timer_count == timer_count)
-        return;
+    if (display_timer_count == timer_count) {
+        return FALSE;
+    }
 
     display_timer_count = timer_count;
     hsprintf(disp_timer, "%d", timer_count);
     bg_draw_rect(16, 500, 80, 16, COL_DARKBLUE);
     bg_draw_text(16, 500, disp_timer, COL_WHITE);
+
+    return TRUE;
 }
 
 // TODO: 各タスクの動作中状態を表示するため、タイマカウンタを表示してみる

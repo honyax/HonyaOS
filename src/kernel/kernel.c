@@ -30,8 +30,9 @@ int kernel_main() {
     _sti();
 
     for (;;) {
+        if (!update_timer())
+            continue;
         update_interrupt();
-        update_timer();
         update_console();
     }
 
