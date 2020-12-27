@@ -27,6 +27,13 @@ void init_window()
     init_background(bg);
 }
 
+bool last_left_button_pressed = FALSE;
+void update_window()
+{
+    // マウスの左ボタン状態を確認
+
+}
+
 void init_background(WINDOW* bg)
 {
 #if !DRAW_COLOR_TEST

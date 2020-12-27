@@ -118,9 +118,9 @@ void init_console()
 
 void update_console()
 {
-    if (isLeftButtonPushed()) {
+    if (is_left_button_pressed()) {
         int x, y;
-        getMousePos(&x, &y);
+        get_mouse_pos(&x, &y);
         win_move(console_win, x, y);
     }
     // 同時に複数キー入力される可能性を考慮して、最大8ループさせる

@@ -209,8 +209,8 @@ bool try_get_key_input(char *c);
 // mouse.c
 void init_mouse();
 int update_mouse();
-bool isLeftButtonPushed();
-void getMousePos(int *x, int *y);
+bool is_left_button_pressed();
+void get_mouse_pos(int *x, int *y);
 
 // timer.c
 void init_timer();
@@ -227,6 +227,7 @@ void add_task(void *addr);
 
 // window.c
 void init_window();
+void update_window();
 WINDOW* win_create(int x, int y, int w, int h);
 void win_move(WINDOW* win, int x, int y);
 byte win_get_pixel(WINDOW* win, int x, int y);

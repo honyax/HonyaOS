@@ -44,12 +44,12 @@ void init_mouse()
     }
 }
 
-bool isLeftButtonPushed()
+bool is_left_button_pressed()
 {
     return (mouse_data.button & 0x01) != 0 ? TRUE : FALSE;
 }
 
-void getMousePos(int *x, int *y)
+void get_mouse_pos(int *x, int *y)
 {
     *x = mouse_data.x;
     *y = mouse_data.y;
