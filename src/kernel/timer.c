@@ -25,9 +25,23 @@ bool update_timer()
     }
 
     display_timer_count = timer_count;
+#if 0
     hsprintf(disp_timer, "%d", timer_count);
     bg_draw_rect(16, 500, 80, 16, COL_DARKBLUE);
     bg_draw_text(16, 500, disp_timer, COL_WHITE);
+#else
+    char time[9];
+    // hour, minute, second
+    _out8(0x70, 0x04);
+    int hour = _in8(0x71) & 0x3F;
+    _out8(0x70, 0x02);
+    int minute = _in8(0x71) & 0x7F;
+    _out8(0x70, 0x00);
+    int second = _in8(0x71) & 0x7F;
+    hsprintf(time, "%X:%X:%X", hour, minute, second);
+    bg_draw_rect(16, 500, 72, 16, COL_DARKBLUE);
+    bg_draw_text(16, 500, time, COL_GREEN);
+#endif
 
     return TRUE;
 }
