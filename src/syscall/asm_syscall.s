@@ -2,13 +2,9 @@
 
 ////////////////////////////////////////////////////////////////
 
-// 各種システムコールを以下に定義する
-// システムコールは、"_sc_xxxxx" という関数名にする。
+// システムコール用マクロ
 
-// サンプル用のシステムコール
-// int _sc_example(int param1, int param2, int param3, int param4, int param5)
-.global _sc_example
-_sc_example:
+.macro _asm_syscall_5 c_syscall_id
     push    ebp
     mov     ebp, esp
     push    edi
@@ -19,8 +15,7 @@ _sc_example:
 
     // 各種レジスタにパラメータ設定（edi はシステムコール番号）
     // int edi, int esi, int ebx, int edx, int ecx, int eax
-    // システムコール番号:0xffff
-    mov     edi, 0xffff
+    mov     edi, \c_syscall_id
     mov     esi, [ebp+ 8]
     mov     ebx, [ebp+12]
     mov     edx, [ebp+16]
@@ -35,16 +30,9 @@ _sc_example:
     pop     edi
     pop     ebp
     ret
+.endm
 
-.global _sc_putchar
-_sc_putchar:
-    mov     edi, 1
-    mov     al, [esp + 4]
-    int     0x40
-    ret
-
-.global _sc_bg_draw_text
-_sc_bg_draw_text:
+.macro _asm_syscall_4 c_syscall_id
     push    ebp
     mov     ebp, esp
     push    edi
@@ -55,8 +43,7 @@ _sc_bg_draw_text:
 
     // 各種レジスタにパラメータ設定（edi はシステムコール番号）
     // int edi, int esi, int ebx, int edx, int ecx
-    // システムコール番号:0xffff
-    mov     edi, 2
+    mov     edi, \c_syscall_id
     mov     esi, [ebp+ 8]
     mov     ebx, [ebp+12]
     mov     edx, [ebp+16]
@@ -70,3 +57,99 @@ _sc_bg_draw_text:
     pop     edi
     pop     ebp
     ret
+.endm
+
+.macro _asm_syscall_3 c_syscall_id
+    push    ebp
+    mov     ebp, esp
+    push    edi
+    push    esi
+    push    ebx
+    push    edx
+
+    // 各種レジスタにパラメータ設定（edi はシステムコール番号）
+    // int edi, int esi, int ebx, int edx
+    mov     edi, \c_syscall_id
+    mov     esi, [ebp+ 8]
+    mov     ebx, [ebp+12]
+    mov     edx, [ebp+16]
+    int     0x40
+
+    pop     edx
+    pop     ebx
+    pop     esi
+    pop     edi
+    pop     ebp
+    ret
+.endm
+
+.macro _asm_syscall_2 c_syscall_id
+    push    ebp
+    mov     ebp, esp
+    push    edi
+    push    esi
+    push    ebx
+
+    // 各種レジスタにパラメータ設定（edi はシステムコール番号）
+    // int edi, int esi, int ebx
+    mov     edi, \c_syscall_id
+    mov     esi, [ebp+ 8]
+    mov     ebx, [ebp+12]
+    int     0x40
+
+    pop     ebx
+    pop     esi
+    pop     edi
+    pop     ebp
+    ret
+.endm
+
+.macro _asm_syscall_1 c_syscall_id
+    push    ebp
+    mov     ebp, esp
+    push    edi
+    push    esi
+
+    // 各種レジスタにパラメータ設定（edi はシステムコール番号）
+    // int edi, int esi
+    mov     edi, \c_syscall_id
+    mov     esi, [ebp+ 8]
+    int     0x40
+
+    pop     esi
+    pop     edi
+    pop     ebp
+    ret
+.endm
+
+.macro _asm_syscall_0 c_syscall_id
+    push    ebp
+    mov     ebp, esp
+    push    edi
+
+    // 各種レジスタにパラメータ設定（edi はシステムコール番号）
+    // int edi
+    mov     edi, \c_syscall_id
+    int     0x40
+
+    pop     edi
+    pop     ebp
+    ret
+.endm
+
+// 各種システムコールを以下に定義する
+// システムコールは、"_sc_xxxxx" という関数名にする。
+
+// サンプル用のシステムコール
+// int _sc_example(int param1, int param2, int param3, int param4, int param5)
+.global _sc_example
+_sc_example:
+    _asm_syscall_5 0xFFFF
+
+.global _sc_putchar
+_sc_putchar:
+    _asm_syscall_1 1
+
+.global _sc_bg_draw_text
+_sc_bg_draw_text:
+    _asm_syscall_4 2
