@@ -32,18 +32,29 @@ bool update_timer()
 #else
     char time[9];
     // hour, minute, second
-    _out8(0x70, 0x04);
-    int hour = _in8(0x71) & 0x3F;
-    _out8(0x70, 0x02);
-    int minute = _in8(0x71) & 0x7F;
-    _out8(0x70, 0x00);
-    int second = _in8(0x71) & 0x7F;
+    int hhmmss = get_current_time();
+    int hour = (hhmmss & 0x00FF0000) >> 16;
+    int minute = (hhmmss & 0x0000FF00) >> 8;
+    int second = hhmmss & 0x000000FF;
     hsprintf(time, "%X:%X:%X", hour, minute, second);
     bg_draw_rect(16, 500, 72, 16, COL_DARKBLUE);
     bg_draw_text(16, 500, time, COL_GREEN);
 #endif
 
     return TRUE;
+}
+
+// 16進数で現在時刻を取得
+// 0x00HHMMSS（最大値は 0x00235959）
+int get_current_time()
+{
+    _out8(0x70, 0x04);
+    int hour = _in8(0x71) & 0x3F;
+    _out8(0x70, 0x02);
+    int minute = _in8(0x71) & 0x7F;
+    _out8(0x70, 0x00);
+    int second = _in8(0x71) & 0x7F;
+    return (hour << 16) | (minute << 8)  | second;
 }
 
 // TODO: 各タスクの動作中状態を表示するため、タイマカウンタを表示してみる
