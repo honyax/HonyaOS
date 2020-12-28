@@ -153,3 +153,7 @@ _sc_putchar:
 .global _sc_bg_draw_text
 _sc_bg_draw_text:
     _asm_syscall_4 2
+
+.global _sc_get_current_time
+_sc_get_current_time:
+    _asm_syscall_0 3
