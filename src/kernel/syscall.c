@@ -25,6 +25,20 @@ void syscall(int sc_id, int param1, int param2, int param3, int param4, int para
         case SYSCALL_ID_GET_CURRENT_TIME:
             result = get_current_time();
             break;
+
+        case SYSCALL_ID_WIN_CREATE: {
+            RECT *rect = (RECT *) param1;
+            result = (int) win_create(rect->x, rect->y, rect->w, rect->h);
+            break;
+        }
+
+        case SYSCALL_ID_WIN_DRAW_RECT: {
+            WINDOW *win = (WINDOW *) param1;
+            RECT *rect = (RECT *) param2;
+            byte color = (byte) param3;
+            win_draw_rect(win, rect->x, rect->y, rect->w, rect->h, color);
+            break;
+        }
     }
 
     // 戻り値をスタックに入れる

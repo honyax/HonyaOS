@@ -1,3 +1,5 @@
+#pragma once
+
 // 共通
 #define     NULL            0
 #define     TRUE            1
@@ -41,6 +43,12 @@ typedef     unsigned int    uint;
 #define     COL_YELLOW      COL_FCFC54
 #define     COL_WHITE       COL_FCFCFC
 #define     COL_NONE        255
+
+typedef struct
+{
+    int x, y;
+    int w, h;
+} RECT;
 
 // string.c
 int hstrlen(const char *str);

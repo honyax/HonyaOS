@@ -157,3 +157,11 @@ _sc_bg_draw_text:
 .global _sc_get_current_time
 _sc_get_current_time:
     _asm_syscall_0 3
+
+.global _sc_win_create
+_sc_win_create:
+    _asm_syscall_1 4
+
+.global _sc_win_draw_rect
+_sc_win_draw_rect:
+    _asm_syscall_3 5
