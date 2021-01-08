@@ -169,3 +169,7 @@ _sc_win_create:
 .global _sc_win_draw_rect
 _sc_win_draw_rect:
     _asm_syscall_3 6
+
+.global _sc_win_draw_text
+_sc_win_draw_text:
+    _asm_syscall_5 7

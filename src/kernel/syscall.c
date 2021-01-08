@@ -45,6 +45,16 @@ void syscall(int sc_id, int param1, int param2, int param3, int param4, int para
             win_draw_rect(win, rect->x, rect->y, rect->w, rect->h, color);
             break;
         }
+
+        case SYSCALL_ID_WIN_DRAW_TEXT: {
+            WINDOW *win = (WINDOW *) param1;
+            int x = param2;
+            int y = param3;
+            char *text = (char *) param4;
+            byte color = (byte) param5;
+            win_draw_text(win, x, y, text, color);
+            break;
+        }
     }
 
     // 戻り値をスタックに入れる

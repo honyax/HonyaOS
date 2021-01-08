@@ -8,6 +8,7 @@ void main()
     char s[16];
     hsprintf(s, "%X:%X:%X", (hhmmss & 0xFF0000) >> 16, (hhmmss & 0xFF00) >> 8, hhmmss & 0xFF);
     _sc_bg_draw_text(80, 700, s, COL_WHITE);
+
     RECT rect;
     rect.x = 100;
     rect.y = 100;
@@ -21,8 +22,18 @@ void main()
     rect.y = 10;
     rect.w = 80;
     rect.h = 60;
-    _sc_win_draw_rect(win_handle, &rect, COL_RED);
+    _sc_win_draw_rect(win_handle, &rect, COL_DARKRED);
+
+    rect.x = 18;
+    rect.y = 32;
+    rect.w = 64;
+    rect.h = 16;
 
     for (;;) {
+        hhmmss = _sc_get_current_time();
+        hsprintf(s, "%X:%X:%X", (hhmmss & 0xFF0000) >> 16, (hhmmss & 0xFF00) >> 8, hhmmss & 0xFF);
+        _sc_win_draw_rect(win_handle, &rect, COL_DARKRED);
+        _sc_win_draw_text(win_handle, 18, 32, s, COL_WHITE);
+        _sc_sleep(1000);
     }
 }
