@@ -39,6 +39,11 @@ void syscall(int sc_id, int param1, int param2, int param3, int param4, int para
             win_draw_rect(win, rect->x, rect->y, rect->w, rect->h, color);
             break;
         }
+
+        case SYSCALL_ID_SLEEP: {
+            int milliseconds = param1;
+            task_sleep(milliseconds);
+        }
     }
 
     // 戻り値をスタックに入れる

@@ -215,6 +215,7 @@ void get_mouse_pos(int *x, int *y);
 // timer.c
 void init_timer();
 bool update_timer();
+int get_timer_count();
 int get_current_time();
 
 // paging.c
@@ -225,6 +226,7 @@ void init_task_paging(uint *page_addr, uint real_addr);
 void init_task();
 void task_switch();
 void add_task(void *addr);
+void task_sleep(int milliseconds);
 
 // window.c
 void init_window();
