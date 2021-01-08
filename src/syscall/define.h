@@ -6,9 +6,9 @@
 #define SYSCALL_ID_PUTCHAR              1
 #define SYSCALL_ID_BG_DRAW_TEXT         2
 #define SYSCALL_ID_GET_CURRENT_TIME     3
-#define SYSCALL_ID_WIN_CREATE           4
-#define SYSCALL_ID_WIN_DRAW_RECT        5
-#define SYSCALL_ID_SLEEP                6
+#define SYSCALL_ID_SLEEP                4
+#define SYSCALL_ID_WIN_CREATE           5
+#define SYSCALL_ID_WIN_DRAW_RECT        6
 
 // asm_syscall.s
 int _sc_example(int param1, int param2, int param3, int param4, int param5);

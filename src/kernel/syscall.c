@@ -26,6 +26,12 @@ void syscall(int sc_id, int param1, int param2, int param3, int param4, int para
             result = get_current_time();
             break;
 
+        case SYSCALL_ID_SLEEP: {
+            int milliseconds = param1;
+            task_sleep(milliseconds);
+            break;
+        }
+
         case SYSCALL_ID_WIN_CREATE: {
             RECT *rect = (RECT *) param1;
             result = (int) win_create(rect->x, rect->y, rect->w, rect->h);
@@ -38,11 +44,6 @@ void syscall(int sc_id, int param1, int param2, int param3, int param4, int para
             byte color = (byte) param3;
             win_draw_rect(win, rect->x, rect->y, rect->w, rect->h, color);
             break;
-        }
-
-        case SYSCALL_ID_SLEEP: {
-            int milliseconds = param1;
-            task_sleep(milliseconds);
         }
     }
 
