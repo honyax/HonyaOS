@@ -5,7 +5,8 @@ static int timer_count;
 static int display_timer_count;
 static char disp_timer[10];
 
-void init_timer() {
+void init_timer()
+{
     timer_count = 0;
     display_timer_count = 0;
 }
@@ -42,6 +43,11 @@ bool update_timer()
 #endif
 
     return TRUE;
+}
+
+int get_timer_count()
+{
+    return timer_count;
 }
 
 // 16進数で現在時刻を取得

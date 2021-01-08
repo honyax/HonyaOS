@@ -14,6 +14,7 @@ typedef enum {
 typedef struct {
     TASK_STATE state;
     TSS tss;
+    int wake_count;
 } TASK_INFORMATION;
 
 // Task State Segment
@@ -95,18 +96,47 @@ void add_task(void *addr)
     task[index].tss.gs = task_ds;
 }
 
+// 現在のタスクを一定時間SLEEP状態にする
+void task_sleep(int milliseconds)
+{
+    // 指定はミリ秒だが、粒度は10msなので10で割って切り上げ
+    int sleep_count = milliseconds / 10 + ((milliseconds % 10) > 0 ? 1 : 0);
+
+    // sleepが終了するカウントを算出
+    int wake_count = get_timer_count() + sleep_count;
+    task[running_task_index].state = TASK_STATE_SLEEP;
+    task[running_task_index].wake_count = wake_count;
+
+    // 次のタイマ割り込みを待たずに、強制的にタスクを切り替える
+    task_switch();
+}
+
 void task_switch() {
-    // task_indexは、現在動作中のタスクのIndexを繰り返し
+    int old_runnning_task_index = running_task_index;
+    // task_indexは、現在動作中のタスクのIndexを繰り返す
     running_task_index++;
+    int current_timer_count = get_timer_count();
     for (; running_task_index < TASK_MAX_NUM; running_task_index++) {
         if (task[running_task_index].state == TASK_STATE_WORK) {
             break;
+        } else if (task[running_task_index].state == TASK_STATE_SLEEP) {
+            // sleep状態のタスクは、wake_countを過ぎた時点で稼働させる
+            if (task[running_task_index].wake_count < current_timer_count) {
+                task[running_task_index].state = TASK_STATE_WORK;
+                break;
+            }
         }
     }
+
+    // タスクIndexが最大値に達したらIndex:0を実行する。rootタスクがsleepになることはないので無条件で切り替えてOK.
     if (running_task_index == TASK_MAX_NUM) {
         running_task_index = 0;
     }
-    _farjmp(0, (running_task_index + GDT_IDX_ROOT_TSS) * 8);
+
+    // rootタスクだけの場合は切り替えられない
+    if (old_runnning_task_index != running_task_index) {
+        _farjmp(0, (running_task_index + GDT_IDX_ROOT_TSS) * 8);
+    }
 }
 
 void update_timer_task(int task_index, int y);
@@ -117,6 +147,7 @@ void task_b_main()
     _sc_putchar('a');
 
     for (;;) {
+        _sc_sleep(1000);
         update_timer_task(1, 560);
     }
 }
@@ -126,6 +157,7 @@ void task_c_main()
     bg_draw_text(80, 600, "This is task_c_main!", COL_CYAN);
 
     for (;;) {
+        _sc_sleep(33);
         update_timer_task(2, 620);
     }
 }
