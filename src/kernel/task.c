@@ -146,9 +146,18 @@ void task_b_main()
     bg_draw_text(80, 540, "This is task_b_main!", COL_CYAN);
     //_sc_example(0x100, 0x200, 0x500, 0x1000, 0x10000);
 
+    int pos;
+    int x, y;
+    char s[16];
     for (;;) {
-        _sc_sleep(1000);
         update_timer_task(1, 560);
+        pos = _sc_get_mouse_pos();
+        x = (pos >> 16) & 0xffff;
+        y = pos & 0xffff;
+        hsprintf(s, "%d %d", x, y);
+        bg_draw_rect(250, 540, 80, 16, COL_DARKBLUE);
+        _sc_bg_draw_text(250, 540, s, COL_CYAN);
+        _sc_sleep(100);
     }
 }
 
@@ -160,8 +169,8 @@ void task_c_main()
     _sc_bg_draw_text(80, 600, s, COL_CYAN);
 
     for (;;) {
-        _sc_sleep(33);
         update_timer_task(2, 620);
+        _sc_sleep(33);
     }
 }
 
