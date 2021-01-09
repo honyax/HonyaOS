@@ -45,11 +45,17 @@ void main()
 
     int hhmmss;
     char s[16];
+    VECTOR src, dst;
+    src.x = 99;
+    src.y = 1;
+    dst.x = 1;
+    dst.y = 79;
     for (;;) {
         hhmmss = _sc_get_current_time();
         hsprintf(s, "%X:%X:%X", (hhmmss & 0xFF0000) >> 16, (hhmmss & 0xFF00) >> 8, hhmmss & 0xFF);
         _sc_win_draw_rect(win_handle, &rect, COL_DARKRED);
         _sc_win_draw_text(win_handle, 18, 32, s, COL_WHITE);
+        _sc_win_draw_line(win_handle, &src, &dst, COL_YELLOW);
         _sc_sleep(1000);
     }
 }
