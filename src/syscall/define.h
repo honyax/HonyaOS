@@ -10,6 +10,7 @@
 #define SYSCALL_ID_WIN_DRAW_RECT        6
 #define SYSCALL_ID_WIN_DRAW_TEXT        7
 #define SYSCALL_ID_WIN_DRAW_BYTES       8
+#define SYSCALL_ID_GET_MOUSE_POS        9
 
 // asm_syscall.s
 int _sc_example(int param1, int param2, int param3, int param4, int param5);
@@ -20,3 +21,4 @@ int _sc_win_create(RECT *rect);
 void _sc_win_draw_rect(int win_handle, RECT *rect, int color);
 void _sc_win_draw_text(int win_handle, int x, int y, char *text, int color);
 void _sc_win_draw_bytes(int win_handle, RECT *rect, byte *data);
+int _sc_get_mouse_pos();

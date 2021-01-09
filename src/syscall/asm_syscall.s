@@ -173,3 +173,7 @@ _sc_win_draw_text:
 .global _sc_win_draw_bytes
 _sc_win_draw_bytes:
     _asm_syscall_3 8
+
+.global _sc_get_mouse_pos
+_sc_get_mouse_pos:
+    _asm_syscall_0 9

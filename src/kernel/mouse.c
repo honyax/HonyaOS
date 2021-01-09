@@ -91,6 +91,18 @@ void show_mouse()
     mouse_data.dx = 0;
     mouse_data.dy = 0;
 
+    // 画面の範囲内チェック
+    if (mouse_data.x < 0) {
+        mouse_data.x = 0;
+    } else if (mouse_data.x > param_screen_x) {
+        mouse_data.x = param_screen_x;
+    }
+    if (mouse_data.y < 0) {
+        mouse_data.y = 0;
+    } else if (mouse_data.y > param_screen_y) {
+        mouse_data.y = param_screen_y;
+    }
+
     // マウスカーソルの位置のcolorを保存
     for (int x = 0; x < MOUSE_CURSOR_W; x++) {
         for (int y = 0; y < MOUSE_CURSOR_H; y++) {

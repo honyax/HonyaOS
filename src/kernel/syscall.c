@@ -60,6 +60,14 @@ void syscall(int sc_id, int param1, int param2, int param3, int param4, int para
             win_draw_bytes(win, rect->x, rect->y, rect->w, rect->h, data);
             break;
         }
+
+        case SYSCALL_ID_GET_MOUSE_POS: {
+            int x, y;
+            get_mouse_pos(&x, &y);
+            // 座標がshortの最大値（32767）を超えることは無いので、
+            // intの上位16bitと下位16bitにそれぞれ x, y の座標を設定する
+            result = (x << 16) | y;
+        }
     }
 
     // 戻り値をスタックに入れる
