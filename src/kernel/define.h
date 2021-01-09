@@ -237,6 +237,7 @@ byte win_get_pixel(WINDOW* win, int x, int y);
 void win_draw_pixel(WINDOW* win, int x, int y, byte color);
 void win_draw_line(WINDOW* win, int x1, int y1, int x2, int y2, byte color);
 void win_draw_rect(WINDOW* win, int x, int y, int w, int h, byte color);
+void win_draw_bytes(WINDOW* win, int x, int y, int w, int h, byte* data);
 void win_draw_char(WINDOW* win, int x, int y, char c, byte color);
 void win_draw_text(WINDOW* win, int x, int y, byte* text, byte color);
 void bg_draw_pixel(int x, int y, byte color);

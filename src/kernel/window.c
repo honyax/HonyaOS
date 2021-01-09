@@ -296,6 +296,15 @@ void win_draw_rect(WINDOW* win, int x, int y, int w, int h, byte color)
     }
 }
 
+void win_draw_bytes(WINDOW* win, int x, int y, int w, int h, byte* data)
+{
+    for (int i = 0; i < w; i++) {
+        for (int j = 0; j < h; j++) {
+            win_draw_pixel(win, i + x, j + y, data[w * j + i]);
+        }
+    }
+}
+
 void win_draw_char(WINDOW* win, int x, int y, char c, byte color)
 {
     int index = c * 16;
