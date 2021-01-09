@@ -25,6 +25,26 @@ void main()
     _sc_win_draw_rect(win_handle, &rect, COL_DARKRED);
 
     rect.x = 18;
+    rect.y = 8;
+    rect.w = 64;
+    rect.h = 64;
+    byte data[64*64];
+    for (int i = 0; i < 64; i++) {
+        for (int j = 0; j < 64; j++) {
+            int x = i - 32;
+            int y = j - 32;
+            byte color;
+            if (x * x + y * y < 625) {
+                color = COL_DARKGREEN;
+            } else {
+                color = COL_NONE;
+            }
+            data[64 * j + i] = color;
+        }
+    }
+    _sc_win_draw_bytes(win_handle, &rect, data);
+
+    rect.x = 18;
     rect.y = 32;
     rect.w = 64;
     rect.h = 16;

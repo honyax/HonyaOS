@@ -173,3 +173,7 @@ _sc_win_draw_rect:
 .global _sc_win_draw_text
 _sc_win_draw_text:
     _asm_syscall_5 7
+
+.global _sc_win_draw_bytes
+_sc_win_draw_bytes:
+    _asm_syscall_3 8
