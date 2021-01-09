@@ -144,7 +144,7 @@ void update_timer_task(int task_index, int y);
 void task_b_main()
 {
     bg_draw_text(80, 540, "This is task_b_main!", COL_CYAN);
-    _sc_putchar('a');
+    //_sc_example(0x100, 0x200, 0x500, 0x1000, 0x10000);
 
     for (;;) {
         _sc_sleep(1000);
@@ -154,7 +154,10 @@ void task_b_main()
 
 void task_c_main()
 {
-    bg_draw_text(80, 600, "This is task_c_main!", COL_CYAN);
+    int hhmmss = _sc_get_current_time();
+    char s[32];
+    hsprintf(s, "task_c_main boot %X:%X:%X", (hhmmss & 0xFF0000) >> 16, (hhmmss & 0xFF00) >> 8, hhmmss & 0xFF);
+    _sc_bg_draw_text(80, 600, s, COL_CYAN);
 
     for (;;) {
         _sc_sleep(33);

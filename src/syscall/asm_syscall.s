@@ -146,10 +146,6 @@
 _sc_example:
     _asm_syscall_5 0xFFFF
 
-.global _sc_putchar
-_sc_putchar:
-    _asm_syscall_1 1
-
 .global _sc_bg_draw_text
 _sc_bg_draw_text:
     _asm_syscall_4 2

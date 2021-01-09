@@ -15,9 +15,6 @@ void syscall(int sc_id, int param1, int param2, int param3, int param4, int para
             result = 0x1234abcd;
             break;
             
-        case SYSCALL_ID_PUTCHAR:
-            break;
-
         case SYSCALL_ID_BG_DRAW_TEXT:
             bg_draw_text(param1, param2, (char *)param3, param4);
             break;
