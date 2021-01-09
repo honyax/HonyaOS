@@ -29,9 +29,27 @@ void syscall(int sc_id, int param1, int param2, int param3, int param4, int para
             break;
         }
 
+        case SYSCALL_ID_GET_MOUSE_POS: {
+            int x, y;
+            get_mouse_pos(&x, &y);
+            // 座標がshortの最大値（32767）を超えることは無いので、
+            // intの上位16bitと下位16bitにそれぞれ x, y の座標を設定する
+            result = (x << 16) | y;
+            break;
+        }
+
         case SYSCALL_ID_WIN_CREATE: {
             RECT *rect = (RECT *) param1;
             result = (int) win_create(rect->x, rect->y, rect->w, rect->h);
+            break;
+        }
+
+        case SYSCALL_ID_WIN_DRAW_LINE: {
+            WINDOW *win = (WINDOW *) param1;
+            VECTOR *src = (VECTOR *) param2;
+            VECTOR *dst = (VECTOR *) param3;
+            byte color = (byte) param4;
+            win_draw_line(win, src->x, src->y, dst->x, dst->y, color);
             break;
         }
 
@@ -43,16 +61,6 @@ void syscall(int sc_id, int param1, int param2, int param3, int param4, int para
             break;
         }
 
-        case SYSCALL_ID_WIN_DRAW_TEXT: {
-            WINDOW *win = (WINDOW *) param1;
-            int x = param2;
-            int y = param3;
-            char *text = (char *) param4;
-            byte color = (byte) param5;
-            win_draw_text(win, x, y, text, color);
-            break;
-        }
-
         case SYSCALL_ID_WIN_DRAW_BYTES: {
             WINDOW *win = (WINDOW *) param1;
             RECT *rect = (RECT *) param2;
@@ -61,12 +69,14 @@ void syscall(int sc_id, int param1, int param2, int param3, int param4, int para
             break;
         }
 
-        case SYSCALL_ID_GET_MOUSE_POS: {
-            int x, y;
-            get_mouse_pos(&x, &y);
-            // 座標がshortの最大値（32767）を超えることは無いので、
-            // intの上位16bitと下位16bitにそれぞれ x, y の座標を設定する
-            result = (x << 16) | y;
+        case SYSCALL_ID_WIN_DRAW_TEXT: {
+            WINDOW *win = (WINDOW *) param1;
+            int x = param2;
+            int y = param3;
+            char *text = (char *) param4;
+            byte color = (byte) param5;
+            win_draw_text(win, x, y, text, color);
+            break;
         }
     }
 

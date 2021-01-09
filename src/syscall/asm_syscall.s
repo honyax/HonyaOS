@@ -148,32 +148,36 @@ _sc_example:
 
 .global _sc_bg_draw_text
 _sc_bg_draw_text:
-    _asm_syscall_4 2
+    _asm_syscall_4 0x100
 
 .global _sc_get_current_time
 _sc_get_current_time:
-    _asm_syscall_0 3
+    _asm_syscall_0 0x200
 
 .global _sc_sleep
 _sc_sleep:
-    _asm_syscall_1 4
-
-.global _sc_win_create
-_sc_win_create:
-    _asm_syscall_1 5
-
-.global _sc_win_draw_rect
-_sc_win_draw_rect:
-    _asm_syscall_3 6
-
-.global _sc_win_draw_text
-_sc_win_draw_text:
-    _asm_syscall_5 7
-
-.global _sc_win_draw_bytes
-_sc_win_draw_bytes:
-    _asm_syscall_3 8
+    _asm_syscall_1 0x201
 
 .global _sc_get_mouse_pos
 _sc_get_mouse_pos:
-    _asm_syscall_0 9
+    _asm_syscall_0 0x202
+
+.global _sc_win_create
+_sc_win_create:
+    _asm_syscall_1 0x300
+
+.global _sc_win_draw_line
+_sc_win_draw_line:
+    _asm_syscall_4 0x301
+
+.global _sc_win_draw_rect
+_sc_win_draw_rect:
+    _asm_syscall_3 0x302
+
+.global _sc_win_draw_bytes
+_sc_win_draw_bytes:
+    _asm_syscall_3 0x303
+
+.global _sc_win_draw_text
+_sc_win_draw_text:
+    _asm_syscall_5 0x304

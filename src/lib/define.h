@@ -50,6 +50,11 @@ typedef struct
     int w, h;
 } RECT;
 
+typedef struct
+{
+    int x, y;
+} VECTOR;
+
 // string.c
 int hstrlen(const char *str);
 int hstrncmp(const char *s1, const char *s2, int len);
