@@ -15,10 +15,10 @@ $(BOOT_IMG): $(BOOT_BIN) $(KERNEL_BIN) $(FS_IMG)
 $(BOOT_BIN): boot/*.asm boot/*.s boot/modules/*.s
 	cd boot; make
 
-$(KERNEL_BIN): kernel/*.c kernel/*.s kernel/*.h lib/*.c syscall/*.s syscall/*.h
+$(KERNEL_BIN): kernel/*.c kernel/*.s kernel/*.h lib/* syscall/*
 	cd kernel; make
 
-$(FS_IMG): tasks/*.c lib/*.c syscall/*.s syscall/*.h
+$(FS_IMG): tasks/*.c tasks/*/*.c lib/* syscall/*
 	cd tasks; make;
 	cd filesystem; make
 

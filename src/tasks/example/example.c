@@ -1,5 +1,5 @@
-#include "../syscall/define.h"
-#include "../lib/define.h"
+#include "../../syscall/define.h"
+#include "../../lib/define.h"
 
 void main()
 {
@@ -29,7 +29,7 @@ void main()
             int y = j - 32;
             byte color;
             if (x * x + y * y < 625) {
-                color = COL_DARKGREEN;
+                color = COL_YELLOW;
             } else {
                 color = COL_NONE;
             }
