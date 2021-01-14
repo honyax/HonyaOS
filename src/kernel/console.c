@@ -340,7 +340,6 @@ void exec_file(const char *input)
     println(s);
 
     add_task(file_buf);
-    //add_task(&task_d_main);
 }
 
 // コンソールで何かテストする時用の関数
