@@ -146,9 +146,13 @@
 _sc_example:
     _asm_syscall_5 0xFFFF
 
+.global _sc_bg_draw_rect
+_sc_bg_draw_rect:
+    _asm_syscall_5 0x100
+
 .global _sc_bg_draw_text
 _sc_bg_draw_text:
-    _asm_syscall_4 0x100
+    _asm_syscall_4 0x101
 
 .global _sc_get_current_time
 _sc_get_current_time:
