@@ -14,6 +14,10 @@ void syscall(int sc_id, int param1, int param2, int param3, int param4, int para
             bg_draw_text(20, 520, str, COL_WHITE);
             result = 0x1234abcd;
             break;
+
+        case SYSCALL_ID_BG_DRAW_RECT:
+            bg_draw_rect(param1, param2, param3, param4, param5);
+            break;
             
         case SYSCALL_ID_BG_DRAW_TEXT:
             bg_draw_text(param1, param2, (char *)param3, param4);

@@ -3,7 +3,8 @@
 #include "../lib/define.h"
 
 #define SYSCALL_ID_EXAMPLE              0xFFFF
-#define SYSCALL_ID_BG_DRAW_TEXT         0x100
+#define SYSCALL_ID_BG_DRAW_RECT         0x100
+#define SYSCALL_ID_BG_DRAW_TEXT         0x101
 #define SYSCALL_ID_GET_CURRENT_TIME     0x200
 #define SYSCALL_ID_SLEEP                0x201
 #define SYSCALL_ID_GET_MOUSE_POS        0x202
@@ -15,6 +16,7 @@
 
 // asm_syscall.s
 int _sc_example(int param1, int param2, int param3, int param4, int param5);
+void _sc_bg_draw_rect(int x, int y, int w, int h, int color);
 void _sc_bg_draw_text(int x, int y, char *text, int color);
 int _sc_get_current_time();
 void _sc_sleep(int milliseconds);
