@@ -65,3 +65,6 @@ char htolowercase(const char c);
 
 // sprintf.c
 int hsprintf (char *str, const char *fmt, ...);
+
+// math.c
+int hsqrt(int s);
