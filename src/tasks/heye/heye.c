@@ -66,7 +66,6 @@ void main()
     rect.y = RADIUS;
     rect.w = PUPIL_RADIUS * 2;
     rect.h = PUPIL_RADIUS * 2;
-    char a[64];
 
     for (;;) {
         mouse_pos = _sc_get_mouse_pos();
