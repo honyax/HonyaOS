@@ -62,6 +62,8 @@ void main()
     int last_x, last_y;
     int cur_x, cur_y;
     int sqrlen, len;
+    rect.x = RADIUS;
+    rect.y = RADIUS;
     rect.w = PUPIL_RADIUS * 2;
     rect.h = PUPIL_RADIUS * 2;
     char a[64];
@@ -78,10 +80,8 @@ void main()
         cur_y = mouse_pos_y - win_pos[1] - PUPIL_RADIUS;
 
         if (cur_x != last_x || cur_y != last_y) {
-            // 直前に描画した瞳を消す
-            if (last_x != 0 && last_y != 0) {
-                _sc_win_draw_rect(win_handle, &rect, COL_WHITE);
-            }
+            // 直前に描画した瞳を消す（デフォルトは中心なので問題ない）
+            _sc_win_draw_rect(win_handle, &rect, COL_WHITE);
 
             sqrlen = diff_x * diff_x + diff_y * diff_y;
 
