@@ -255,7 +255,7 @@ byte win_get_pixel(WINDOW* win, int x, int y)
     short y_max = win->y + win->h;
 
     // 指定された位置が範囲外であればNONEを返す
-    if (x < x_min || x_max < x || y < y_min || y_max < y) {
+    if (x < x_min || x_max <= x || y < y_min || y_max <= y) {
         return COL_NONE;
     }
 
