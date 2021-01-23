@@ -258,9 +258,9 @@ void exec_ls()
             }
         }
 
-        // yearに加算するのはネットの情報によると1980らしいが、手元では2010にしないとダメっぽい。謎。
-        int year = ((file_info[i].update_date & 0xf800) >> 11) + 2010;
-        int mon  = (file_info[i].update_date & 0x07e0) >>  5;
+        // yearには1980を加算
+        int year = ((file_info[i].update_date & 0xfe00) >> 9) + 1980;
+        int mon  = (file_info[i].update_date & 0x01e0) >>  5;
         int day  = (file_info[i].update_date & 0x001f) >>  0;
         int hour = (file_info[i].update_time & 0xf800) >> 11;
         int min  = (file_info[i].update_time & 0x07e0) >>  5;
