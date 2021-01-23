@@ -258,6 +258,8 @@ void exec_ls()
             }
         }
 
+        // update_dateの上位ビットから、
+        // 7bit:year, 4bit:month, 5bit:day
         // yearには1980を加算
         int year = ((file_info[i].update_date & 0xfe00) >> 9) + 1980;
         int mon  = (file_info[i].update_date & 0x01e0) >>  5;
