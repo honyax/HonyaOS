@@ -133,7 +133,8 @@ void init_background(WINDOW* bg)
     win_draw_text(bg, 16, 120, "HonyaOS is my own operating system.", COL_WHITE);
 
     char test_txt[128];
-    hsprintf(test_txt, "This is %d, 0x%x, 0x%X, string:%s.", 100, 0x12AB, 0x34CD, "string parameter");
+    int vram_upper = (param_vram >> 16) & 0xFFFF;
+    hsprintf(test_txt, "VRAM:0x%X 0000, %d x %d", vram_upper, param_screen_x, param_screen_y);
     win_draw_text(bg, 16, 160, test_txt, COL_YELLOW);
 
     uint _TEXT_START    = ( uint )&_text_start;
