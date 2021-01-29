@@ -4,6 +4,7 @@ static int timer_count;
 
 static int display_timer_count;
 static char disp_timer[10];
+static int last_hhmmss;
 
 void init_timer()
 {
@@ -34,12 +35,15 @@ bool update_timer()
     char time[9];
     // hour, minute, second
     int hhmmss = get_current_time();
-    int hour = (hhmmss & 0x00FF0000) >> 16;
-    int minute = (hhmmss & 0x0000FF00) >> 8;
-    int second = hhmmss & 0x000000FF;
-    hsprintf(time, "%X:%X:%X", hour, minute, second);
-    bg_draw_rect(16, 500, 72, 16, COL_DARKBLUE);
-    bg_draw_text(16, 500, time, COL_GREEN);
+    if (last_hhmmss != hhmmss) {
+        last_hhmmss = hhmmss;
+        int hour = (hhmmss & 0x00FF0000) >> 16;
+        int minute = (hhmmss & 0x0000FF00) >> 8;
+        int second = hhmmss & 0x000000FF;
+        hsprintf(time, "%X:%X:%X", hour, minute, second);
+        bg_draw_rect(16, 500, 72, 16, COL_DARKBLUE);
+        bg_draw_text(16, 500, time, COL_GREEN);
+    }
 #endif
 
     return TRUE;
