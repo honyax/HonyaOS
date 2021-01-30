@@ -183,7 +183,7 @@ void exec_command(char *input)
         // 改行のみの場合は無処理
     } else if (cmd_equals(input, "clear")) {
         exec_clear();
-    } else if (cmd_equals(input, "mem")) {
+    } else if (cmd_equals(input, "free")) {
         exec_mem();
     } else if (cmd_equals(input, "ls")) {
         exec_ls();
