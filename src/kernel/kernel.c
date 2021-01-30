@@ -33,8 +33,8 @@ int kernel_main() {
         if (!update_timer())
             continue;
         update_interrupt();
-        update_window();
         update_console();
+        update_window();
     }
 
     return 0;
