@@ -3,11 +3,32 @@
 
 #define BOARD_WIDTH     480
 #define BOARD_HEIGHT    320
+#define PLAYER_POS_Y    280
+#define PLAYER_WIDTH    80
+#define PLAYER_HEIGHT   10
 
 RECT board;
 RECT ball;
 VECTOR p;
 VECTOR v;
+RECT player;
+int player_pos_x;
+short *win_pos;
+
+void get_mouse_pos()
+{
+    int mouse_pos = _sc_get_mouse_pos();
+    int mouse_pos_x = (mouse_pos >> 16) & 0xFFFF;
+
+    // ボードの範囲外の場合はボードの範囲内に収める
+    if (mouse_pos_x < win_pos[0]) {
+        player_pos_x = 0;
+    } else if (mouse_pos_x > win_pos[0] + BOARD_WIDTH - PLAYER_WIDTH) {
+        player_pos_x = BOARD_WIDTH - PLAYER_WIDTH;
+    } else {
+        player_pos_x = mouse_pos_x - win_pos[0];
+    }
+}
 
 // 水平方向に衝突したか
 int is_hit_horizontal()
@@ -30,6 +51,10 @@ void main()
     board.h = BOARD_HEIGHT;
     int win_handle = _sc_win_create(&board);
 
+    // TODO: win_handleがWINDOWのポインタになっており、先頭からウィンドウのX座標、Y座標が2byteずつで格納されている。
+    // ここでは一旦これを使う。
+    win_pos = (short *) win_handle;
+
     // 位置と速度は、ドットを100倍したものにする
     p.x = 100 * 100;
     p.y = 100 * 100;
@@ -42,15 +67,35 @@ void main()
     ball.h = 4;
     _sc_win_draw_rect(win_handle, &ball, COL_WHITE);
 
+    player.x = 0;
+    player.y = PLAYER_POS_Y;
+    player.w = PLAYER_WIDTH;
+    player.h = PLAYER_HEIGHT;
+    _sc_win_draw_rect(win_handle, &player, COL_CYAN);
+
     for (int i = 0; ; i++) {
+
+        // マウスの位置を検出
+        get_mouse_pos();
+        // 本のプレイヤーの位置を黒く描画
+        _sc_win_draw_rect(win_handle, &player, COL_BLACK);
+        // プレイヤーの位置をマウスに合わせて更新
+        player.x = player_pos_x;
+        _sc_win_draw_rect(win_handle, &player, COL_CYAN);
+
+        // ボールの速度分、位置を変更
         p.x += v.x;
         p.y += v.y;
+
+        // 壁にあたった場合は反射
         if (is_hit_horizontal()) {
             v.x = -v.x;
         }
         if (is_hit_vertical()) {
             v.y = -v.y;
         }
+
+        // 直前のボールの位置を黒く塗りつぶして、新しい位置を白く描画
         _sc_win_draw_rect(win_handle, &ball, COL_BLACK);
         ball.x = p.x / 100;
         ball.y = p.y / 100;
@@ -76,5 +121,6 @@ TODO:
 17:20 ☆ブロックを並べて複数作る
 17:30 ☆ブロックの接触判定を作る
 17:40 ☆ブロックにあたったらブロックを消滅させる
+17:50 ☆ボールの速度を徐々に上げる
 
 */
