@@ -43,6 +43,32 @@ int is_hit_vertical()
     return p.y > BOARD_HEIGHT * 100 || p.y < 0;
 }
 
+// プレイヤーに衝突した場合は衝突した位置
+// 衝突しなかった場合は -1 を返す
+int hit_player_pos()
+{
+    int pos_x = p.x / 100;
+    int pos_y = p.y / 100;
+
+    // Y座標がプレイヤーの位置でなければ衝突しない
+    if (pos_y < player.y || player.y + PLAYER_HEIGHT < pos_y)
+        return -1;
+
+    // X座標がプレイヤーの位置でなければ衝突しない
+    if (pos_x < player.x || player.x + PLAYER_WIDTH < pos_x)
+        return -1;
+    
+    // プレイヤーに衝突している場合は衝突している相対位置を返す
+    return pos_x - player.x;
+}
+
+// プレイヤーに衝突した後の速度を算出する
+void calc_v_after_player_hit(int hit_pos)
+{
+    // TODO ひとまず反射だけする
+    v.y = -v.y;
+}
+
 void main()
 {
     board.x = 100;
@@ -83,10 +109,6 @@ void main()
         player.x = player_pos_x;
         _sc_win_draw_rect(win_handle, &player, COL_CYAN);
 
-        // ボールの速度分、位置を変更
-        p.x += v.x;
-        p.y += v.y;
-
         // 壁にあたった場合は反射
         if (is_hit_horizontal()) {
             v.x = -v.x;
@@ -94,6 +116,22 @@ void main()
         if (is_hit_vertical()) {
             v.y = -v.y;
         }
+
+        // プレイヤーに衝突した場合は、Y速度を反射させ、X速度をヒット位置に合わせて調整
+        int hit_pos = hit_player_pos();
+        if (hit_pos >= 0) {
+            calc_v_after_player_hit(hit_pos);
+        }
+
+        // ボールの速度分、位置を変更
+        p.x += v.x;
+        p.y += v.y;
+        
+        // 速度向上
+        if (v.x > 0) v.x++;
+        else v.x--;
+        if (v.y > 0) v.y++;
+        else v.y--;
 
         // 直前のボールの位置を黒く塗りつぶして、新しい位置を白く描画
         _sc_win_draw_rect(win_handle, &ball, COL_BLACK);
@@ -112,10 +150,10 @@ TODO:
 15:50 ★ボールに速度を持たせる
 16:00 ★ボールを速度方向に毎フレーム動かす
 16:10 ★ボールが壁にあたったら速度を反射する
-16:20 ☆自キャラのバーを作る
-16:30 ☆マウスの位置を検知する
-16:40 ☆マウスの位置に合わせてバーを動かす
-16:50 ☆バーに当たったら反射させる
+16:20 ★自キャラのバーを作る
+16:30 ★マウスの位置を検知する
+16:40 ★マウスの位置に合わせてバーを動かす
+16:50 ★バーに当たったら反射させる
 17:00 ☆バーに当たった位置によって反射方向を調整する
 17:10 ☆ブロックを一つ作る
 17:20 ☆ブロックを並べて複数作る
