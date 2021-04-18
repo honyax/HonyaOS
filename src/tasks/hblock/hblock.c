@@ -65,8 +65,25 @@ int hit_player_pos()
 // プレイヤーに衝突した後の速度を算出する
 void calc_v_after_player_hit(int hit_pos)
 {
-    // TODO ひとまず反射だけする
-    v.y = -v.y;
+    // 相対的な位置を100分率で算出
+    // 衝突したX座標が、-100 ～ 100 の範囲に収まる
+    int hit_pos_rate = (hit_pos - PLAYER_WIDTH / 2) * 100 / (PLAYER_WIDTH / 2);
+
+    int total_v = 0;
+    total_v += v.x > 0 ? v.x : -v.x;
+    total_v += v.y > 0 ? v.y : -v.y;
+
+    // X速度はヒット位置の割合から算出する
+    v.x = total_v * hit_pos_rate / 100;
+
+    // Y速度は残りの速度にするが、上方向に反射させる
+    total_v -= (v.x > 0 ? v.x : -v.x);
+    v.y = -total_v;
+
+    // Y速度がゼロにならないよう留意
+    if (-300 < v.y && v.y < 300) {
+        v.y = -300;
+    }
 }
 
 void main()
