@@ -6,6 +6,17 @@
 #define PLAYER_POS_Y    280
 #define PLAYER_WIDTH    80
 #define PLAYER_HEIGHT   10
+#define BLOCK_WIDTH     80
+#define BLOCK_HEIGHT    20
+#define BLOCK_NUM_X     BOARD_WIDTH / BLOCK_WIDTH
+#define BLOCK_NUM_Y     4
+
+typedef struct _BLOCK {
+    int x;
+    int y;
+    int color;
+    int exists;
+} BLOCK;
 
 RECT board;
 RECT ball;
@@ -14,6 +25,7 @@ VECTOR v;
 RECT player;
 int player_pos_x;
 short *win_pos;
+BLOCK blocks[BLOCK_NUM_X][BLOCK_NUM_Y];
 
 void get_mouse_pos()
 {
@@ -115,6 +127,32 @@ void main()
     player.w = PLAYER_WIDTH;
     player.h = PLAYER_HEIGHT;
     _sc_win_draw_rect(win_handle, &player, COL_CYAN);
+
+    const int COLOR_NUM = 6;
+    int colors[COLOR_NUM];
+    colors[0] = COL_BROWN;
+    colors[1] = COL_GREY;
+    colors[2] = COL_BLUE;
+    colors[3] = COL_GREEN;
+    colors[4] = COL_PURPLE;
+    colors[5] = COL_YELLOW;
+
+    RECT block_rect;
+    block_rect.w = BLOCK_WIDTH;
+    block_rect.h = BLOCK_HEIGHT;
+    // ブロックを作成する
+    for (int i_x = 0; i_x < BLOCK_NUM_X; i_x++) {
+        for (int i_y = 0; i_y < BLOCK_NUM_Y; i_y++) {
+            BLOCK *b = &blocks[i_x][i_y];
+            b->x = i_x;
+            b->y = i_y;
+            b->color = colors[(i_x + i_y) % COLOR_NUM];
+            b->exists = TRUE;
+            block_rect.x = BLOCK_WIDTH * i_x;
+            block_rect.y = BLOCK_HEIGHT * i_y;
+            _sc_win_draw_rect(win_handle, &block_rect, b->color);
+        }
+    }
 
     for (int i = 0; ; i++) {
 
